@@ -2,28 +2,24 @@ package com.example.customerclient;
 
 
 import com.fasterxml.jackson.databind.ObjectMapper;
-import com.github.tomakehurst.wiremock.client.WireMock;
 import org.assertj.core.api.BDDAssertions;
 import org.junit.Test;
 import org.junit.runner.RunWith;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.boot.test.autoconfigure.json.AutoConfigureJson;
 import org.springframework.boot.test.context.SpringBootTest;
-import org.springframework.cloud.contract.wiremock.AutoConfigureWireMock;
-import org.springframework.http.HttpHeaders;
-import org.springframework.http.MediaType;
+import org.springframework.cloud.contract.stubrunner.spring.AutoConfigureStubRunner;
 import org.springframework.test.context.junit4.SpringRunner;
 
 import java.util.Arrays;
 import java.util.Collection;
 import java.util.List;
 
-import static com.github.tomakehurst.wiremock.client.WireMock.*;
-
 @RunWith(SpringRunner.class)
 @SpringBootTest(classes = CustomerClientApplication.class)
-@AutoConfigureWireMock(port = 8081)
-@AutoConfigureJson
+//@AutoConfigureWireMock(port = 8081)
+@AutoConfigureStubRunner(
+    ids = "com.example:customer-service:+:8081"
+)
 public class CustomerClientTest {
 
     @Autowired
@@ -34,6 +30,8 @@ public class CustomerClientTest {
 
     @Test
     public void clientShouldReturnAllCustomers() throws Exception {
+
+/*
         WireMock.stubFor(
             get(urlEqualTo("/customers"))
                 .willReturn(aResponse()
@@ -50,7 +48,7 @@ public class CustomerClientTest {
                     )
                 )
         );
-
+*/
 
         Collection<Customer> customers = client.getAllCustomers();
         BDDAssertions
