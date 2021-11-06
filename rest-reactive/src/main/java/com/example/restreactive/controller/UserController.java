@@ -1,5 +1,7 @@
-package com.example.restreactive;
+package com.example.restreactive.controller;
 
+
+import com.example.restreactive.greeting.Greeting;
 import org.springframework.core.NestedExceptionUtils;
 import org.springframework.http.MediaType;
 import org.springframework.http.ResponseEntity;
@@ -12,13 +14,10 @@ import reactor.core.publisher.Flux;
 import reactor.core.publisher.Mono;
 
 import java.time.Duration;
-import java.util.function.Supplier;
 import java.util.stream.Stream;
 
 @RestController
-//@Controller
-//@ResponseBody
-public class GreetingRestController {
+public class UserController {
 
     @ExceptionHandler
         //@ResponseStatus(HttpStatus.BAD_REQUEST)
@@ -28,20 +27,17 @@ public class GreetingRestController {
         return ResponseEntity.badRequest().build();
     }
 
-    @GetMapping("/greeting/{name}")
-    Mono<Greeting> greetingMono(@PathVariable String name) {
-        Assert.isTrue(Character.isUpperCase(name.charAt(0)),
-            () -> "The name must be uppercase, " +
-                "you supplied: name = " + name);
-        return Mono.just(new Greeting(name));
+    @GetMapping("/user/{username}")
+    Mono<Greeting> userMono(@PathVariable String username) {
+        return Mono.just(new Greeting(username));
     }
 
-    @GetMapping(value = "/greetings/{name}",
+    @GetMapping(value = "/users",
         produces = MediaType.TEXT_EVENT_STREAM_VALUE)
-    Flux<Greeting> greetingFlux(@PathVariable String name) {
+    Flux<Greeting> userFlux() {
         return Flux
             .fromStream(Stream.generate(() ->
-                new Greeting("Hello, " + name + "!")))
+                new Greeting("Hello, World!")))
             .take(10)
             .delayElements(Duration.ofSeconds(1));
     }
