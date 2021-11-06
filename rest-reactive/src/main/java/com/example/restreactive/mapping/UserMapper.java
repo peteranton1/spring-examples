@@ -42,42 +42,44 @@ public class UserMapper implements DtoMapper, EntityMapper {
     }
 
     public User userUpdate(User user, UserDto userDto) {
-        Long id = nonNull(user.id()) ?
-            user.id() :
+        Long id = nonNull(user.getId()) ?
+            user.getId():
             userDto.getId();
-        String username = nonNull(user.username()) ?
-            user.username() :
+        String username = nonNull(user.getUsername()) ?
+            user.getUsername() :
             userDto.getUsername();
         String firstName = nonNull(userDto.getFirstName()) ?
-            userDto.getFirstName() : user.firstName();
+            userDto.getFirstName() : user.getFirstName();
         String lastName = nonNull(userDto.getLastName()) ?
-            userDto.getLastName() : user.lastName();
+            userDto.getLastName() : user.getLastName();
         EmailAddress email = emailAddressMapper
-            .emailAddressUpdate(user.email(), userDto.getEmail());
-        return new User(
-            id,
-            username,
-            firstName,
-            lastName,
-            email);
+            .emailAddressUpdate(user.getEmail(), userDto.getEmail());
+        return User.builder()
+            .id(id)
+            .username(username)
+            .firstName(firstName)
+            .lastName(lastName)
+            .email(email)
+            .build();
     }
 
     public User userEntityOf(UserDto userDto) {
-        return new User(
-            userDto.getId(),
-            userDto.getUsername(),
-            userDto.getFirstName(),
-            userDto.getLastName(),
-            emailAddressMapper.emailAddressEntityOf(userDto.getEmail()));
+        return User.builder()
+            .id(userDto.getId())
+            .username(userDto.getUsername())
+            .firstName(userDto.getFirstName())
+            .lastName(userDto.getLastName())
+            .email(emailAddressMapper.emailAddressEntityOf(userDto.getEmail()))
+            .build();
     }
 
     public UserDto userDtoOf(User user) {
         return UserDto.builder()
-            .id(user.id())
-            .username(user.username())
-            .firstName(user.firstName())
-            .lastName(user.lastName())
-            .email(emailAddressMapper.emailAddressDtoOf(user.email()))
+            .id(user.getId())
+            .username(user.getUsername())
+            .firstName(user.getFirstName())
+            .lastName(user.getLastName())
+            .email(emailAddressMapper.emailAddressDtoOf(user.getEmail()))
             .build();
     }
 }

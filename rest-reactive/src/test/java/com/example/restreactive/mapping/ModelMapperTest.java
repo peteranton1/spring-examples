@@ -106,8 +106,13 @@ class ModelMapperTest {
     }
 
     private User createUser() {
-        return new User(ID_1, TEST, TEST, TEST,
-            new EmailAddress(ID_1, TEST));
+        return User.builder()
+            .id(ID_1)
+            .username(TEST)
+            .firstName(TEST)
+            .lastName(TEST)
+            .email(createEmailAddress())
+            .build();
     }
 
     private CountryDto createCountryDto() {
@@ -130,7 +135,10 @@ class ModelMapperTest {
     }
 
     private EmailAddress createEmailAddress() {
-        return new EmailAddress(ID_1, TEST);
+        return EmailAddress.builder()
+            .id(ID_1)
+            .email(TEST)
+            .build();
     }
 
     private StreetAddressDto createStreetAddressDto() {

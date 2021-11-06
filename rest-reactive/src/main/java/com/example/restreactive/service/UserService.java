@@ -1,8 +1,11 @@
 package com.example.restreactive.service;
 
+import com.example.restreactive.dto.EmailAddressDto;
 import com.example.restreactive.dto.UserDto;
 import com.example.restreactive.mapping.ModelMapper;
+import com.example.restreactive.model.EmailAddress;
 import com.example.restreactive.model.User;
+import com.example.restreactive.repository.EmailAddressRepository;
 import com.example.restreactive.repository.UserRepository;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Component;
@@ -17,6 +20,9 @@ public class UserService {
 
     @Autowired
     private UserRepository userRepository;
+
+    @Autowired
+    private EmailAddressRepository emailAddressRepository;
 
     @Autowired
     private ModelMapper modelMapper;
@@ -42,5 +48,16 @@ public class UserService {
             .orElse((User)modelMapper.insert(userDto))
         );
         return (UserDto)modelMapper.toDto(userOut);
+    }
+
+    public Long upsertEmailAddress(EmailAddressDto emailAddressDto) {
+        requireNonNull(emailAddressDto);
+        requireNonNull(emailAddressDto.getEmail());
+        EmailAddress emailOut = emailAddressRepository.save(emailAddressRepository
+            .findByEmail(emailAddressDto.getEmail())
+            .map(email -> (EmailAddress)modelMapper.update(email, emailAddressDto))
+            .orElse((EmailAddress)modelMapper.insert(emailAddressDto))
+        );
+        return emailOut.getId();
     }
 }
