@@ -18,6 +18,7 @@ import static org.junit.jupiter.api.Assertions.assertEquals;
 class UserServiceTest {
 
     public static final String EMAIL = "my@user.name";
+
     @Autowired
     private UserService underTest;
 
