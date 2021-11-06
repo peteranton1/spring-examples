@@ -44,23 +44,24 @@ public class StoreMapper implements DtoMapper, EntityMapper {
     }
 
     public Store storeUpdate(Store store, StoreDto storeDto) {
-        Long id = nonNull(store.id()) ?
-            store.id() :
+        Long id = nonNull(store.getId()) ?
+            store.getId() :
             storeDto.getId();
         String storeName = nonNull(storeDto.getStoreName()) ?
             storeDto.getStoreName() :
-            store.storeName();
+            store.getStoreName();
         String storeCode = nonNull(storeDto.getStoreCode()) ?
             storeDto.getStoreCode() :
-            store.storeCode();
+            store.getStoreCode();
         StreetAddress streetAddress = nonNull(storeDto.getAddress()) ?
             streetAddressMapper.streetAddressEntityOf(storeDto.getAddress()) :
-            store.address();
-        return new Store(
-            id
-            ,storeName
-            ,storeCode
-            ,streetAddress);
+            store.getAddress();
+        return Store.builder()
+            .id(id)
+            .storeName(storeName)
+            .storeCode(storeCode)
+            .address(streetAddress)
+            .build();
     }
 
     public Store storeEntityOf(StoreDto storeDto) {
@@ -74,10 +75,10 @@ public class StoreMapper implements DtoMapper, EntityMapper {
 
     public StoreDto storeDtoOf(Store store) {
         return StoreDto.builder()
-            .id(store.id())
-            .storeName(store.storeName())
-            .storeCode(store.storeCode())
-            .address(streetAddressMapper.streetAddressDtoOf(store.address()))
+            .id(store.getId())
+            .storeName(store.getStoreName())
+            .storeCode(store.getStoreCode())
+            .address(streetAddressMapper.streetAddressDtoOf(store.getAddress()))
             .build();
     }
 

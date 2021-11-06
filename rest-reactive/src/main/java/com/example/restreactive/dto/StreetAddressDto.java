@@ -1,12 +1,10 @@
 package com.example.restreactive.dto;
 
-import lombok.Builder;
-import lombok.EqualsAndHashCode;
-import lombok.Getter;
-import lombok.ToString;
+import lombok.*;
 
 @Builder
 @Getter
+@Setter
 @ToString
 @EqualsAndHashCode
 public class StreetAddressDto implements DtoObject {

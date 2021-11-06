@@ -9,6 +9,8 @@ import javax.persistence.*;
 @NoArgsConstructor
 @Getter
 @Setter
+@ToString
+@EqualsAndHashCode
 @Entity
 @Table(name = "appt_user")
 public class User implements EntityObject {

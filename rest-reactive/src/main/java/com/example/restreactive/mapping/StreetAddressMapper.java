@@ -42,35 +42,36 @@ public class StreetAddressMapper implements DtoMapper, EntityMapper {
     }
 
     public StreetAddress streetAddressUpdate(StreetAddress streetAddress, StreetAddressDto streetAddressDto) {
-        Long id = nonNull(streetAddress.id()) ?
-            streetAddress.id() :
+        Long id = nonNull(streetAddress.getId()) ?
+            streetAddress.getId() :
             streetAddressDto.getId();
         String line1 = nonNull(streetAddressDto.getLine1()) ?
             streetAddressDto.getLine1() :
-            streetAddress.line1();
+            streetAddress.getLine1();
         String line2 = nonNull(streetAddressDto.getLine2()) ?
             streetAddressDto.getLine2() :
-            streetAddress.line2();
+            streetAddress.getLine2();
         String city = nonNull(streetAddressDto.getCity()) ?
             streetAddressDto.getCity() :
-            streetAddress.city();
+            streetAddress.getCity();
         String county = nonNull(streetAddressDto.getCounty()) ?
             streetAddressDto.getCounty() :
-            streetAddress.county();
+            streetAddress.getCounty();
         Country country = nonNull(streetAddressDto.getCountry()) ?
             countryMapper.countryEntityOf(streetAddressDto.getCountry()) :
-            streetAddress.country();
+            streetAddress.getCountry();
         String postcode = nonNull(streetAddressDto.getPostcode()) ?
             streetAddressDto.getPostcode() :
-            streetAddress.postcode();
-        return new StreetAddress(
-            id
-            , line1
-            , line2
-            , city
-            , county
-            , country
-            , postcode);
+            streetAddress.getPostcode();
+        return StreetAddress.builder()
+            .id(id)
+            .line1(line1)
+            .line2(line2)
+            .city(city)
+            .county(county)
+            .country(country)
+            .postcode(postcode)
+            .build();
     }
 
     public StreetAddress streetAddressEntityOf(StreetAddressDto streetAddressDto) {
@@ -87,13 +88,13 @@ public class StreetAddressMapper implements DtoMapper, EntityMapper {
 
     public StreetAddressDto streetAddressDtoOf(StreetAddress streetAddress) {
         return StreetAddressDto.builder()
-            .id(streetAddress.id())
-            .line1(streetAddress.line1())
-            .line2(streetAddress.line2())
-            .city(streetAddress.city())
-            .county(streetAddress.county())
-            .country(countryMapper.countryDtoOf(streetAddress.country()))
-            .postcode(streetAddress.postcode())
+            .id(streetAddress.getId())
+            .line1(streetAddress.getLine1())
+            .line2(streetAddress.getLine2())
+            .city(streetAddress.getCity())
+            .county(streetAddress.getCounty())
+            .country(countryMapper.countryDtoOf(streetAddress.getCountry()))
+            .postcode(streetAddress.getPostcode())
             .build();
     }
 

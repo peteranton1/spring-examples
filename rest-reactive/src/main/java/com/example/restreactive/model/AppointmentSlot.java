@@ -1,17 +1,26 @@
 package com.example.restreactive.model;
 
+import lombok.*;
+
 import javax.persistence.Entity;
 import javax.persistence.GeneratedValue;
 import javax.persistence.Id;
 import javax.persistence.Table;
 import java.time.ZonedDateTime;
 
+@Builder
+@AllArgsConstructor
+@NoArgsConstructor
+@Getter
+@Setter
+@ToString
+@EqualsAndHashCode
 @Entity
 @Table(name = "appt_appointment_slot")
-public record AppointmentSlot(
-    @Id @GeneratedValue
-    Long id,
-    ZonedDateTime startTime,
-    ZonedDateTime endTime
-) implements EntityObject {
+public class AppointmentSlot implements EntityObject {
+    @Id
+    @GeneratedValue
+    Long id;
+    ZonedDateTime startTime;
+    ZonedDateTime endTime;
 }

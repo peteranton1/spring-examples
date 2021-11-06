@@ -4,7 +4,6 @@ import com.example.restreactive.dto.EmailAddressDto;
 import com.example.restreactive.dto.UserDto;
 import com.example.restreactive.repository.EmailAddressRepository;
 import com.example.restreactive.repository.UserRepository;
-import com.google.common.collect.ImmutableList;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -49,17 +48,11 @@ class UserServiceTest {
     @Test
     void whenUpsertUserCreateThenCreate() {
 
-        // Step 1 - save emailAddress
-        EmailAddressDto emailAddressDto = createEmailAddressDto(EMAIL);
-        Long expectedEmailId = 1L;
-        Long actualEmailId = underTest.upsertEmailAddress(emailAddressDto);
-        assertEquals(expectedEmailId, actualEmailId);
-        emailAddressDto.setId(actualEmailId);
-
         // Check 0 users in db, initial conditions
         assertUsersSize(0);
 
-        // Step 2 - save User
+        // Step 1 - save
+        EmailAddressDto emailAddressDto = createEmailAddressDto(EMAIL);
         UserDto userDto = createUserDto(emailAddressDto);
         UserDto expected = createUserDto(emailAddressDto);
         UserDto actual = underTest.upsertUser(userDto);
@@ -68,50 +61,33 @@ class UserServiceTest {
         expected.setId(actual.getId());
         assertEquals(expected, actual);
 
-        // Check 1 user in db, therefore user created
+        // Check 1 in db, therefore created
         assertUsersSize(1);
     }
 
     @Test
     void whenUpsertUserUpdateThenUpdate() {
 
-        // Step 1 - save emailAddress
-        EmailAddressDto emailAddressDto = createEmailAddressDto(EMAIL);
-        Long expectedEmailId = 1L;
-        Long actualEmailId = underTest.upsertEmailAddress(emailAddressDto);
-        assertEquals(expectedEmailId, actualEmailId);
-        emailAddressDto.setId(actualEmailId);
-
-        // Check 0 users in db, initial conditions
+        // Check 0 in db, initial conditions
         assertUsersSize(0);
 
-        // Step 2 - save User
+        // Step 1 - create
+        EmailAddressDto emailAddressDto = createEmailAddressDto(EMAIL);
         UserDto userDto = createUserDto(emailAddressDto);
         UserDto expected = createUserDto(emailAddressDto);
-        expected.setId(2L);
         UserDto actual1 = underTest.upsertUser(userDto);
+        expected.setId(actual1.getId());
         assertEquals(expected, actual1);
 
-        // Check 1 user in db, therefore it was a created
+        // Check 1 in db, therefore created
         assertUsersSize(1);
 
-        // Step 3 - update User
+        // Step 3 - update
         UserDto actual2 = underTest.upsertUser(userDto);
-        System.out.println("(2) underTest.upsertUser: " +
-            "\nExpected: " + expected +
-            "\nActual2 : " + actual2);
         assertEquals(expected, actual2);
 
-        // Check 1 user in db, therefore it was a updated
+        // Check 2 in db, therefore updated
         assertUsersSize(1);
-    }
-
-    @Test
-    void whenUpsertEmailAddressValidThenSaved() {
-        EmailAddressDto input = createEmailAddressDto(EMAIL);
-        Long expected = 1L;
-        Long actual = underTest.upsertEmailAddress(input);
-        assertEquals(expected, actual);
     }
 
     private void assertUsersSize(int expectedSize) {

@@ -12,6 +12,8 @@ import javax.persistence.Table;
 @NoArgsConstructor
 @Getter
 @Setter
+@ToString
+@EqualsAndHashCode
 @Entity
 @Table(name = "appt_email_address")
 public class EmailAddress implements EntityObject {

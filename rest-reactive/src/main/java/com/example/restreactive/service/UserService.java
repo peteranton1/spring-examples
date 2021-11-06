@@ -8,14 +8,15 @@ import com.example.restreactive.model.User;
 import com.example.restreactive.repository.EmailAddressRepository;
 import com.example.restreactive.repository.UserRepository;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.stereotype.Component;
+import org.springframework.stereotype.Service;
 
 import java.util.List;
 import java.util.Optional;
 
+import static java.util.Objects.nonNull;
 import static java.util.Objects.requireNonNull;
 
-@Component
+@Service
 public class UserService {
 
     @Autowired
@@ -30,24 +31,28 @@ public class UserService {
     public List<UserDto> findAllUsers() {
         return userRepository.findAll()
             .stream()
-            .map(user -> (UserDto)modelMapper.toDto(user))
+            .map(user -> (UserDto) modelMapper.toDto(user))
             .toList();
     }
 
     public Optional<UserDto> findByUsername(String username) {
         return userRepository.findByUsername(username)
-                .map(user -> (UserDto)modelMapper.toDto(user));
+            .map(user -> (UserDto) modelMapper.toDto(user));
     }
 
     public UserDto upsertUser(UserDto userDto) {
         requireNonNull(userDto);
         requireNonNull(userDto.getUsername());
+        EmailAddressDto emailAddressDto = userDto.getEmail();
+        if (nonNull(emailAddressDto)) {
+            emailAddressDto.setId(upsertEmailAddress(emailAddressDto));
+        }
         User userOut = userRepository.save(userRepository
             .findByUsername(userDto.getUsername())
-            .map(user -> (User)modelMapper.update(user, userDto))
-            .orElse((User)modelMapper.insert(userDto))
+            .map(user -> (User) modelMapper.update(user, userDto))
+            .orElse((User) modelMapper.insert(userDto))
         );
-        return (UserDto)modelMapper.toDto(userOut);
+        return (UserDto) modelMapper.toDto(userOut);
     }
 
     public Long upsertEmailAddress(EmailAddressDto emailAddressDto) {
@@ -55,8 +60,8 @@ public class UserService {
         requireNonNull(emailAddressDto.getEmail());
         EmailAddress emailOut = emailAddressRepository.save(emailAddressRepository
             .findByEmail(emailAddressDto.getEmail())
-            .map(email -> (EmailAddress)modelMapper.update(email, emailAddressDto))
-            .orElse((EmailAddress)modelMapper.insert(emailAddressDto))
+            .map(email -> (EmailAddress) modelMapper.update(email, emailAddressDto))
+            .orElse((EmailAddress) modelMapper.insert(emailAddressDto))
         );
         return emailOut.getId();
     }

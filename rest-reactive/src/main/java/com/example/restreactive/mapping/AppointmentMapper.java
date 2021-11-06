@@ -47,26 +47,26 @@ public class AppointmentMapper implements DtoMapper, EntityMapper {
     }
 
     public Appointment appointmentUpdate(Appointment appointment, AppointmentDto appointmentDto) {
-        Long id = nonNull(appointment.id()) ?
-            appointment.id() :
+        Long id = nonNull(appointment.getId()) ?
+            appointment.getId() :
             appointmentDto.getId();
         Store store = nonNull(appointmentDto.getStore()) ?
             storeMapper.storeEntityOf(appointmentDto.getStore()) :
-            appointment.store();
+            appointment.getStore();
         AppointmentSlot slot = nonNull(appointmentDto.getSlot()) ?
             appointmentSlotMapper.appointmentSlotEntityOf(appointmentDto.getSlot()) :
-            appointment.slot();
+            appointment.getSlot();
         List<User> users = nonNull(appointmentDto.getUsers()) ?
             appointmentDto.getUsers().stream()
                 .map(userDto -> userMapper.userEntityOf(userDto))
                 .collect(Collectors.toList()) :
-            appointment.users();
-        return new Appointment(
-            id
-            , store
-            , slot
-            , users
-        );
+            appointment.getUsers();
+        return Appointment.builder()
+            .id(id)
+            .store(store)
+            .slot(slot)
+            .users(users)
+            .build();
     }
 
     public Appointment appointmentEntityOf(AppointmentDto appointmentDto) {
@@ -82,10 +82,10 @@ public class AppointmentMapper implements DtoMapper, EntityMapper {
 
     public AppointmentDto appointmentDtoOf(Appointment appointment) {
         return AppointmentDto.builder()
-            .id(appointment.id())
-            .store(storeMapper.storeDtoOf(appointment.store()))
-            .slot(appointmentSlotMapper.appointmentSlotDtoOf(appointment.slot()))
-            .users(appointment.users().stream()
+            .id(appointment.getId())
+            .store(storeMapper.storeDtoOf(appointment.getStore()))
+            .slot(appointmentSlotMapper.appointmentSlotDtoOf(appointment.getSlot()))
+            .users(appointment.getUsers().stream()
                 .map(user -> userMapper.userDtoOf(user))
                 .collect(Collectors.toList()))
             .build();

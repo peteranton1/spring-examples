@@ -1,14 +1,24 @@
 package com.example.restreactive.model;
 
+import lombok.*;
+
 import javax.persistence.*;
 
+@Builder
+@AllArgsConstructor
+@NoArgsConstructor
+@Getter
+@Setter
+@ToString
+@EqualsAndHashCode
 @Entity
 @Table(name = "appt_store")
-public record Store(
-    @Id @GeneratedValue Long id,
-    String storeName,
-    String storeCode,
+public class Store implements EntityObject {
+    @Id
+    @GeneratedValue
+    Long id;
+    String storeName;
+    String storeCode;
     @OneToOne
-    StreetAddress address
-) implements EntityObject {
+    StreetAddress address;
 }

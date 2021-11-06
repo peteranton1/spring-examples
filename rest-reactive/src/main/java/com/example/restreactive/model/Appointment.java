@@ -1,18 +1,27 @@
 package com.example.restreactive.model;
 
+import lombok.*;
+
 import javax.persistence.*;
 import java.util.List;
 
+@Builder
+@AllArgsConstructor
+@NoArgsConstructor
+@Getter
+@Setter
+@ToString
+@EqualsAndHashCode
 @Entity
 @Table(name = "appt_appointment")
-public record Appointment(
-    @Id @GeneratedValue
-    Long id,
+public class Appointment implements EntityObject {
+    @Id
+    @GeneratedValue
+    Long id;
     @OneToOne
-    Store store,
+    Store store;
     @OneToOne
-    AppointmentSlot slot,
+    AppointmentSlot slot;
     @OneToMany
-    List<User> users
-) implements EntityObject {
+    List<User> users;
 }

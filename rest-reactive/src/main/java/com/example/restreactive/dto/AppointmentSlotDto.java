@@ -1,14 +1,12 @@
 package com.example.restreactive.dto;
 
-import lombok.Builder;
-import lombok.EqualsAndHashCode;
-import lombok.Getter;
-import lombok.ToString;
+import lombok.*;
 
 import java.time.ZonedDateTime;
 
 @Builder
 @Getter
+@Setter
 @ToString
 @EqualsAndHashCode
 public class AppointmentSlotDto implements DtoObject {

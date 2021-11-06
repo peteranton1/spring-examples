@@ -2,9 +2,8 @@ package com.example.restreactive.mapping;
 
 import com.example.restreactive.dto.AppointmentSlotDto;
 import com.example.restreactive.dto.DtoObject;
-import com.example.restreactive.dto.EmailAddressDto;
-import com.example.restreactive.dto.StoreDto;
-import com.example.restreactive.model.*;
+import com.example.restreactive.model.AppointmentSlot;
+import com.example.restreactive.model.EntityObject;
 import org.springframework.stereotype.Component;
 
 import java.time.ZonedDateTime;
@@ -12,7 +11,7 @@ import java.time.ZonedDateTime;
 import static java.util.Objects.nonNull;
 
 @Component
-public class AppointmentSlotMapper implements DtoMapper, EntityMapper{
+public class AppointmentSlotMapper implements DtoMapper, EntityMapper {
 
     @Override
     public boolean accepts(DtoObject dtoObject) {
@@ -40,34 +39,35 @@ public class AppointmentSlotMapper implements DtoMapper, EntityMapper{
     }
 
     public AppointmentSlot appointmentSlotUpdate(AppointmentSlot appointmentSlot, AppointmentSlotDto appointmentSlotDto) {
-        Long id = nonNull(appointmentSlot.id()) ?
-            appointmentSlot.id() :
+        Long id = nonNull(appointmentSlot.getId()) ?
+            appointmentSlot.getId() :
             appointmentSlotDto.getId();
         ZonedDateTime startTime = nonNull(appointmentSlotDto.getStartTime()) ?
             appointmentSlotDto.getStartTime() :
-            appointmentSlot.startTime();
+            appointmentSlot.getStartTime();
         ZonedDateTime endTime = nonNull(appointmentSlotDto.getEndTime()) ?
             appointmentSlotDto.getEndTime() :
-            appointmentSlot.endTime();
-        return new AppointmentSlot(
-            id
-            ,startTime
-            ,endTime);
+            appointmentSlot.getEndTime();
+        return AppointmentSlot.builder()
+            .id(id)
+            .startTime(startTime)
+            .endTime(endTime)
+            .build();
     }
 
     public AppointmentSlot appointmentSlotEntityOf(AppointmentSlotDto appointmentSlotDto) {
         return new AppointmentSlot(
             appointmentSlotDto.getId()
-            ,appointmentSlotDto.getStartTime()
-            ,appointmentSlotDto.getEndTime()
+            , appointmentSlotDto.getStartTime()
+            , appointmentSlotDto.getEndTime()
         );
     }
 
     public AppointmentSlotDto appointmentSlotDtoOf(AppointmentSlot appointmentSlot) {
         return AppointmentSlotDto.builder()
-            .id(appointmentSlot.id())
-            .startTime(appointmentSlot.startTime())
-            .endTime(appointmentSlot.endTime())
+            .id(appointmentSlot.getId())
+            .startTime(appointmentSlot.getStartTime())
+            .endTime(appointmentSlot.getEndTime())
             .build();
     }
 }
