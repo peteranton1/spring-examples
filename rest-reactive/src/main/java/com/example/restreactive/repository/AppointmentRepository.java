@@ -5,10 +5,10 @@ import com.example.restreactive.model.AppointmentSlot;
 import com.example.restreactive.model.Store;
 import org.springframework.data.jpa.repository.JpaRepository;
 
-import java.util.Optional;
+import java.util.List;
 
 public interface AppointmentRepository extends JpaRepository<Appointment, Long> {
 
-    Optional<Appointment> findByStoreAndAppointmentSlot(Store store,
-                                                        AppointmentSlot slot);
+    List<Appointment> findByStoreAndAppointmentSlot(Store store,
+                                                    AppointmentSlot slot);
 }

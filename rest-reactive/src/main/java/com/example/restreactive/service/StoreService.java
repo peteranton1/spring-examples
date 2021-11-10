@@ -80,7 +80,7 @@ public class StoreService {
                 .findByLine1AndPostcode(
                     streetAddressDto.getLine1(),
                     streetAddressDto.getPostcode()
-                )
+                ).stream().findFirst()
                 .map(address -> (StreetAddress) modelMapper
                     .update(address, streetAddressDto))
                 .orElse((StreetAddress) modelMapper.insert(streetAddressDto))
@@ -94,6 +94,7 @@ public class StoreService {
         Country countryOut = countryRepository
             .save(countryRepository
                 .findByCode(countryDto.getCode())
+                .stream().findFirst()
                 .map(country -> (Country) modelMapper
                     .update(country, countryDto))
                 .orElse((Country) modelMapper.insert(countryDto))

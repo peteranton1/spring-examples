@@ -85,6 +85,7 @@ public class AppointmentService {
 
         appointmentDto.getUsers().forEach(userDto -> {
             User user = userRepository.findByUsername(userDto.getUsername())
+                .stream().findFirst()
                 .orElseThrow(() -> new AppointmentException(String.format(
                     "Unable to find username: '%s'", userDto.getUsername()
                 )));
