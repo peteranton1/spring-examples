@@ -8,6 +8,7 @@ import com.example.restreactive.model.StreetAddress;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Component;
 
+import static java.util.Objects.isNull;
 import static java.util.Objects.nonNull;
 
 @Component
@@ -75,6 +76,9 @@ public class StreetAddressMapper implements DtoMapper, EntityMapper {
     }
 
     public StreetAddress streetAddressEntityOf(StreetAddressDto streetAddressDto) {
+        if(isNull(streetAddressDto)) {
+            return null;
+        }
         return new StreetAddress(
             streetAddressDto.getId()
             , streetAddressDto.getLine1()
@@ -87,6 +91,9 @@ public class StreetAddressMapper implements DtoMapper, EntityMapper {
     }
 
     public StreetAddressDto streetAddressDtoOf(StreetAddress streetAddress) {
+        if(isNull(streetAddress)) {
+            return null;
+        }
         return StreetAddressDto.builder()
             .id(streetAddress.getId())
             .line1(streetAddress.getLine1())
@@ -97,5 +104,4 @@ public class StreetAddressMapper implements DtoMapper, EntityMapper {
             .postcode(streetAddress.getPostcode())
             .build();
     }
-
 }

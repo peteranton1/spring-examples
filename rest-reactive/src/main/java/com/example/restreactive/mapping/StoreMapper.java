@@ -10,6 +10,7 @@ import com.example.restreactive.model.StreetAddress;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Component;
 
+import static java.util.Objects.isNull;
 import static java.util.Objects.nonNull;
 
 @Component
@@ -65,6 +66,9 @@ public class StoreMapper implements DtoMapper, EntityMapper {
     }
 
     public Store storeEntityOf(StoreDto storeDto) {
+        if(isNull(storeDto)) {
+            return null;
+        }
         return new Store(
             storeDto.getId()
             , storeDto.getStoreName()
@@ -74,6 +78,9 @@ public class StoreMapper implements DtoMapper, EntityMapper {
     }
 
     public StoreDto storeDtoOf(Store store) {
+        if(isNull(store)) {
+            return null;
+        }
         return StoreDto.builder()
             .id(store.getId())
             .storeName(store.getStoreName())

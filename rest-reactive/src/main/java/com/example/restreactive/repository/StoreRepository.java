@@ -3,9 +3,9 @@ package com.example.restreactive.repository;
 import com.example.restreactive.model.Store;
 import org.springframework.data.jpa.repository.JpaRepository;
 
-import java.util.Optional;
+import java.util.List;
 
 public interface StoreRepository extends JpaRepository<Store, Long> {
 
-    Optional<Store> findByStoreCode(String storeCode);
+    List<Store> findByStoreCode(String storeCode);
 }

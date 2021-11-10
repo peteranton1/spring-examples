@@ -2,11 +2,14 @@ package com.example.restreactive.mapping;
 
 import com.example.restreactive.dto.AppointmentDto;
 import com.example.restreactive.dto.DtoObject;
+import com.example.restreactive.dto.UserDto;
 import com.example.restreactive.model.*;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Component;
 
+import java.util.Collections;
 import java.util.List;
+import java.util.Optional;
 import java.util.stream.Collectors;
 
 import static java.util.Objects.nonNull;
@@ -53,9 +56,9 @@ public class AppointmentMapper implements DtoMapper, EntityMapper {
         Store store = nonNull(appointmentDto.getStore()) ?
             storeMapper.storeEntityOf(appointmentDto.getStore()) :
             appointment.getStore();
-        AppointmentSlot slot = nonNull(appointmentDto.getSlot()) ?
-            appointmentSlotMapper.appointmentSlotEntityOf(appointmentDto.getSlot()) :
-            appointment.getSlot();
+        AppointmentSlot slot = nonNull(appointmentDto.getAppointmentSlotDto()) ?
+            appointmentSlotMapper.appointmentSlotEntityOf(appointmentDto.getAppointmentSlotDto()) :
+            appointment.getAppointmentSlot();
         List<User> users = nonNull(appointmentDto.getUsers()) ?
             appointmentDto.getUsers().stream()
                 .map(userDto -> userMapper.userEntityOf(userDto))
@@ -64,7 +67,7 @@ public class AppointmentMapper implements DtoMapper, EntityMapper {
         return Appointment.builder()
             .id(id)
             .store(store)
-            .slot(slot)
+            .appointmentSlot(slot)
             .users(users)
             .build();
     }
@@ -73,7 +76,7 @@ public class AppointmentMapper implements DtoMapper, EntityMapper {
         return new Appointment(
             appointmentDto.getId()
             , storeMapper.storeEntityOf(appointmentDto.getStore())
-            , appointmentSlotMapper.appointmentSlotEntityOf(appointmentDto.getSlot())
+            , appointmentSlotMapper.appointmentSlotEntityOf(appointmentDto.getAppointmentSlotDto())
             , appointmentDto.getUsers().stream()
             .map(userDto -> userMapper.userEntityOf(userDto))
             .collect(Collectors.toList())
@@ -84,10 +87,10 @@ public class AppointmentMapper implements DtoMapper, EntityMapper {
         return AppointmentDto.builder()
             .id(appointment.getId())
             .store(storeMapper.storeDtoOf(appointment.getStore()))
-            .slot(appointmentSlotMapper.appointmentSlotDtoOf(appointment.getSlot()))
+            .appointmentSlotDto(appointmentSlotMapper.appointmentSlotDtoOf(appointment.getAppointmentSlot()))
             .users(appointment.getUsers().stream()
                 .map(user -> userMapper.userDtoOf(user))
-                .collect(Collectors.toList()))
+                .toList())
             .build();
     }
 }

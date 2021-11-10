@@ -28,6 +28,8 @@ class AppointmentSlotServiceTest {
     @Autowired
     private AppointmentSlotRepository appointmentSlotRepository;
 
+    private EntityDtoCreator creator = new EntityDtoCreator();
+
     @BeforeEach
     void setUp() {
         appointmentSlotRepository.deleteAll();
@@ -53,8 +55,8 @@ class AppointmentSlotServiceTest {
         assertSlotsSize(0);
 
         // Step 1 - save
-        AppointmentSlotDto appointmentSlotDto = createAppointmentSlotDto(
-        );
+        AppointmentSlotDto appointmentSlotDto = creator.createAppointmentSlotDto(
+            DATE_TIME_1, DATE_TIME_2);
         long actual = underTest.upsertAppointmentSlot(appointmentSlotDto);
         long expected = 1L;
         assertTrue(expected <= actual);
@@ -70,8 +72,8 @@ class AppointmentSlotServiceTest {
         assertSlotsSize(0);
 
         // Step 1 - save
-        AppointmentSlotDto appointmentSlotDto = createAppointmentSlotDto(
-        );
+        AppointmentSlotDto appointmentSlotDto = creator.createAppointmentSlotDto(
+            DATE_TIME_1, DATE_TIME_2);
         long actual1 = underTest.upsertAppointmentSlot(appointmentSlotDto);
         long expected = 1L;
         assertTrue(expected <= actual1);
@@ -92,10 +94,4 @@ class AppointmentSlotServiceTest {
         assertEquals(expectedSize, slots.size());
     }
 
-    private AppointmentSlotDto createAppointmentSlotDto() {
-        return AppointmentSlotDto.builder()
-            .startTime(DATE_TIME_1)
-            .endTime(DATE_TIME_2)
-            .build();
-    }
 }

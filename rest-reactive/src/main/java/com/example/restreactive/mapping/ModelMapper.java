@@ -23,7 +23,7 @@ public class ModelMapper {
             .filter(mapper -> mapper.accepts(entityObject))
             .map(mapper -> mapper.mapTo(entityObject))
             .findAny()
-            .orElseThrow(() -> new ApptException("No mapper found " +
+            .orElseThrow(() -> new AppointmentException("No mapper found " +
                 "for entity of type " +
                 entityObject.getClass().getName()))
             ;
@@ -34,7 +34,7 @@ public class ModelMapper {
             .filter(mapper -> mapper.accepts(dtoObject))
             .map(mapper -> mapper.mapTo(dtoObject))
             .findAny()
-            .orElseThrow(() -> new ApptException("No mapper found " +
+            .orElseThrow(() -> new AppointmentException("No mapper found " +
                 "for dto of type " +
                 dtoObject.getClass().getName()))
             ;
@@ -46,7 +46,7 @@ public class ModelMapper {
             .filter(mapper -> mapper.accepts(dtoObject))
             .map(mapper -> mapper.updateEntity(entityObject, dtoObject))
             .findAny()
-            .orElseThrow(() -> new ApptException("No mapper found " +
+            .orElseThrow(() -> new AppointmentException("No mapper found " +
                 "for update of type " +
                 dtoObject.getClass().getName()))
             ;

@@ -17,9 +17,14 @@ public class User implements EntityObject {
     @Id
     @GeneratedValue
     Long id;
+
     String username;
     String firstName;
     String lastName;
     @OneToOne
     EmailAddress email;
+
+    @ManyToOne(fetch = FetchType.LAZY)
+    @JoinColumn(name = "user_id")
+    private Appointment appointment;
 }

@@ -6,6 +6,7 @@ import com.example.restreactive.model.Country;
 import com.example.restreactive.model.EntityObject;
 import org.springframework.stereotype.Component;
 
+import static java.util.Objects.isNull;
 import static java.util.Objects.nonNull;
 
 @Component
@@ -54,6 +55,9 @@ public class CountryMapper implements DtoMapper, EntityMapper {
     }
 
     public Country countryEntityOf(CountryDto countryDto) {
+        if(isNull(countryDto)) {
+            return null;
+        }
         return Country.builder()
             .id(countryDto.getId())
             .name(countryDto.getName())
@@ -62,6 +66,9 @@ public class CountryMapper implements DtoMapper, EntityMapper {
     }
 
     public CountryDto countryDtoOf(Country country) {
+        if(isNull(country)) {
+            return null;
+        }
         return CountryDto.builder()
             .id(country.getId())
             .name(country.getName())

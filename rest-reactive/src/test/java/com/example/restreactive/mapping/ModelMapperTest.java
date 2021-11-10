@@ -60,7 +60,7 @@ class ModelMapperTest {
         EntityObject input = new EntityObject() {
         };
         Exception exception = Assertions.assertThrows(
-            ApptException.class,
+            AppointmentException.class,
             () -> underTest.toDto(input)
         );
         String expected = "No mapper found for entity of type " +
@@ -84,7 +84,7 @@ class ModelMapperTest {
         DtoObject input = new DtoObject() {
         };
         Exception exception = Assertions.assertThrows(
-            ApptException.class,
+            AppointmentException.class,
             () -> underTest.toEntity(input)
         );
         String expected = "No mapper found for dto of type " +
@@ -200,7 +200,7 @@ class ModelMapperTest {
         return AppointmentDto.builder()
             .id(ID_1)
             .store(createStoreDto())
-            .slot(createAppointmentSlotDto())
+            .appointmentSlotDto(createAppointmentSlotDto())
             .users(ImmutableList.of(createUserDto()))
             .build();
     }

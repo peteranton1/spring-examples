@@ -8,6 +8,7 @@ import org.springframework.stereotype.Component;
 
 import java.time.ZonedDateTime;
 
+import static java.util.Objects.isNull;
 import static java.util.Objects.nonNull;
 
 @Component
@@ -56,6 +57,9 @@ public class AppointmentSlotMapper implements DtoMapper, EntityMapper {
     }
 
     public AppointmentSlot appointmentSlotEntityOf(AppointmentSlotDto appointmentSlotDto) {
+        if(isNull(appointmentSlotDto)) {
+            return null;
+        }
         return new AppointmentSlot(
             appointmentSlotDto.getId()
             , appointmentSlotDto.getStartTime()
@@ -64,6 +68,9 @@ public class AppointmentSlotMapper implements DtoMapper, EntityMapper {
     }
 
     public AppointmentSlotDto appointmentSlotDtoOf(AppointmentSlot appointmentSlot) {
+        if(isNull(appointmentSlot)) {
+            return null;
+        }
         return AppointmentSlotDto.builder()
             .id(appointmentSlot.getId())
             .startTime(appointmentSlot.getStartTime())

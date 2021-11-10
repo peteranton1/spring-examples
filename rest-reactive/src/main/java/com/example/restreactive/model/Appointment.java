@@ -21,7 +21,8 @@ public class Appointment implements EntityObject {
     @OneToOne
     Store store;
     @OneToOne
-    AppointmentSlot slot;
-    @OneToMany
+    AppointmentSlot appointmentSlot;
+
+    @OneToMany(fetch = FetchType.EAGER, mappedBy = "id")
     List<User> users;
 }

@@ -5,6 +5,7 @@ import com.example.restreactive.model.Country;
 import com.example.restreactive.repository.CountryRepository;
 import com.example.restreactive.repository.StoreRepository;
 import com.example.restreactive.repository.StreetAddressRepository;
+import com.google.common.collect.ImmutableList;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -30,6 +31,8 @@ class StoreServiceTest {
     @Autowired
     private CountryRepository countryRepository;
 
+    private EntityDtoCreator creator = new EntityDtoCreator();
+
     @BeforeEach
     void setUp() {
         storeRepository.deleteAll();
@@ -42,8 +45,8 @@ class StoreServiceTest {
 
     @Test
     void whenFindByStoreCodeEmptyThenEmpty() {
-        Optional<StoreDto> expected = Optional.empty();
-        Optional<StoreDto> actual = underTest.findByStoreCode("non-existent");
+        List<StoreDto> expected = ImmutableList.of();
+        List<StoreDto> actual = underTest.findByStoreCodeAsDto("non-existent");
         assertEquals(expected, actual);
     }
 
@@ -54,10 +57,10 @@ class StoreServiceTest {
         assertStoresSize(0);
 
         // Step 1 - save
-        CountryDto countryDto = createCountryDto();
-        StreetAddressDto streetAddressDto = createStreetAddressDto(countryDto);
-        StoreDto storeDto = createStoreDto(streetAddressDto);
-        StoreDto expected = createStoreDto(streetAddressDto);
+        CountryDto countryDto = creator.createCountryDto();
+        StreetAddressDto streetAddressDto = creator.createStreetAddressDto(countryDto);
+        StoreDto storeDto = creator.createStoreDto(streetAddressDto);
+        StoreDto expected = creator.createStoreDto(streetAddressDto);
         StoreDto actual = underTest.upsertStore(storeDto);
         // we don't know the id that will be created so set it to
         // whatever it was so following assertEquals works
@@ -75,10 +78,10 @@ class StoreServiceTest {
         assertStoresSize(0);
 
         // Step 1 - save
-        CountryDto countryDto = createCountryDto();
-        StreetAddressDto streetAddressDto = createStreetAddressDto(countryDto);
-        StoreDto storeDto = createStoreDto(streetAddressDto);
-        StoreDto expected = createStoreDto(streetAddressDto);
+        CountryDto countryDto = creator.createCountryDto();
+        StreetAddressDto streetAddressDto = creator.createStreetAddressDto(countryDto);
+        StoreDto storeDto = creator.createStoreDto(streetAddressDto);
+        StoreDto expected = creator.createStoreDto(streetAddressDto);
         StoreDto actual = underTest.upsertStore(storeDto);
         // we don't know the id that will be created so set it to
         // whatever it was so following assertEquals works
@@ -100,31 +103,4 @@ class StoreServiceTest {
         List<StoreDto> stores = underTest.findAllStores();
         assertEquals(expectedSize, stores.size());
     }
-
-    private StoreDto createStoreDto(StreetAddressDto streetAddressDto) {
-        return StoreDto.builder()
-            .storeName("mystore")
-            .storeCode("mycode")
-            .address(streetAddressDto)
-            .build();
-    }
-
-    private StreetAddressDto createStreetAddressDto(CountryDto countryDto) {
-        return StreetAddressDto.builder()
-            .line1("line1")
-            .line2("line2")
-            .city("city")
-            .county("county")
-            .country(countryDto)
-            .postcode("postcode")
-            .build();
-    }
-
-    private CountryDto createCountryDto() {
-        return CountryDto.builder()
-            .name("name")
-            .code("code")
-            .build();
-    }
-
 }

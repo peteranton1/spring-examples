@@ -6,8 +6,7 @@ import com.example.restreactive.model.EmailAddress;
 import com.example.restreactive.model.EntityObject;
 import org.springframework.stereotype.Component;
 
-import static java.util.Objects.nonNull;
-import static java.util.Objects.requireNonNull;
+import static java.util.Objects.*;
 
 @Component
 public class EmailAddressMapper implements DtoMapper, EntityMapper {
@@ -51,8 +50,9 @@ public class EmailAddressMapper implements DtoMapper, EntityMapper {
     }
 
     public EmailAddress emailAddressEntityOf(EmailAddressDto emailAddressDto) {
-        requireNonNull(emailAddressDto);
-        requireNonNull(emailAddressDto.getEmail());
+        if(isNull(emailAddressDto)) {
+            return null;
+        }
         return EmailAddress.builder()
             .id(emailAddressDto.getId())
             .email(emailAddressDto.getEmail())
@@ -60,8 +60,9 @@ public class EmailAddressMapper implements DtoMapper, EntityMapper {
     }
 
     public EmailAddressDto emailAddressDtoOf(EmailAddress emailAddress) {
-        requireNonNull(emailAddress);
-        requireNonNull(emailAddress.getEmail());
+        if(isNull(emailAddress)) {
+            return null;
+        }
         return EmailAddressDto.builder()
             .id(emailAddress.getId())
             .email(emailAddress.getEmail())

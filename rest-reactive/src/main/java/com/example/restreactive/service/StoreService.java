@@ -41,9 +41,15 @@ public class StoreService {
             .toList();
     }
 
-    public Optional<StoreDto> findByStoreCode(String storeCode) {
-        return storeRepository.findByStoreCode(storeCode)
-            .map(store -> (StoreDto) modelMapper.toDto(store));
+    public List<Store> findByStoreCode(String storeCode) {
+        return storeRepository.findByStoreCode(storeCode);
+    }
+
+    public List<StoreDto> findByStoreCodeAsDto(String storeCode) {
+        return findByStoreCode(storeCode)
+            .stream()
+            .map(store -> (StoreDto) modelMapper.toDto(store))
+            .toList();
     }
 
     public StoreDto upsertStore(StoreDto storeDto) {
@@ -54,8 +60,9 @@ public class StoreService {
             streetAddressDto.setId(upsertStreetAddress(streetAddressDto));
         }
         Store storeOut = storeRepository.save(storeRepository
-            .findByStoreCode(storeDto.getStoreCode())
+            .findByStoreCode(storeDto.getStoreCode()).stream()
             .map(store -> (Store) modelMapper.update(store, storeDto))
+            .findAny()
             .orElse((Store) modelMapper.insert(storeDto))
         );
         return (StoreDto) modelMapper.toDto(storeOut);

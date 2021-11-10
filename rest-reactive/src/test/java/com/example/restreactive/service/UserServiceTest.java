@@ -28,6 +28,7 @@ class UserServiceTest {
     @Autowired
     private EmailAddressRepository emailAddressRepository;
 
+    private EntityDtoCreator creator = new EntityDtoCreator();
 
     @BeforeEach
     void setUp() {
@@ -53,9 +54,9 @@ class UserServiceTest {
         assertUsersSize(0);
 
         // Step 1 - save
-        EmailAddressDto emailAddressDto = createEmailAddressDto(EMAIL);
-        UserDto userDto = createUserDto(emailAddressDto);
-        UserDto expected = createUserDto(emailAddressDto);
+        EmailAddressDto emailAddressDto = creator.createEmailAddressDto(EMAIL);
+        UserDto userDto = creator.createUserDto(emailAddressDto);
+        UserDto expected = creator.createUserDto(emailAddressDto);
         UserDto actual = underTest.upsertUser(userDto);
         // we don't know the id that will be created so set it to
         // whatever it was so following assertEquals works
@@ -73,9 +74,9 @@ class UserServiceTest {
         assertUsersSize(0);
 
         // Step 1 - create
-        EmailAddressDto emailAddressDto = createEmailAddressDto(EMAIL);
-        UserDto userDto = createUserDto(emailAddressDto);
-        UserDto expected = createUserDto(emailAddressDto);
+        EmailAddressDto emailAddressDto = creator.createEmailAddressDto(EMAIL);
+        UserDto userDto = creator.createUserDto(emailAddressDto);
+        UserDto expected = creator.createUserDto(emailAddressDto);
         UserDto actual1 = underTest.upsertUser(userDto);
         expected.setId(actual1.getId());
         assertEquals(expected, actual1);
@@ -96,16 +97,4 @@ class UserServiceTest {
         assertEquals(expectedSize, users.size());
     }
 
-    private UserDto createUserDto(EmailAddressDto emailAddressDto) {
-        return UserDto.builder()
-            .username("myusername")
-            .email(emailAddressDto)
-            .build();
-    }
-
-    private EmailAddressDto createEmailAddressDto(String email) {
-        return EmailAddressDto.builder()
-            .email(email)
-            .build();
-    }
 }
