@@ -36,7 +36,8 @@ public class UserService {
     }
 
     public Optional<UserDto> findByUsername(String username) {
-        return userRepository.findByUsername(username)
+        requireNonNull(username);
+        return userRepository.findByUsername(username.toLowerCase())
             .stream().findFirst()
             .map(user -> (UserDto) modelMapper.toDto(user));
     }
@@ -44,6 +45,7 @@ public class UserService {
     public UserDto upsertUser(UserDto userDto) {
         requireNonNull(userDto);
         requireNonNull(userDto.getUsername());
+        userDto.setUsername(userDto.getUsername().toLowerCase());
         EmailAddressDto emailAddressDto = userDto.getEmail();
         if (nonNull(emailAddressDto)) {
             emailAddressDto.setId(upsertEmailAddress(emailAddressDto));
@@ -60,8 +62,9 @@ public class UserService {
     public Long upsertEmailAddress(EmailAddressDto emailAddressDto) {
         requireNonNull(emailAddressDto);
         requireNonNull(emailAddressDto.getEmail());
+        emailAddressDto.setEmail(emailAddressDto.getEmail().toLowerCase());
         EmailAddress emailOut = emailAddressRepository.save(emailAddressRepository
-            .findByEmail(emailAddressDto.getEmail())
+            .findByEmail(emailAddressDto.getEmail().toLowerCase())
             .stream().findFirst()
             .map(email -> (EmailAddress) modelMapper.update(email, emailAddressDto))
             .orElse((EmailAddress) modelMapper.insert(emailAddressDto))

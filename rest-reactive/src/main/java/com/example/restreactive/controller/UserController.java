@@ -1,44 +1,68 @@
 package com.example.restreactive.controller;
 
 
-import com.example.restreactive.greeting.Greeting;
+import com.example.restreactive.dto.ErrorDto;
+import com.example.restreactive.dto.UserDto;
+import com.example.restreactive.mapping.AppointmentException;
+import com.example.restreactive.service.UserService;
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.core.NestedExceptionUtils;
+import org.springframework.http.HttpStatus;
 import org.springframework.http.MediaType;
 import org.springframework.http.ResponseEntity;
-import org.springframework.util.Assert;
-import org.springframework.web.bind.annotation.ExceptionHandler;
-import org.springframework.web.bind.annotation.GetMapping;
-import org.springframework.web.bind.annotation.PathVariable;
-import org.springframework.web.bind.annotation.RestController;
+import org.springframework.web.bind.annotation.*;
 import reactor.core.publisher.Flux;
 import reactor.core.publisher.Mono;
 
 import java.time.Duration;
-import java.util.stream.Stream;
 
 @RestController
 public class UserController {
 
+    @Autowired
+    private UserService userService;
+
     @ExceptionHandler
-        //@ResponseStatus(HttpStatus.BAD_REQUEST)
+    @ResponseStatus(HttpStatus.BAD_REQUEST)
     ResponseEntity<?> handleException(Exception exception) {
-        System.out.println("The exception is " +
-            NestedExceptionUtils.getMostSpecificCause(exception));
-        return ResponseEntity.badRequest().build();
+        Throwable cause = NestedExceptionUtils.getMostSpecificCause(exception);
+        String message = cause.getClass().getSimpleName() + ": " + cause.getMessage();
+        System.out.println("The exception is " + cause);
+        return ResponseEntity.badRequest()
+            .body(ErrorDto.builder()
+                .code("400")
+                .message(message)
+                .build());
     }
 
-    @GetMapping("/user/{username}")
-    Mono<Greeting> userMono(@PathVariable String username) {
-        return Mono.just(new Greeting(username));
-    }
-
-    @GetMapping(value = "/users",
-        produces = MediaType.TEXT_EVENT_STREAM_VALUE)
-    Flux<Greeting> userFlux() {
+    @GetMapping(value = "/users/{limit}",
+        produces = MediaType.APPLICATION_JSON_VALUE)
+    Flux<UserDto> listAllUsersWithLimit(@PathVariable int limit) {
+        final int max = 1000;
+        int limitTemp = (limit < max ? limit : max);
         return Flux
-            .fromStream(Stream.generate(() ->
-                new Greeting("Hello, World!")))
-            .take(10)
-            .delayElements(Duration.ofSeconds(1));
+            .fromStream(userService.findAllUsers().stream())
+            .take(limitTemp)
+            .delayElements(Duration.ofMillis(100));
     }
+
+    @GetMapping(value = "/user/{username}",
+        produces = MediaType.APPLICATION_JSON_VALUE)
+    @ResponseStatus(HttpStatus.OK)
+    Mono<UserDto> findUser(@PathVariable String username) {
+        return Mono.just(
+            userService.findByUsername(username)
+                .orElseThrow(() -> new AppointmentException("User not found: " + username))
+        );
+    }
+
+    @PutMapping(value = "/user",
+        consumes = MediaType.APPLICATION_JSON_VALUE,
+        produces = MediaType.APPLICATION_JSON_VALUE)
+    @ResponseStatus(HttpStatus.OK)
+    Mono<UserDto> upsertUser(@RequestBody UserDto request) {
+        return Mono.just(
+            userService.upsertUser(request));
+    }
+
 }
