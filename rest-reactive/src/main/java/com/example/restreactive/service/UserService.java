@@ -7,6 +7,7 @@ import com.example.restreactive.model.EmailAddress;
 import com.example.restreactive.model.User;
 import com.example.restreactive.repository.EmailAddressRepository;
 import com.example.restreactive.repository.UserRepository;
+import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
@@ -16,6 +17,7 @@ import java.util.Optional;
 import static java.util.Objects.nonNull;
 import static java.util.Objects.requireNonNull;
 
+@Slf4j
 @Service
 public class UserService {
 
@@ -29,10 +31,14 @@ public class UserService {
     private ModelMapper modelMapper;
 
     public List<UserDto> findAllUsers() {
-        return userRepository.findAll()
+        List<UserDto> userDtos = userRepository.findAll()
             .stream()
             .map(user -> (UserDto) modelMapper.toDto(user))
             .toList();
+        userDtos.forEach(userDto ->
+            log.info("Retrieved user from db : {}", userDto));
+        log.info("Retrieved {} users from db", userDtos.size());
+        return userDtos;
     }
 
     public Optional<UserDto> findByUsername(String username) {

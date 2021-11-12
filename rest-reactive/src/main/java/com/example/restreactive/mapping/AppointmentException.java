@@ -1,23 +1,21 @@
 package com.example.restreactive.mapping;
 
+import lombok.Getter;
+import lombok.With;
+import org.springframework.http.HttpStatus;
+
+@With
+@Getter
 public class AppointmentException extends RuntimeException {
 
-    public AppointmentException() {
-    }
+    private final String statusCode;
 
     public AppointmentException(String message) {
+        this(message, HttpStatus.BAD_REQUEST);
+    }
+
+    public AppointmentException(String message, HttpStatus statusCode) {
         super(message);
-    }
-
-    public AppointmentException(String message, Throwable cause) {
-        super(message, cause);
-    }
-
-    public AppointmentException(Throwable cause) {
-        super(cause);
-    }
-
-    public AppointmentException(String message, Throwable cause, boolean enableSuppression, boolean writableStackTrace) {
-        super(message, cause, enableSuppression, writableStackTrace);
+        this.statusCode = String.valueOf(statusCode.value());
     }
 }
