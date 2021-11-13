@@ -1,6 +1,7 @@
 package com.example.restreactive.service;
 
 import com.example.restreactive.dto.CountryDto;
+import com.example.restreactive.dto.MessageDto;
 import com.example.restreactive.dto.StoreDto;
 import com.example.restreactive.dto.StreetAddressDto;
 import com.example.restreactive.mapping.ModelMapper;
@@ -14,10 +15,9 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
 import java.util.List;
-import java.util.Optional;
+import java.util.Objects;
 
 import static java.util.Objects.nonNull;
-import static java.util.Objects.requireNonNull;
 
 @Service
 public class StoreService {
@@ -34,6 +34,8 @@ public class StoreService {
     @Autowired
     private ModelMapper modelMapper;
 
+    private final ServiceHelper helper = new ServiceHelper();
+
     public List<StoreDto> findAllStores() {
         return storeRepository.findAll()
             .stream()
@@ -45,19 +47,13 @@ public class StoreService {
         return storeRepository.findByStoreCode(storeCode);
     }
 
-    public List<StoreDto> findByStoreCodeAsDto(String storeCode) {
-        return findByStoreCode(storeCode)
-            .stream()
-            .map(store -> (StoreDto) modelMapper.toDto(store))
-            .toList();
-    }
-
     public StoreDto upsertStore(StoreDto storeDto) {
-        requireNonNull(storeDto);
-        requireNonNull(storeDto.getStoreCode());
+        helper.assertNonNull("storeDto", storeDto);
+        helper.assertNonNull("storeDto.getStoreCode()", storeDto.getStoreCode());
         StreetAddressDto streetAddressDto = storeDto.getAddress();
         if (nonNull(streetAddressDto)) {
-            streetAddressDto.setId(upsertStreetAddress(streetAddressDto));
+            Integer id = upsertStreetAddress(streetAddressDto);
+            streetAddressDto.setId(id);
         }
         Store storeOut = storeRepository.save(storeRepository
             .findByStoreCode(storeDto.getStoreCode()).stream()
@@ -65,15 +61,18 @@ public class StoreService {
             .findAny()
             .orElse((Store) modelMapper.insert(storeDto))
         );
+        helper.assertNonNull("storeOut", storeOut);
         return (StoreDto) modelMapper.toDto(storeOut);
     }
 
-    public Long upsertStreetAddress(StreetAddressDto streetAddressDto) {
-        requireNonNull(streetAddressDto);
-        requireNonNull(streetAddressDto.getPostcode());
+    public Integer upsertStreetAddress(StreetAddressDto streetAddressDto) {
+        helper.assertNonNull("streetAddressDto", streetAddressDto);
+        helper.assertNonNull("streetAddressDto.getPostcode()", streetAddressDto.getPostcode());
         CountryDto countryDto = streetAddressDto.getCountry();
         if (nonNull(countryDto)) {
-            countryDto.setId(upsertCountry(countryDto));
+            Integer id = upsertCountry(countryDto);
+            helper.assertNonNull("country.id", id);
+            countryDto.setId(id);
         }
         StreetAddress streetAddress = streetAddressRepository
             .save(streetAddressRepository
@@ -85,12 +84,13 @@ public class StoreService {
                     .update(address, streetAddressDto))
                 .orElse((StreetAddress) modelMapper.insert(streetAddressDto))
             );
+        helper.assertNonNull("streetAddress", streetAddress);
         return streetAddress.getId();
     }
 
-    public Long upsertCountry(CountryDto countryDto) {
-        requireNonNull(countryDto);
-        requireNonNull(countryDto.getCode());
+    public Integer upsertCountry(CountryDto countryDto) {
+        helper.assertNonNull("countryDto", countryDto);
+        helper.assertNonNull("countryDto.getCode()", countryDto.getCode());
         Country countryOut = countryRepository
             .save(countryRepository
                 .findByCode(countryDto.getCode())
@@ -99,6 +99,26 @@ public class StoreService {
                     .update(country, countryDto))
                 .orElse((Country) modelMapper.insert(countryDto))
             );
+        helper.assertNonNull("countryOut", countryOut);
         return countryOut.getId();
     }
+
+    public MessageDto deleteStore(String storeCode) {
+        if (Objects.isNull(storeCode)) {
+            return MessageDto.builder()
+                .code("200")
+                .message("Store not specified.")
+                .build();
+        }
+        String storeCode1 = storeCode.toLowerCase();
+        storeRepository
+            .findByStoreCode(storeCode1)
+            .stream().findFirst()
+            .ifPresent(store1 -> storeRepository.delete(store1));
+        return MessageDto.builder()
+            .code("200")
+            .message("Store deleted: " + storeCode)
+            .build();
+    }
+
 }

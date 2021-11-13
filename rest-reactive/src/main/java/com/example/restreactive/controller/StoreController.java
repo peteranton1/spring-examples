@@ -2,8 +2,11 @@ package com.example.restreactive.controller;
 
 
 import com.example.restreactive.dto.MessageDto;
+import com.example.restreactive.dto.StoreDto;
 import com.example.restreactive.dto.UserDto;
 import com.example.restreactive.mapping.AppointmentException;
+import com.example.restreactive.mapping.ModelMapper;
+import com.example.restreactive.service.StoreService;
 import com.example.restreactive.service.UserService;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -17,53 +20,59 @@ import java.util.List;
 
 @Slf4j
 @RestController
-public class UserController extends ControllerExceptionHandler {
+public class StoreController extends ControllerExceptionHandler {
 
     @Autowired
-    private UserService userService;
+    private StoreService storeService;
 
-    @GetMapping(value = "/users/{limit}",
+    @Autowired
+    private ModelMapper modelMapper;
+
+    @GetMapping(value = "/stores/{limit}",
         produces = MediaType.APPLICATION_JSON_VALUE)
-    Flux<UserDto> listAllUsersWithLimit(@PathVariable int limit) {
+    Flux<StoreDto> listAllUsersWithLimit(@PathVariable int limit) {
         final int max = 1000;
         int limitTemp = (limit < max ? limit : max);
-        List<UserDto> userDtos = userService.findAllUsers();
-        log.info("Controller: users {} ", userDtos.size());
+        List<StoreDto> storeDtos = storeService.findAllStores();
+        log.info("Controller: users {} ", storeDtos.size());
         return Flux
-            .fromStream(userDtos.stream())
+            .fromStream(storeDtos.stream())
             .take(limitTemp)
             //.delayElements(Duration.ofMillis(100))
             ;
     }
 
-    @GetMapping(value = "/user/{username}",
+    @GetMapping(value = "/store/{storeCode}",
         produces = MediaType.APPLICATION_JSON_VALUE)
     @ResponseStatus(HttpStatus.OK)
-    Mono<UserDto> findUser(@PathVariable String username) {
+    Mono<StoreDto> findStore(@PathVariable String storeCode) {
         AppointmentException ap = new AppointmentException(
-            "User not found: " + username,
+            "Store not found: " + storeCode,
             HttpStatus.NOT_FOUND);
         return Mono.just(
-            userService.findByUsername(username)
+            storeService.findByStoreCode(storeCode)
+                .stream()
+                .map(store -> (StoreDto)modelMapper.toDto(store))
+                .findFirst()
                 .orElseThrow(() -> ap)
         );
     }
 
-    @PutMapping(value = "/user",
+    @PutMapping(value = "/store",
         consumes = MediaType.APPLICATION_JSON_VALUE,
         produces = MediaType.APPLICATION_JSON_VALUE)
     @ResponseStatus(HttpStatus.OK)
-    Mono<UserDto> upsertUser(@RequestBody UserDto request) {
+    Mono<StoreDto> upsertStore(@RequestBody StoreDto request) {
         return Mono.just(
-            userService.upsertUser(request));
+            storeService.upsertStore(request));
     }
 
-    @DeleteMapping(value = "/user/{username}",
+    @DeleteMapping(value = "/store/{storeCode}",
         produces = MediaType.APPLICATION_JSON_VALUE)
     @ResponseStatus(HttpStatus.OK)
-    Mono<MessageDto> deleteUser(@PathVariable String username) {
+    Mono<MessageDto> deleteStore(@PathVariable String storeCode) {
         return Mono.just(
-            userService.deleteUser(username));
+            storeService.deleteStore(storeCode));
     }
 
 }

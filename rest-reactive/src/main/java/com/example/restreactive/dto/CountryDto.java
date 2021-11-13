@@ -8,7 +8,7 @@ import lombok.*;
 @ToString
 @EqualsAndHashCode
 public class CountryDto implements DtoObject {
-    Long id;
+    Integer id;
     String name;
     String code;
 }

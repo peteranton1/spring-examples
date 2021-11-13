@@ -50,7 +50,7 @@ public class AppointmentMapper implements DtoMapper, EntityMapper {
     }
 
     public Appointment appointmentUpdate(Appointment appointment, AppointmentDto appointmentDto) {
-        Long id = nonNull(appointment.getId()) ?
+        Integer id = nonNull(appointment.getId()) ?
             appointment.getId() :
             appointmentDto.getId();
         Store store = nonNull(appointmentDto.getStore()) ?

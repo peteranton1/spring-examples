@@ -1,6 +1,7 @@
 package com.example.restreactive.service;
 
 import com.example.restreactive.dto.EmailAddressDto;
+import com.example.restreactive.dto.MessageDto;
 import com.example.restreactive.dto.UserDto;
 import com.example.restreactive.repository.EmailAddressRepository;
 import com.example.restreactive.repository.UserRepository;
@@ -90,6 +91,36 @@ class UserServiceTest {
 
         // Check 2 in db, therefore updated
         assertUsersSize(1);
+    }
+
+    @Test
+    void whenDeleteUserExistsThenDelete() {
+
+        // Check 0 in db, initial conditions
+        assertUsersSize(0);
+
+        // Step 1 - create
+        EmailAddressDto emailAddressDto = creator.createEmailAddressDto(EMAIL);
+        UserDto userDto = creator.createUserDto(emailAddressDto);
+        UserDto expected = creator.createUserDto(emailAddressDto);
+        UserDto actual1 = underTest.upsertUser(userDto);
+        expected.setId(actual1.getId());
+        assertEquals(expected, actual1);
+
+        // Check 1 in db, therefore created
+        assertUsersSize(1);
+
+        // Step 3 - delete
+        String username = userDto.getUsername();
+        MessageDto expected2 = MessageDto.builder()
+            .code("200")
+            .message("User deleted: " + username)
+            .build();
+        MessageDto actual2 = underTest.deleteUser(username);
+        assertEquals(expected2, actual2);
+
+        // Check in db, therefore deleted
+        assertUsersSize(0);
     }
 
     private void assertUsersSize(int expectedSize) {

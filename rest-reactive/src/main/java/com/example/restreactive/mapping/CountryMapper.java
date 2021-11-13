@@ -38,7 +38,7 @@ public class CountryMapper implements DtoMapper, EntityMapper {
     }
 
     public Country countryUpdate(Country country, CountryDto countryDto) {
-        Long id = nonNull(country.getId()) ?
+        Integer id = nonNull(country.getId()) ?
             country.getId() :
             countryDto.getId();
         String name = nonNull(countryDto.getName()) ?

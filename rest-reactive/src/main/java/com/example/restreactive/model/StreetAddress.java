@@ -16,7 +16,7 @@ import javax.persistence.*;
 public class StreetAddress implements EntityObject {
     @Id
     @GeneratedValue
-    Long id;
+    Integer id;
     String line1;
     String line2;
     String city;

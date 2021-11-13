@@ -10,7 +10,7 @@ import java.util.List;
 @ToString
 @EqualsAndHashCode
 public class AppointmentDto implements DtoObject {
-    Long id;
+    Integer id;
     StoreDto store;
     AppointmentSlotDto appointmentSlotDto;
     List<UserDto> users;

@@ -20,7 +20,7 @@ import java.time.ZonedDateTime;
 public class AppointmentSlot implements EntityObject {
     @Id
     @GeneratedValue
-    Long id;
+    Integer id;
     ZonedDateTime startTime;
     ZonedDateTime endTime;
 }

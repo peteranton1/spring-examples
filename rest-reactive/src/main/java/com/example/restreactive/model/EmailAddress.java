@@ -19,7 +19,7 @@ import javax.persistence.Table;
 public class EmailAddress implements EntityObject {
     @Id
     @GeneratedValue
-    Long id;
+    Integer id;
     String email;
 
 }

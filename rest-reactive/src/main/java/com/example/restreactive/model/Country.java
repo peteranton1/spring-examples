@@ -19,7 +19,7 @@ import javax.persistence.Table;
 public class Country implements EntityObject {
     @Id
     @GeneratedValue
-    Long id;
+    Integer id;
     String name;
     String code;
 }

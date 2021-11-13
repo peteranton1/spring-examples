@@ -37,7 +37,7 @@ public class EmailAddressMapper implements DtoMapper, EntityMapper {
     }
 
     public EmailAddress emailAddressUpdate(EmailAddress emailAddress, EmailAddressDto emailAddressDto) {
-        Long id = nonNull(emailAddress.getId()) ?
+        Integer id = nonNull(emailAddress.getId()) ?
             emailAddress.getId() :
             emailAddressDto.getId();
         String email = nonNull(emailAddressDto.getEmail()) ?

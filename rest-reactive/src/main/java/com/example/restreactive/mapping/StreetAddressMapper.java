@@ -43,7 +43,7 @@ public class StreetAddressMapper implements DtoMapper, EntityMapper {
     }
 
     public StreetAddress streetAddressUpdate(StreetAddress streetAddress, StreetAddressDto streetAddressDto) {
-        Long id = nonNull(streetAddress.getId()) ?
+        Integer id = nonNull(streetAddress.getId()) ?
             streetAddress.getId() :
             streetAddressDto.getId();
         String line1 = nonNull(streetAddressDto.getLine1()) ?

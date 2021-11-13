@@ -1,7 +1,9 @@
 package com.example.restreactive.service;
 
 import com.example.restreactive.dto.EmailAddressDto;
+import com.example.restreactive.dto.MessageDto;
 import com.example.restreactive.dto.UserDto;
+import com.example.restreactive.mapping.AppointmentException;
 import com.example.restreactive.mapping.ModelMapper;
 import com.example.restreactive.model.EmailAddress;
 import com.example.restreactive.model.User;
@@ -12,6 +14,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
 import java.util.List;
+import java.util.Objects;
 import java.util.Optional;
 
 import static java.util.Objects.nonNull;
@@ -30,6 +33,8 @@ public class UserService {
     @Autowired
     private ModelMapper modelMapper;
 
+    private final ServiceHelper helper = new ServiceHelper();
+
     public List<UserDto> findAllUsers() {
         List<UserDto> userDtos = userRepository.findAll()
             .stream()
@@ -42,15 +47,15 @@ public class UserService {
     }
 
     public Optional<UserDto> findByUsername(String username) {
-        requireNonNull(username);
+        helper.assertNonNull("username",username);
         return userRepository.findByUsername(username.toLowerCase())
             .stream().findFirst()
             .map(user -> (UserDto) modelMapper.toDto(user));
     }
 
     public UserDto upsertUser(UserDto userDto) {
-        requireNonNull(userDto);
-        requireNonNull(userDto.getUsername());
+        helper.assertNonNull("userDto",userDto);
+        helper.assertNonNull("userDto.getUsername()",userDto.getUsername());
         userDto.setUsername(userDto.getUsername().toLowerCase());
         EmailAddressDto emailAddressDto = userDto.getEmail();
         if (nonNull(emailAddressDto)) {
@@ -65,9 +70,9 @@ public class UserService {
         return (UserDto) modelMapper.toDto(userOut);
     }
 
-    public Long upsertEmailAddress(EmailAddressDto emailAddressDto) {
-        requireNonNull(emailAddressDto);
-        requireNonNull(emailAddressDto.getEmail());
+    public Integer upsertEmailAddress(EmailAddressDto emailAddressDto) {
+        helper.assertNonNull("emailAddressDto",emailAddressDto);
+        helper.assertNonNull("emailAddressDto.getEmail()",emailAddressDto.getEmail());
         emailAddressDto.setEmail(emailAddressDto.getEmail().toLowerCase());
         EmailAddress emailOut = emailAddressRepository.save(emailAddressRepository
             .findByEmail(emailAddressDto.getEmail().toLowerCase())
@@ -77,4 +82,23 @@ public class UserService {
         );
         return emailOut.getId();
     }
+
+    public MessageDto deleteUser(String username) {
+        if(Objects.isNull(username)){
+            return MessageDto.builder()
+                .code("200")
+                .message("User not specified.")
+                .build();
+        }
+        String username1 = username.toLowerCase();
+        userRepository
+            .findByUsername(username1)
+            .stream().findFirst()
+            .ifPresent(user1 -> userRepository.delete(user1));
+        return MessageDto.builder()
+            .code("200")
+            .message("User deleted: " + username)
+            .build();
+    }
+
 }

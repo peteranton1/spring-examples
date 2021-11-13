@@ -42,7 +42,7 @@ public class UserMapper implements DtoMapper, EntityMapper {
     }
 
     public User userUpdate(User user, UserDto userDto) {
-        Long id = nonNull(user.getId()) ?
+        Integer id = nonNull(user.getId()) ?
             user.getId():
             userDto.getId();
         String username = nonNull(user.getUsername()) ?

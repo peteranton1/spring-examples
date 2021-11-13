@@ -17,7 +17,7 @@ import java.util.List;
 public class Appointment implements EntityObject {
     @Id
     @GeneratedValue
-    Long id;
+    Integer id;
     @OneToOne
     Store store;
     @OneToOne

@@ -8,6 +8,6 @@ import lombok.*;
 @ToString
 @EqualsAndHashCode
 public class EmailAddressDto implements DtoObject {
-    Long id;
+    Integer id;
     String email;
 }

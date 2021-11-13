@@ -40,7 +40,7 @@ public class AppointmentSlotMapper implements DtoMapper, EntityMapper {
     }
 
     public AppointmentSlot appointmentSlotUpdate(AppointmentSlot appointmentSlot, AppointmentSlotDto appointmentSlotDto) {
-        Long id = nonNull(appointmentSlot.getId()) ?
+        Integer id = nonNull(appointmentSlot.getId()) ?
             appointmentSlot.getId() :
             appointmentSlotDto.getId();
         ZonedDateTime startTime = nonNull(appointmentSlotDto.getStartTime()) ?

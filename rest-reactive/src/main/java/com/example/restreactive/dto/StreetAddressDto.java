@@ -8,7 +8,7 @@ import lombok.*;
 @ToString
 @EqualsAndHashCode
 public class StreetAddressDto implements DtoObject {
-    private Long id;
+    private Integer id;
     private String line1;
     private String line2;
     private String city;

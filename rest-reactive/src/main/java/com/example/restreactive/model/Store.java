@@ -16,7 +16,7 @@ import javax.persistence.*;
 public class Store implements EntityObject {
     @Id
     @GeneratedValue
-    Long id;
+    Integer id;
     String storeName;
     String storeCode;
     @OneToOne

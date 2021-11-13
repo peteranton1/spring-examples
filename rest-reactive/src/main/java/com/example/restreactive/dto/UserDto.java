@@ -8,7 +8,7 @@ import lombok.*;
 @ToString
 @EqualsAndHashCode
 public class UserDto implements DtoObject {
-    Long id;
+    Integer id;
     String username;
     String firstName;
     String lastName;

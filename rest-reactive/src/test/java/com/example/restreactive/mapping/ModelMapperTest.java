@@ -16,7 +16,7 @@ import static org.junit.jupiter.api.Assertions.assertEquals;
 @SpringBootTest
 class ModelMapperTest {
 
-    public static final long ID_1 = 1L;
+    public static final int ID_1 = 1;
     public static final String TEST = "TEST";
     public static final ZonedDateTime DATE_TIME = ZonedDateTime
         .parse("2019-04-01T16:24:11.252Z");

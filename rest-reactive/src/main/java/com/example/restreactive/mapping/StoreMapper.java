@@ -45,7 +45,7 @@ public class StoreMapper implements DtoMapper, EntityMapper {
     }
 
     public Store storeUpdate(Store store, StoreDto storeDto) {
-        Long id = nonNull(store.getId()) ?
+        Integer id = nonNull(store.getId()) ?
             store.getId() :
             storeDto.getId();
         String storeName = nonNull(storeDto.getStoreName()) ?

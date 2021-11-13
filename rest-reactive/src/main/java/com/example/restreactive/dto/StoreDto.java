@@ -8,7 +8,7 @@ import lombok.*;
 @ToString
 @EqualsAndHashCode
 public class StoreDto implements DtoObject {
-    Long id;
+    Integer id;
     String storeName;
     String storeCode;
     StreetAddressDto address;

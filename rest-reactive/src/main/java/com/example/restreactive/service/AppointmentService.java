@@ -68,7 +68,7 @@ public class AppointmentService {
             .toList();
     }
 
-    public Long upsertAppointment(AppointmentDto appointmentDto) {
+    public Integer upsertAppointment(AppointmentDto appointmentDto) {
         // Validate Input
         requireNonNull(appointmentDto);
         StoreDto storeDto = appointmentDto.getStore();

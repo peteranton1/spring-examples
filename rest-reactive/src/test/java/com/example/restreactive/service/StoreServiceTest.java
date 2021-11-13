@@ -2,6 +2,7 @@ package com.example.restreactive.service;
 
 import com.example.restreactive.dto.*;
 import com.example.restreactive.model.Country;
+import com.example.restreactive.model.Store;
 import com.example.restreactive.repository.CountryRepository;
 import com.example.restreactive.repository.StoreRepository;
 import com.example.restreactive.repository.StreetAddressRepository;
@@ -45,8 +46,8 @@ class StoreServiceTest {
 
     @Test
     void whenFindByStoreCodeEmptyThenEmpty() {
-        List<StoreDto> expected = ImmutableList.of();
-        List<StoreDto> actual = underTest.findByStoreCodeAsDto("non-existent");
+        List<Store> expected = ImmutableList.of();
+        List<Store> actual = underTest.findByStoreCode("non-existent");
         assertEquals(expected, actual);
     }
 
@@ -97,6 +98,39 @@ class StoreServiceTest {
 
         // Check 1 in db, therefore updated
         assertStoresSize(1);
+    }
+
+    @Test
+    void whenDeleteStoreExistsThenDelete() {
+
+        // Check 0 users in db, initial conditions
+        assertStoresSize(0);
+
+        // Step 1 - save
+        CountryDto countryDto = creator.createCountryDto();
+        StreetAddressDto streetAddressDto = creator.createStreetAddressDto(countryDto);
+        StoreDto storeDto = creator.createStoreDto(streetAddressDto);
+        StoreDto expected = creator.createStoreDto(streetAddressDto);
+        StoreDto actual = underTest.upsertStore(storeDto);
+        // we don't know the id that will be created so set it to
+        // whatever it was so following assertEquals works
+        expected.setId(actual.getId());
+        assertEquals(expected, actual);
+
+        // Check 1 in db, therefore created
+        assertStoresSize(1);
+
+        // Step 2 - delete
+        String storeCode = storeDto.getStoreCode();
+        MessageDto expected2 = MessageDto.builder()
+            .code("200")
+            .message("Store deleted: mycode")
+            .build();
+        MessageDto actual2 = underTest.deleteStore(storeCode);
+        assertEquals(expected2, actual2);
+
+        // Check 1 in db, therefore updated
+        assertStoresSize(0);
     }
 
     private void assertStoresSize(int expectedSize) {

@@ -7,7 +7,7 @@ import lombok.*;
 @Setter
 @ToString
 @EqualsAndHashCode
-public class ErrorDto {
+public class MessageDto {
     private String code;
     private String message;
 }

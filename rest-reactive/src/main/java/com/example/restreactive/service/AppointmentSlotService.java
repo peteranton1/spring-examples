@@ -38,7 +38,7 @@ public class AppointmentSlotService {
     }
 
 
-    public Long upsertAppointmentSlot(AppointmentSlotDto appointmentSlotDto) {
+    public Integer upsertAppointmentSlot(AppointmentSlotDto appointmentSlotDto) {
         requireNonNull(appointmentSlotDto);
         requireNonNull(appointmentSlotDto.getStartTime());
         requireNonNull(appointmentSlotDto.getEndTime());

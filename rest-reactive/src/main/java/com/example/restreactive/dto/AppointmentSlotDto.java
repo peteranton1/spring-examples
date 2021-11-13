@@ -10,7 +10,7 @@ import java.time.ZonedDateTime;
 @ToString
 @EqualsAndHashCode
 public class AppointmentSlotDto implements DtoObject {
-    Long id;
+    Integer id;
     ZonedDateTime startTime;
     ZonedDateTime endTime;
 }

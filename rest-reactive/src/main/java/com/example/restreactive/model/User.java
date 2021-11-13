@@ -16,7 +16,7 @@ import javax.persistence.*;
 public class User implements EntityObject {
     @Id
     @GeneratedValue
-    Long id;
+    Integer id;
 
     String username;
     String firstName;
