@@ -1,7 +1,8 @@
 package com.example.restreactive.service;
 
-import com.example.restreactive.dto.AppointmentSlotDto;
-import com.example.restreactive.repository.AppointmentSlotRepository;
+import com.example.restreactive.dto.StoreSlotDto;
+import com.example.restreactive.repository.AppointmentRepository;
+import com.example.restreactive.repository.StoreSlotRepository;
 import com.google.common.collect.ImmutableList;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
@@ -14,7 +15,9 @@ import java.util.List;
 import static org.junit.jupiter.api.Assertions.*;
 
 @SpringBootTest
-class AppointmentSlotServiceTest {
+class StoreSlotServiceTest {
+
+    public static final String TEST = "test";
 
     public static final ZonedDateTime DATE_TIME_1 = ZonedDateTime
         .parse("2019-04-01T16:24:11.252Z");
@@ -23,16 +26,20 @@ class AppointmentSlotServiceTest {
         .plusMinutes(30);
 
     @Autowired
-    private AppointmentSlotService underTest;
+    private StoreSlotService underTest;
 
     @Autowired
-    private AppointmentSlotRepository appointmentSlotRepository;
+    private AppointmentRepository appointmentRepository;
 
-    private EntityDtoCreator creator = new EntityDtoCreator();
+    @Autowired
+    private StoreSlotRepository storeSlotRepository;
+
+    private final EntityDtoCreator creator = new EntityDtoCreator();
 
     @BeforeEach
     void setUp() {
-        appointmentSlotRepository.deleteAll();
+        appointmentRepository.deleteAll();
+        storeSlotRepository.deleteAll();
     }
 
     @Test
@@ -41,9 +48,18 @@ class AppointmentSlotServiceTest {
     }
 
     @Test
+    void whenFindByStoreAndStartTimeAndEndTimeEmptyThenEmpty() {
+        List<StoreSlotDto> expected = ImmutableList.of();
+        List<StoreSlotDto> actual = underTest.findByStoreCodeAndStartTimeAndEndTime(
+            "non-existent",
+            DATE_TIME_1, DATE_TIME_2);
+        assertEquals(expected, actual);
+    }
+
+    @Test
     void whenFindByStartTimeAndEndTimeEmptyThenEmpty() {
-        List<AppointmentSlotDto> expected = ImmutableList.of();
-        List<AppointmentSlotDto> actual = underTest.findByStartTimeAndEndTime(
+        List<StoreSlotDto> expected = ImmutableList.of();
+        List<StoreSlotDto> actual = underTest.findByStartTimeAndEndTime(
             DATE_TIME_1, DATE_TIME_2);
         assertEquals(expected, actual);
     }
@@ -55,11 +71,10 @@ class AppointmentSlotServiceTest {
         assertSlotsSize(0);
 
         // Step 1 - save
-        AppointmentSlotDto appointmentSlotDto = creator.createAppointmentSlotDto(
-            DATE_TIME_1, DATE_TIME_2);
-        long actual = underTest.upsertAppointmentSlot(appointmentSlotDto);
-        long expected = 1L;
-        assertTrue(expected <= actual);
+        StoreSlotDto storeSlotDto = creator.createStoreSlotDto(
+            TEST, TEST, DATE_TIME_1, DATE_TIME_2);
+        StoreSlotDto actual = underTest.upsertAppointmentSlot(storeSlotDto);
+        assertNotNull(actual);
 
         // Check 1 in db, therefore created
         assertSlotsSize(1);
@@ -72,17 +87,16 @@ class AppointmentSlotServiceTest {
         assertSlotsSize(0);
 
         // Step 1 - save
-        AppointmentSlotDto appointmentSlotDto = creator.createAppointmentSlotDto(
-            DATE_TIME_1, DATE_TIME_2);
-        long actual1 = underTest.upsertAppointmentSlot(appointmentSlotDto);
-        long expected = 1L;
-        assertTrue(expected <= actual1);
+        StoreSlotDto appointmentSlotDto = creator.createStoreSlotDto(
+            TEST, TEST, DATE_TIME_1, DATE_TIME_2);
+        StoreSlotDto actual1 = underTest.upsertAppointmentSlot(appointmentSlotDto);
+        assertNotNull(actual1);
 
         // Check 1 in db, therefore created
         assertSlotsSize(1);
 
         // Step 2 - Update
-        long actual2 = underTest.upsertAppointmentSlot(appointmentSlotDto);
+        StoreSlotDto actual2 = underTest.upsertAppointmentSlot(appointmentSlotDto);
         assertEquals(actual1, actual2);
 
         // Check 1 in db, therefore updated
@@ -90,7 +104,7 @@ class AppointmentSlotServiceTest {
     }
 
     private void assertSlotsSize(int expectedSize) {
-        List<AppointmentSlotDto> slots = underTest.findAllSlots();
+        List<StoreSlotDto> slots = underTest.findAllSlots();
         assertEquals(expectedSize, slots.size());
     }
 

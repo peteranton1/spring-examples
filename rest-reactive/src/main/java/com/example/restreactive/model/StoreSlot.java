@@ -16,11 +16,13 @@ import java.time.ZonedDateTime;
 @ToString
 @EqualsAndHashCode
 @Entity
-@Table(name = "appt_appointment_slot")
-public class AppointmentSlot implements EntityObject {
+@Table(name = "appt_store_slot")
+public class StoreSlot implements EntityObject {
     @Id
     @GeneratedValue
     Integer id;
+    String slotCode;
+    String storeCode;
     ZonedDateTime startTime;
     ZonedDateTime endTime;
 }

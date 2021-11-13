@@ -30,11 +30,11 @@ public class StoreController extends ControllerExceptionHandler {
 
     @GetMapping(value = "/stores/{limit}",
         produces = MediaType.APPLICATION_JSON_VALUE)
-    Flux<StoreDto> listAllUsersWithLimit(@PathVariable int limit) {
+    Flux<StoreDto> listAllStoresWithLimit(@PathVariable int limit) {
         final int max = 1000;
         int limitTemp = (limit < max ? limit : max);
         List<StoreDto> storeDtos = storeService.findAllStores();
-        log.info("Controller: users {} ", storeDtos.size());
+        log.info("Controller: stores {} ", storeDtos.size());
         return Flux
             .fromStream(storeDtos.stream())
             .take(limitTemp)

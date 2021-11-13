@@ -1,17 +1,11 @@
 package com.example.restreactive.service;
 
 import com.example.restreactive.dto.AppointmentDto;
-import com.example.restreactive.dto.AppointmentSlotDto;
+import com.example.restreactive.dto.StoreSlotDto;
 import com.example.restreactive.dto.StoreDto;
 import com.example.restreactive.dto.UserDto;
 import com.example.restreactive.mapping.AppointmentException;
-import com.example.restreactive.model.AppointmentSlot;
-import com.example.restreactive.model.Store;
-import com.example.restreactive.model.User;
 import com.example.restreactive.repository.AppointmentRepository;
-import com.example.restreactive.repository.AppointmentSlotRepository;
-import com.example.restreactive.repository.StoreRepository;
-import com.example.restreactive.repository.UserRepository;
 import com.google.common.collect.ImmutableList;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
@@ -31,12 +25,13 @@ class AppointmentServiceTest {
     public static final ZonedDateTime DATE_TIME_2 = DATE_TIME_1
         .plusMinutes(30);
     public static final String EMAIL = "a@a.a";
+    public static final String TEST = "test";
 
     @Autowired
     private AppointmentService underTest;
 
     @Autowired
-    private AppointmentSlotService appointmentSlotService;
+    private StoreSlotService storeSlotService;
 
     @Autowired
     private StoreService storeService;
@@ -47,9 +42,9 @@ class AppointmentServiceTest {
     @Autowired
     private AppointmentRepository appointmentRepository;
 
-    private EntityDtoCreator creator = new EntityDtoCreator();
+    private final EntityDtoCreator creator = new EntityDtoCreator();
 
-    private AppointmentSlotDto appointmentSlotDto ;
+    private StoreSlotDto storeSlotDto ;
 
     private StoreDto storeDto ;
 
@@ -61,9 +56,9 @@ class AppointmentServiceTest {
         appointmentRepository.deleteAll();
 
         // Appointment slot
-        appointmentSlotDto = creator
-            .createAppointmentSlotDto(DATE_TIME_1, DATE_TIME_2);
-        appointmentSlotService.upsertAppointmentSlot(appointmentSlotDto);
+        storeSlotDto = creator
+            .createStoreSlotDto(TEST, TEST, DATE_TIME_1, DATE_TIME_2);
+        storeSlotService.upsertAppointmentSlot(storeSlotDto);
 
         // STORE
         storeDto = creator.createStoreDto(
@@ -86,7 +81,7 @@ class AppointmentServiceTest {
     void whenFindByStoreAndAppointmentEmptyThenEmpty() {
         List<AppointmentDto> expected = ImmutableList.of();
         List<AppointmentDto> actual = underTest
-            .findByStoreAndAppointmentSlot(storeDto, appointmentSlotDto);
+            .findByStoreAndAppointmentSlot(storeDto, storeSlotDto);
         assertEquals(expected, actual);
     }
 
@@ -94,11 +89,11 @@ class AppointmentServiceTest {
     void whenFindByStoreAndAppointmentNullStoreThenException() {
         Exception ex = assertThrows(AppointmentException.class,
             () -> underTest
-            .findByStoreAndAppointmentSlot(null, appointmentSlotDto));
+            .findByStoreAndAppointmentSlot(null, storeSlotDto));
         String expected = """
             Null value for find appointment,\s
             store: 'null',\s
-            slot: 'AppointmentSlotDto(id=null, startTime=2019-04-01T16:24:11.252Z, endTime=2019-04-01T16:54:11.252Z)'""";
+            slot: 'StoreSlotDto(id=null, slotCode=test, storeCode=test, startTime=2019-04-01T16:24:11.252Z, endTime=2019-04-01T16:54:11.252Z)'""";
         assertEquals(expected, ex.getMessage());
     }
 
@@ -131,7 +126,7 @@ class AppointmentServiceTest {
 
         // Step 1 - save
         AppointmentDto appointmentDto = creator.createAppointmentDto(
-            appointmentSlotDto,
+            storeSlotDto,
             storeDto, userDto
         );
         long actual = underTest.upsertAppointment(appointmentDto);
@@ -150,7 +145,7 @@ class AppointmentServiceTest {
 
         // Step 1 - save
         AppointmentDto appointmentDto = creator.createAppointmentDto(
-            appointmentSlotDto,
+            storeSlotDto,
             storeDto, userDto
         );
         long actual1 = underTest.upsertAppointment(appointmentDto);

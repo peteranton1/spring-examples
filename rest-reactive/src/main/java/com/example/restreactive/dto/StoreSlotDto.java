@@ -9,8 +9,10 @@ import java.time.ZonedDateTime;
 @Setter
 @ToString
 @EqualsAndHashCode
-public class AppointmentSlotDto implements DtoObject {
+public class StoreSlotDto implements DtoObject {
     Integer id;
+    String slotCode;
+    String storeCode;
     ZonedDateTime startTime;
     ZonedDateTime endTime;
 }

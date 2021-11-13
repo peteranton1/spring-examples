@@ -33,9 +33,6 @@ import static java.util.Collections.emptyList;
 import static org.mockito.ArgumentMatchers.any;
 import static org.mockito.Mockito.when;
 
-/*
-
- */
 @ExtendWith(SpringExtension.class)
 @WebFluxTest(controllers = {StoreController.class})
 @Import({StoreService.class,

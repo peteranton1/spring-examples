@@ -164,16 +164,20 @@ class ModelMapperTest {
         );
     }
 
-    private AppointmentSlotDto createAppointmentSlotDto() {
-        return AppointmentSlotDto.builder()
+    private StoreSlotDto createAppointmentSlotDto() {
+        return StoreSlotDto.builder()
             .id(ID_1)
+            .slotCode(TEST)
+            .storeCode(TEST)
             .startTime(DATE_TIME)
             .endTime(DATE_TIME)
             .build();
     }
 
-    private AppointmentSlot createAppointmentSlot() {
-        return new AppointmentSlot(ID_1
+    private StoreSlot createAppointmentSlot() {
+        return new StoreSlot(ID_1
+            ,TEST
+            ,TEST
             ,DATE_TIME
             ,DATE_TIME
         );
@@ -200,7 +204,7 @@ class ModelMapperTest {
         return AppointmentDto.builder()
             .id(ID_1)
             .store(createStoreDto())
-            .appointmentSlotDto(createAppointmentSlotDto())
+            .storeSlotDto(createAppointmentSlotDto())
             .users(ImmutableList.of(createUserDto()))
             .build();
     }

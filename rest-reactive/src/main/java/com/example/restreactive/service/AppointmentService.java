@@ -1,18 +1,16 @@
 package com.example.restreactive.service;
 
 import com.example.restreactive.dto.AppointmentDto;
-import com.example.restreactive.dto.AppointmentSlotDto;
+import com.example.restreactive.dto.StoreSlotDto;
 import com.example.restreactive.dto.StoreDto;
-import com.example.restreactive.dto.UserDto;
 import com.example.restreactive.mapping.AppointmentException;
 import com.example.restreactive.mapping.ModelMapper;
 import com.example.restreactive.model.Appointment;
-import com.example.restreactive.model.AppointmentSlot;
+import com.example.restreactive.model.StoreSlot;
 import com.example.restreactive.model.Store;
 import com.example.restreactive.model.User;
 import com.example.restreactive.repository.AppointmentRepository;
-import com.example.restreactive.repository.AppointmentSlotRepository;
-import com.example.restreactive.repository.StoreRepository;
+import com.example.restreactive.repository.StoreSlotRepository;
 import com.example.restreactive.repository.UserRepository;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
@@ -29,7 +27,7 @@ public class AppointmentService {
     private AppointmentRepository appointmentRepository;
 
     @Autowired
-    private AppointmentSlotRepository appointmentSlotRepository;
+    private StoreSlotRepository storeSlotRepository;
 
     @Autowired
     private StoreService storeService;
@@ -48,20 +46,20 @@ public class AppointmentService {
     }
 
     public List<AppointmentDto> findByStoreAndAppointmentSlot(
-        StoreDto storeDto, AppointmentSlotDto slotDto) {
+        StoreDto storeDto, StoreSlotDto slotDto) {
 
         // Validate Input
         validateInputs(storeDto, slotDto);
 
         // Get Entities
-        AppointmentSlot slot = getAppointmentSlot(
+        StoreSlot slot = getAppointmentSlot(
             slotDto.getStartTime(), slotDto.getEndTime());
 
         Store store = getStore(storeDto.getStoreCode());
 
         // Get Slot
         return appointmentRepository
-            .findByStoreAndAppointmentSlot(store, slot)
+            .findByStoreAndStoreSlot(store, slot)
             .stream()
             .map(appointment -> (AppointmentDto) modelMapper
                 .toDto(appointment))
@@ -72,13 +70,13 @@ public class AppointmentService {
         // Validate Input
         requireNonNull(appointmentDto);
         StoreDto storeDto = appointmentDto.getStore();
-        AppointmentSlotDto slotDto = appointmentDto.getAppointmentSlotDto();
+        StoreSlotDto slotDto = appointmentDto.getStoreSlotDto();
         validateInputs(storeDto, slotDto);
 
         // Get Entities and ids
-        AppointmentSlot slot = getAppointmentSlot(
+        StoreSlot slot = getAppointmentSlot(
             slotDto.getStartTime(), slotDto.getEndTime());
-        appointmentDto.getAppointmentSlotDto().setId(slot.getId());
+        appointmentDto.getStoreSlotDto().setId(slot.getId());
 
         Store store = getStore(storeDto.getStoreCode());
         appointmentDto.getStore().setId(store.getId());
@@ -94,7 +92,7 @@ public class AppointmentService {
 
         // Get Slot
         Appointment apptOut = appointmentRepository.save(appointmentRepository
-            .findByStoreAndAppointmentSlot(
+            .findByStoreAndStoreSlot(
                 store,
                 slot
             ).stream().findAny()
@@ -105,11 +103,11 @@ public class AppointmentService {
         return apptOut.getId();
     }
 
-    AppointmentSlot getAppointmentSlot(ZonedDateTime startTime,
-                                       ZonedDateTime endTime) {
+    StoreSlot getAppointmentSlot(ZonedDateTime startTime,
+                                 ZonedDateTime endTime) {
         if (nonNull(startTime) && nonNull(endTime)) {
-            return appointmentSlotRepository
-                .findByStartTimeAndEndTime(startTime, endTime)
+            return storeSlotRepository
+                .findAllSlotsBetweenStartTimeAndEndTime(startTime, endTime)
                 .stream().findFirst()
                 .orElseThrow(() -> slotNotFoundException(startTime, endTime));
         }
@@ -131,7 +129,7 @@ public class AppointmentService {
                 "with code: '%s'", storeCode));
     }
 
-    void validateInputs(StoreDto storeDto, AppointmentSlotDto slotDto) {
+    void validateInputs(StoreDto storeDto, StoreSlotDto slotDto) {
         if (isNull(storeDto) ||
             isNull(storeDto.getStoreCode()) ||
             isNull(slotDto) ||

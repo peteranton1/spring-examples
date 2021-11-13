@@ -9,38 +9,43 @@ import java.time.ZonedDateTime;
 public class EntityDtoCreator {
 
     public Appointment createAppointment(
-        AppointmentSlot appointmentSlot,
+        StoreSlot storeSlot,
         Store store,
         User user) {
         return Appointment.builder()
-            .appointmentSlot(appointmentSlot)
+            .storeSlot(storeSlot)
             .store(store)
             .users(ImmutableList.of(user))
             .build();
     }
 
     public AppointmentDto createAppointmentDto(
-        AppointmentSlotDto appointmentSlotDto,
+        StoreSlotDto appointmentSlotDto,
         StoreDto storeDto,
         UserDto userDto) {
         return AppointmentDto.builder()
-            .appointmentSlotDto(appointmentSlotDto)
+            .storeSlotDto(appointmentSlotDto)
             .store(storeDto)
             .users(ImmutableList.of(userDto))
             .build();
     }
 
-    public AppointmentSlot createAppointmentSlot(ZonedDateTime startTime,
-                                                 ZonedDateTime endTime) {
-        return AppointmentSlot.builder()
+    public StoreSlot createAppointmentSlot(ZonedDateTime startTime,
+                                           ZonedDateTime endTime) {
+        return StoreSlot.builder()
             .startTime(startTime)
             .endTime(endTime)
             .build();
     }
 
-    public AppointmentSlotDto createAppointmentSlotDto(ZonedDateTime startTime,
-                                                       ZonedDateTime endTime) {
-        return AppointmentSlotDto.builder()
+    public StoreSlotDto createStoreSlotDto(
+        String slotCode,
+        String storeCode,
+        ZonedDateTime startTime,
+        ZonedDateTime endTime) {
+        return StoreSlotDto.builder()
+            .slotCode(slotCode)
+            .storeCode(storeCode)
             .startTime(startTime)
             .endTime(endTime)
             .build();

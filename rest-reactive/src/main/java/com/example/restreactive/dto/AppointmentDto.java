@@ -12,6 +12,6 @@ import java.util.List;
 public class AppointmentDto implements DtoObject {
     Integer id;
     StoreDto store;
-    AppointmentSlotDto appointmentSlotDto;
+    StoreSlotDto storeSlotDto;
     List<UserDto> users;
 }
