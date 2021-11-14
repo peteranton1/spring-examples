@@ -10,6 +10,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.context.SpringBootTest;
 
 import java.time.ZonedDateTime;
+import java.util.Collections;
 import java.util.List;
 
 import static org.junit.jupiter.api.Assertions.*;
@@ -52,6 +53,15 @@ class StoreSlotServiceTest {
         List<StoreSlotDto> expected = ImmutableList.of();
         List<StoreSlotDto> actual = underTest.findByStoreCodeAndStartTimeAndEndTime(
             "non-existent",
+            DATE_TIME_1, DATE_TIME_2);
+        assertEquals(expected, actual);
+    }
+
+    @Test
+    void whenFindByStoreCodeListAndStartTimeAndEndTimeEmptyThenEmpty() {
+        List<StoreSlotDto> expected = ImmutableList.of();
+        List<StoreSlotDto> actual = underTest.findByStoreCodeListAndStartTimeAndEndTime(
+            ImmutableList.of("non-existent"),
             DATE_TIME_1, DATE_TIME_2);
         assertEquals(expected, actual);
     }

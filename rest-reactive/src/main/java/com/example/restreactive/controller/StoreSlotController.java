@@ -28,17 +28,20 @@ public class StoreSlotController extends ControllerExceptionHandler {
     @Autowired
     private ModelMapper modelMapper;
 
-    @GetMapping(value = "/store/{storeCode}/slots/{startTime}/{limit}",
+    @GetMapping(value = "/store/slots/{startTime}/{limit}",
         produces = MediaType.APPLICATION_JSON_VALUE)
-    Flux<StoreSlotDto> listAllSlotsWithLimit(
-        @PathVariable String storeCode,
+    Flux<StoreSlotDto> listAllSlotsForStartDateWithLimit(
         @PathVariable String startTime,
         @PathVariable int limit
-        ) {
+    ) {
         final int max = 1000;
         ZonedDateTime startTimeDT = getZonedDateTime(startTime);
+        ZonedDateTime endTimeDT = startTimeDT.plusDays(7L);
         int limitTemp = (limit < max ? limit : max);
-        List<StoreSlotDto> slotDtos = storeSlotService.findAllSlots();
+        List<StoreSlotDto> slotDtos = storeSlotService
+            .findByStartTimeAndEndTime(
+            startTimeDT, endTimeDT
+        );
         log.info("Controller: slots {} ", slotDtos.size());
         return Flux
             .fromStream(slotDtos.stream())
@@ -47,14 +50,28 @@ public class StoreSlotController extends ControllerExceptionHandler {
             ;
     }
 
-    private ZonedDateTime getZonedDateTime(String startTime) {
-        try {
-            return ZonedDateTime
-                .parse(startTime);
-        } catch(Exception e){
-            throw new AppointmentException(String.format(
-                "Unable to parse date: %s", startTime), e);
-        }
+    @PostMapping(value = "/store/slots/{startTime}/{limit}",
+        produces = MediaType.APPLICATION_JSON_VALUE)
+    @ResponseStatus(HttpStatus.OK)
+    Flux<StoreSlotDto> listAllSlotsForStoresAndStartDateWithLimit(
+        @PathVariable String startTime,
+        @PathVariable int limit,
+        @RequestBody List<String> storeCodes
+    ) {
+        final int max = 1000;
+        ZonedDateTime startTimeDT = getZonedDateTime(startTime);
+        ZonedDateTime endTimeDT = startTimeDT.plusDays(7L);
+        int limitTemp = (limit < max ? limit : max);
+        List<StoreSlotDto> slotDtos = storeSlotService
+            .findByStoreCodeListAndStartTimeAndEndTime(
+                storeCodes, startTimeDT, endTimeDT
+        );
+        log.info("Controller: slots {} ", slotDtos.size());
+        return Flux
+            .fromStream(slotDtos.stream())
+            .take(limitTemp)
+            //.delayElements(Duration.ofMillis(100))
+            ;
     }
 
     @GetMapping(value = "/store/{storeCode}/slot/{startTime}/{endTime}",
@@ -88,12 +105,24 @@ public class StoreSlotController extends ControllerExceptionHandler {
             storeSlotService.upsertAppointmentSlot(request));
     }
 
-    @DeleteMapping(value = "/store/{slotCode}",
+    @DeleteMapping(value = "/store/{storeCode}/slot/{slotCode}",
         produces = MediaType.APPLICATION_JSON_VALUE)
     @ResponseStatus(HttpStatus.OK)
-    Mono<MessageDto> deleteStore(@PathVariable String storeCode) {
+    Mono<MessageDto> deleteStore(
+        @PathVariable String storeCode,
+        @PathVariable String slotCode
+                                 ) {
         return Mono.just(
-            storeSlotService.deleteAppointmentSlot(storeCode));
+            storeSlotService.deleteAppointmentSlot(storeCode,slotCode));
     }
 
+    private ZonedDateTime getZonedDateTime(String startTime) {
+        try {
+            return ZonedDateTime
+                .parse(startTime);
+        } catch(Exception e){
+            throw new AppointmentException(String.format(
+                "Unable to parse date: %s", startTime), e);
+        }
+    }
 }

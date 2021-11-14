@@ -50,7 +50,24 @@ public class StoreSlotService {
 
         return storeSlotRepository
             .findAllSlotsByStoreBetweenStartTimeAndEndTime(
-                startTime, endTime, storeCode)
+                startTime,
+                endTime,
+                storeCode)
+            .stream()
+            .map(slot -> (StoreSlotDto) modelMapper.toDto(slot))
+            .toList();
+    }
+
+    public List<StoreSlotDto> findByStoreCodeListAndStartTimeAndEndTime(
+        List<String> storeCodes,
+        ZonedDateTime startTime,
+        ZonedDateTime endTime) {
+
+        return storeSlotRepository
+            .findAllSlotsByStoresListBetweenStartTimeAndEndTime(
+                startTime,
+                endTime,
+                storeCodes)
             .stream()
             .map(slot -> (StoreSlotDto) modelMapper.toDto(slot))
             .toList();
@@ -78,21 +95,28 @@ public class StoreSlotService {
         return (StoreSlotDto) modelMapper.toDto(slotOut);
     }
 
-    public MessageDto deleteAppointmentSlot(String slotCode) {
-        if (Objects.isNull(slotCode)) {
+    public MessageDto deleteAppointmentSlot(
+        String storeCode,
+        String slotCode
+    ) {
+        if (
+            Objects.isNull(storeCode) ||
+            Objects.isNull(slotCode)
+        ) {
             return MessageDto.builder()
                 .code("200")
-                .message("Store not specified.")
+                .message("Store / Slot not specified.")
                 .build();
         }
-        String storeCode1 = slotCode.toLowerCase();
+        String storeCode1 = storeCode.toLowerCase();
+        String slotCode1 = slotCode.toLowerCase();
         storeSlotRepository
-            .findAllSlotsBySlotCode(storeCode1)
+            .findAllSlotsByStoreCodeAndSlotCode(storeCode1, slotCode1)
             .stream().findFirst()
-            .ifPresent(store1 -> storeSlotRepository.delete(store1));
+            .ifPresent(slot -> storeSlotRepository.delete(slot));
         return MessageDto.builder()
             .code("200")
-            .message("Store Slot deleted: " + slotCode)
+            .message("Store Slot deleted: " + storeCode1 + "/" + slotCode)
             .build();
     }
 }
