@@ -47,15 +47,15 @@ public class UserService {
     }
 
     public Optional<UserDto> findByUsername(String username) {
-        helper.assertNonNull("username",username);
+        helper.assertNonNull("username", username);
         return userRepository.findByUsername(username.toLowerCase())
             .stream().findFirst()
             .map(user -> (UserDto) modelMapper.toDto(user));
     }
 
     public UserDto upsertUser(UserDto userDto) {
-        helper.assertNonNull("userDto",userDto);
-        helper.assertNonNull("userDto.getUsername()",userDto.getUsername());
+        helper.assertNonNull("userDto", userDto);
+        helper.assertNonNull("userDto.getUsername()", userDto.getUsername());
         userDto.setUsername(userDto.getUsername().toLowerCase());
         EmailAddressDto emailAddressDto = userDto.getEmail();
         if (nonNull(emailAddressDto)) {
@@ -71,8 +71,8 @@ public class UserService {
     }
 
     public Integer upsertEmailAddress(EmailAddressDto emailAddressDto) {
-        helper.assertNonNull("emailAddressDto",emailAddressDto);
-        helper.assertNonNull("emailAddressDto.getEmail()",emailAddressDto.getEmail());
+        helper.assertNonNull("emailAddressDto", emailAddressDto);
+        helper.assertNonNull("emailAddressDto.getEmail()", emailAddressDto.getEmail());
         emailAddressDto.setEmail(emailAddressDto.getEmail().toLowerCase());
         EmailAddress emailOut = emailAddressRepository.save(emailAddressRepository
             .findByEmail(emailAddressDto.getEmail().toLowerCase())
@@ -84,21 +84,28 @@ public class UserService {
     }
 
     public MessageDto deleteUser(String username) {
-        if(Objects.isNull(username)){
+        if (Objects.isNull(username)) {
             return MessageDto.builder()
                 .code("200")
                 .message("User not specified.")
                 .build();
         }
         String username1 = username.toLowerCase();
-        userRepository
+        return userRepository
             .findByUsername(username1)
             .stream().findFirst()
-            .ifPresent(user1 -> userRepository.delete(user1));
-        return MessageDto.builder()
-            .code("200")
-            .message("User deleted: " + username)
-            .build();
+            .map(user1 -> {
+                userRepository.delete(user1);
+                return MessageDto.builder()
+                    .code("200")
+                    .message("User deleted: " + username)
+                    .build();
+            })
+            .orElse(MessageDto.builder()
+                .code("200")
+                .message("User not found: " + username)
+                .build());
+
     }
 
 }

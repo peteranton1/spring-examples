@@ -118,13 +118,20 @@ public class StoreSlotService {
         }
         String storeCode1 = storeCode.toLowerCase();
         String slotCode1 = slotCode.toLowerCase();
-        storeSlotRepository
+        return storeSlotRepository
             .findAllSlotsByStoreCodeAndSlotCode(storeCode1, slotCode1)
             .stream().findFirst()
-            .ifPresent(slot -> storeSlotRepository.delete(slot));
-        return MessageDto.builder()
+            .map(slot -> {
+                storeSlotRepository.delete(slot);
+                return MessageDto.builder()
+                    .code("200")
+                    .message("Store Slot deleted: " + storeCode1 + "/" + slotCode)
+                    .build();
+            })
+            .orElse( MessageDto.builder()
             .code("200")
-            .message("Store Slot deleted: " + storeCode1 + "/" + slotCode)
-            .build();
+            .message("Store Slot not found: " + storeCode1 + "/" + slotCode)
+            .build());
+
     }
 }

@@ -21,7 +21,7 @@ import java.util.List;
 @RestController
 public class StoreSlotController extends ControllerExceptionHandler {
 
-    public static final String STORE_SLOTS_START_TIME_LIMIT = "/store/slots/{startTime}/{limit}";
+    public static final String STORE_SLOTS_START_TIME_LIMIT = "/stores/slots/{startTime}/{limit}";
     public static final String PUT_STORE_STORE_CODE_SLOT = "/store/{storeCode}/slot";
     public static final String DELETE_STORE_STORE_CODE_SLOT_SLOT_CODE = "/store/{storeCode}/slot/{slotCode}";
     public static final long PLUS_DAYS = 7L;

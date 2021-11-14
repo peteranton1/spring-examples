@@ -135,9 +135,9 @@ class StoreControllerTest {
     void whenUpsertStoreInsertThenOk() {
         StoreDto storeDto = getStoreDto(1);
         Store store = (Store)modelMapper.toEntity(storeDto);
-        when(storeRepository.findByStoreCode("store1"))
+        when(storeRepository.findByStoreCode(any()))
             .thenReturn(ImmutableList.of(store));
-        when(storeRepository.save(store))
+        when(storeRepository.save(any()))
             .thenReturn(store);
         when(streetAddressRepository.save(any()))
             .thenReturn(store.getAddress());
@@ -169,7 +169,7 @@ class StoreControllerTest {
             .thenReturn(ImmutableList.of(store));
 
         MessageDto actual = webTestClient.delete()
-            .uri("/store/" + storeCode)
+            .uri("/store/store1")
             .accept(MediaType.APPLICATION_JSON)
             .exchange()
             .expectStatus().isOk()

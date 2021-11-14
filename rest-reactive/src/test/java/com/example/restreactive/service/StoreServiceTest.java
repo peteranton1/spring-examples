@@ -66,6 +66,7 @@ class StoreServiceTest {
         // we don't know the id that will be created so set it to
         // whatever it was so following assertEquals works
         expected.setId(actual.getId());
+        expected.setStoreCode(actual.getStoreCode());
         assertEquals(expected, actual);
 
         // Check 1 in db, therefore created
@@ -87,6 +88,7 @@ class StoreServiceTest {
         // we don't know the id that will be created so set it to
         // whatever it was so following assertEquals works
         expected.setId(actual.getId());
+        expected.setStoreCode(actual.getStoreCode());
         assertEquals(expected, actual);
 
         // Check 1 in db, therefore created
@@ -115,6 +117,7 @@ class StoreServiceTest {
         // we don't know the id that will be created so set it to
         // whatever it was so following assertEquals works
         expected.setId(actual.getId());
+        expected.setStoreCode(actual.getStoreCode());
         assertEquals(expected, actual);
 
         // Check 1 in db, therefore created
@@ -124,7 +127,7 @@ class StoreServiceTest {
         String storeCode = storeDto.getStoreCode();
         MessageDto expected2 = MessageDto.builder()
             .code("200")
-            .message("Store deleted: mycode")
+            .message("Store deleted: " + expected.getStoreCode())
             .build();
         MessageDto actual2 = underTest.deleteStore(storeCode);
         assertEquals(expected2, actual2);

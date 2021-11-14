@@ -44,7 +44,7 @@ class StoreSlotControllerTest {
     private static final String END_TIME_STR_1 = "2019-04-01T16:54:11.252Z";
 
     private static final String STORE_SLOTS_START_TIME_LIMIT =
-        "/store/slots/" + START_TIME_STR_1 + "/10";
+        "/stores/slots/" + START_TIME_STR_1 + "/10";
     private static final String PUT_STORE_STORE_CODE_SLOT =
         "/store/" + STORE_1 + "/slot";
     private static final String DELETE_STORE_STORE_CODE_SLOT_SLOT_CODE =
@@ -168,6 +168,27 @@ class StoreSlotControllerTest {
     }
 
     @Test
+    void whenDeleteStoreNotExistsThenOk() {
+        MessageDto messageDto = MessageDto.builder()
+            .code("200")
+            .message("Store Slot not found: " + STORE_1 + "/" + SLOT_1)
+            .build();
+        when(storeSlotRepository.findAllSlotsByStoreCodeAndSlotCode(
+            any(), any()))
+            .thenReturn(ImmutableList.of());
+
+        MessageDto actual = webTestClient.delete()
+            .uri(DELETE_STORE_STORE_CODE_SLOT_SLOT_CODE)
+            .accept(MediaType.APPLICATION_JSON)
+            .exchange()
+            .expectStatus().isOk()
+            .expectBody(MessageDto.class)
+            .returnResult().getResponseBody();
+
+        assertEquals(messageDto, actual);
+    }
+
+    @Test
     void whenDeleteStoreExistsThenOk() {
         MessageDto messageDto = MessageDto.builder()
             .code("200")
@@ -175,8 +196,8 @@ class StoreSlotControllerTest {
             .build();
         StoreSlotDto storeSlotDto = getStoreSlotDto(1);
         StoreSlot storeSlot = (StoreSlot) modelMapper.toEntity(storeSlotDto);
-        when(storeSlotRepository.findAllSlotsByStoreBetweenStartTimeAndEndTime(
-            START_TIME_1, END_TIME_1, STORE_1))
+        when(storeSlotRepository.findAllSlotsByStoreCodeAndSlotCode(
+            any(), any()))
             .thenReturn(ImmutableList.of(storeSlot));
 
         MessageDto actual = webTestClient.delete()

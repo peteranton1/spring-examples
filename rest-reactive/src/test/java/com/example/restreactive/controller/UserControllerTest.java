@@ -25,6 +25,7 @@ import reactor.core.publisher.Mono;
 import java.util.LinkedHashMap;
 import java.util.List;
 import java.util.Map;
+import java.util.Optional;
 
 import static java.util.Collections.emptyList;
 import static org.mockito.ArgumentMatchers.any;
@@ -151,14 +152,36 @@ class UserControllerTest {
     }
 
     @Test
+    void whenDeleteUserNotExistsThenOk() {
+        String username = "user1";
+        MessageDto messageDto = MessageDto.builder()
+            .code("200")
+            .message("User not found: " + username)
+            .build();
+        when(userRepository.findByUsername("user1"))
+            .thenReturn(emptyList());
+
+        MessageDto actual = webTestClient.delete()
+            .uri("/user/" + username)
+            .accept(MediaType.APPLICATION_JSON)
+            .exchange()
+            .expectStatus().isOk()
+            .expectBody(MessageDto.class)
+            .returnResult().getResponseBody();
+
+        Assertions.assertEquals(messageDto, actual);
+    }
+
+    @Test
     void whenDeleteUserExistsThenOk() {
         String username = "user1";
         MessageDto messageDto = MessageDto.builder()
             .code("200")
             .message("User deleted: " + username)
             .build();
+        User user = User.builder().username(username).build();
         when(userRepository.findByUsername("user1"))
-            .thenReturn(emptyList());
+            .thenReturn(ImmutableList.of(user));
 
         MessageDto actual = webTestClient.delete()
             .uri("/user/" + username)

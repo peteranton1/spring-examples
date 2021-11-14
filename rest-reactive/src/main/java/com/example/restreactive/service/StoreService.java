@@ -17,6 +17,7 @@ import org.springframework.stereotype.Service;
 import java.util.List;
 import java.util.Objects;
 
+import static java.util.Objects.isNull;
 import static java.util.Objects.nonNull;
 
 @Service
@@ -48,13 +49,7 @@ public class StoreService {
     }
 
     public StoreDto upsertStore(StoreDto storeDto) {
-        helper.assertNonNull("storeDto", storeDto);
-        helper.assertNonNull("storeDto.getStoreCode()", storeDto.getStoreCode());
-        StreetAddressDto streetAddressDto = storeDto.getAddress();
-        if (nonNull(streetAddressDto)) {
-            Integer id = upsertStreetAddress(streetAddressDto);
-            streetAddressDto.setId(id);
-        }
+        verifyStoreForUpdate(storeDto);
         Store storeOut = storeRepository.save(storeRepository
             .findByStoreCode(storeDto.getStoreCode()).stream()
             .findFirst()
@@ -63,6 +58,18 @@ public class StoreService {
         );
         helper.assertNonNull("storeOut", storeOut);
         return (StoreDto) modelMapper.toDto(storeOut);
+    }
+
+    private void verifyStoreForUpdate(StoreDto storeDto) {
+        helper.assertNonNull("storeDto", storeDto);
+        StreetAddressDto streetAddressDto = storeDto.getAddress();
+        if (nonNull(streetAddressDto)) {
+            Integer id = upsertStreetAddress(streetAddressDto);
+            streetAddressDto.setId(id);
+            String storeCode = storeDto.getStoreName().toLowerCase() + "-" + id;
+            storeDto.setStoreCode(storeCode);
+        }
+        helper.assertNonNull("storeDto.getStoreCode()", storeDto.getStoreCode());
     }
 
     public Integer upsertStreetAddress(StreetAddressDto streetAddressDto) {
@@ -104,15 +111,11 @@ public class StoreService {
     }
 
     public MessageDto deleteStore(String storeCode) {
-        if (Objects.isNull(storeCode)) {
-            return MessageDto.builder()
-                .code("200")
-                .message("Store not specified.")
-                .build();
-        }
-        String storeCode1 = storeCode.toLowerCase();
+
+        helper.assertNonNull("storeCode", storeCode);
+        storeCode = storeCode.toLowerCase();
         storeRepository
-            .findByStoreCode(storeCode1)
+            .findByStoreCode(storeCode)
             .stream().findFirst()
             .ifPresent(store1 -> storeRepository.delete(store1));
         return MessageDto.builder()

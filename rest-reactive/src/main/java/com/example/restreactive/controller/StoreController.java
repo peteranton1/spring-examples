@@ -3,11 +3,9 @@ package com.example.restreactive.controller;
 
 import com.example.restreactive.dto.MessageDto;
 import com.example.restreactive.dto.StoreDto;
-import com.example.restreactive.dto.UserDto;
 import com.example.restreactive.mapping.AppointmentException;
 import com.example.restreactive.mapping.ModelMapper;
 import com.example.restreactive.service.StoreService;
-import com.example.restreactive.service.UserService;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
@@ -25,7 +23,7 @@ public class StoreController extends ControllerExceptionHandler {
     public static final String GET_STORES_LIMIT = "/stores/{limit}";
     public static final String GET_STORE_STORE_CODE = "/store/{storeCode}";
     public static final String PUT_STORE = "/store";
-    public static final String DELETE_STORE_STORE_CODE = "/store/{storeCode}";
+    public static final String DELETE_STORE = "/store/{storeCode}";
 
     @Autowired
     private StoreService storeService;
@@ -72,7 +70,7 @@ public class StoreController extends ControllerExceptionHandler {
             storeService.upsertStore(request));
     }
 
-    @DeleteMapping(value = DELETE_STORE_STORE_CODE,
+    @DeleteMapping(value = DELETE_STORE,
         produces = MediaType.APPLICATION_JSON_VALUE)
     @ResponseStatus(HttpStatus.OK)
     Mono<MessageDto> deleteStore(@PathVariable String storeCode) {
