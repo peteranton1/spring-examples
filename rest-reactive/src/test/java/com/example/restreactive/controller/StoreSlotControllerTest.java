@@ -38,15 +38,22 @@ import static org.mockito.Mockito.when;
     StoreSlotMapper.class})
 class StoreSlotControllerTest {
 
-    public static final String SLOT_1 = "slot1";
-    public static final String STORE_1 = "store1";
-    public static final String START_TIME_STR_1 = "2019-04-01T16:24:11.252Z";
-    public static final String END_TIME_STR_1 = "2019-04-01T16:54:11.252Z";
+    private static final String SLOT_1 = "slot1";
+    private static final String STORE_1 = "store1";
+    private static final String START_TIME_STR_1 = "2019-04-01T16:24:11.252Z";
+    private static final String END_TIME_STR_1 = "2019-04-01T16:54:11.252Z";
 
-    public static final ZonedDateTime START_TIME_1 = ZonedDateTime
+    private static final String STORE_SLOTS_START_TIME_LIMIT =
+        "/store/slots/" + START_TIME_STR_1 + "/10";
+    private static final String PUT_STORE_STORE_CODE_SLOT =
+        "/store/" + STORE_1 + "/slot";
+    private static final String DELETE_STORE_STORE_CODE_SLOT_SLOT_CODE =
+        "/store/" + STORE_1 + "/slot/" + SLOT_1;
+
+    private static final ZonedDateTime START_TIME_1 = ZonedDateTime
         .parse(START_TIME_STR_1).withZoneSameLocal(ZoneId.of("UTC"));
 
-    public static final ZonedDateTime END_TIME_1 = ZonedDateTime
+    private static final ZonedDateTime END_TIME_1 = ZonedDateTime
         .parse(END_TIME_STR_1).withZoneSameLocal(ZoneId.of("UTC"));
 
 
@@ -65,9 +72,8 @@ class StoreSlotControllerTest {
             START_TIME_1, END_TIME_1))
             .thenReturn(emptyList());
 
-        String uri = "/store/slots/" + START_TIME_STR_1 + "/10";
         List<?> actual = webTestClient.get()
-            .uri(uri)
+            .uri(STORE_SLOTS_START_TIME_LIMIT)
             .accept(MediaType.APPLICATION_JSON)
             .exchange()
             .expectStatus().isOk()
@@ -86,9 +92,8 @@ class StoreSlotControllerTest {
             any(), any()))
             .thenReturn(ImmutableList.of(storeSlot));
 
-        String uri = "/store/slots/" + START_TIME_STR_1 + "/10";
         List<?> actual = webTestClient.get()
-            .uri(uri)
+            .uri(STORE_SLOTS_START_TIME_LIMIT)
             .accept(MediaType.APPLICATION_JSON)
             .exchange()
             .expectStatus().isOk()
@@ -105,9 +110,8 @@ class StoreSlotControllerTest {
             any(), any(), any()))
             .thenReturn(emptyList());
 
-        String uri = "/store/slots/" + START_TIME_STR_1 + "/10";
         List<?> actual = webTestClient.post()
-            .uri(uri)
+            .uri(STORE_SLOTS_START_TIME_LIMIT)
             .accept(MediaType.APPLICATION_JSON)
             .body(Mono.just(ImmutableList.of(STORE_1)), List.class)
             .exchange()
@@ -127,9 +131,8 @@ class StoreSlotControllerTest {
             any(), any(), any()))
             .thenReturn(ImmutableList.of(storeSlot));
 
-        String uri = "/store/slots/" + START_TIME_STR_1 + "/10";
         List<?> actual = webTestClient.post()
-            .uri(uri)
+            .uri(STORE_SLOTS_START_TIME_LIMIT)
             .accept(MediaType.APPLICATION_JSON)
             .body(Mono.just(ImmutableList.of(STORE_1)), List.class)
             .exchange()
@@ -142,51 +145,6 @@ class StoreSlotControllerTest {
     }
 
     @Test
-    void whenFindSlotNotExistsThenNotFound() {
-        when(storeSlotRepository.findAllSlotsByStoreBetweenStartTimeAndEndTime(
-            START_TIME_1, END_TIME_1, STORE_1))
-            .thenReturn(emptyList());
-
-        String uri = "/store/" + STORE_1 + "/slot/" + START_TIME_STR_1 +
-            "/" + END_TIME_STR_1;
-        MessageDto actual = webTestClient.get()
-            .uri(uri)
-            .accept(MediaType.APPLICATION_JSON)
-            .exchange()
-            .expectStatus().isNotFound()
-            .expectBody(MessageDto.class)
-            .returnResult().getResponseBody();
-
-        MessageDto expected = MessageDto.builder()
-            .code("404")
-            .message("AppointmentException: Slot not found: " +
-                "2019-04-01T16:24:11.252Z, 2019-04-01T16:54:11.252Z")
-            .build();
-        assertEquals(expected, actual);
-    }
-
-    @Test
-    void whenFindStoreExistsThenOk() {
-        StoreSlotDto storeSlotDto = getStoreSlotDto(1);
-        StoreSlot storeSlot = (StoreSlot) modelMapper.toEntity(storeSlotDto);
-        when(storeSlotRepository.findAllSlotsByStoreBetweenStartTimeAndEndTime(
-            any(), any(), any()))
-            .thenReturn(ImmutableList.of(storeSlot));
-
-        String uri = "/store/" + STORE_1 + "/slot/" + START_TIME_STR_1 +
-            "/" + END_TIME_STR_1;
-        StoreSlotDto actual = webTestClient.get()
-            .uri(uri)
-            .accept(MediaType.APPLICATION_JSON)
-            .exchange()
-            .expectStatus().isOk()
-            .expectBody(StoreSlotDto.class)
-            .returnResult().getResponseBody();
-
-        assertEquals(storeSlotDto, actual);
-    }
-
-    @Test
     void whenUpsertStoreInsertThenOk() {
         StoreSlotDto storeSlotDto = getStoreSlotDto(1);
         StoreSlot storeSlot = (StoreSlot) modelMapper.toEntity(storeSlotDto);
@@ -196,9 +154,8 @@ class StoreSlotControllerTest {
         when(storeSlotRepository.save(any()))
             .thenReturn(storeSlot);
 
-        String uri = "/store/" + STORE_1 + "/slot";
         StoreSlotDto actual = webTestClient.put()
-            .uri(uri)
+            .uri(PUT_STORE_STORE_CODE_SLOT)
             .accept(MediaType.APPLICATION_JSON)
             .body(Mono.just(storeSlotDto), StoreDto.class)
             .exchange()
@@ -222,9 +179,8 @@ class StoreSlotControllerTest {
             START_TIME_1, END_TIME_1, STORE_1))
             .thenReturn(ImmutableList.of(storeSlot));
 
-        String uri = "/store/" + STORE_1 + "/slot/" + SLOT_1;
         MessageDto actual = webTestClient.delete()
-            .uri(uri)
+            .uri(DELETE_STORE_STORE_CODE_SLOT_SLOT_CODE)
             .accept(MediaType.APPLICATION_JSON)
             .exchange()
             .expectStatus().isOk()

@@ -22,13 +22,18 @@ import java.util.List;
 @RestController
 public class StoreController extends ControllerExceptionHandler {
 
+    public static final String GET_STORES_LIMIT = "/stores/{limit}";
+    public static final String GET_STORE_STORE_CODE = "/store/{storeCode}";
+    public static final String PUT_STORE = "/store";
+    public static final String DELETE_STORE_STORE_CODE = "/store/{storeCode}";
+
     @Autowired
     private StoreService storeService;
 
     @Autowired
     private ModelMapper modelMapper;
 
-    @GetMapping(value = "/stores/{limit}",
+    @GetMapping(value = GET_STORES_LIMIT,
         produces = MediaType.APPLICATION_JSON_VALUE)
     Flux<StoreDto> listAllStoresWithLimit(@PathVariable int limit) {
         final int max = 1000;
@@ -42,7 +47,7 @@ public class StoreController extends ControllerExceptionHandler {
             ;
     }
 
-    @GetMapping(value = "/store/{storeCode}",
+    @GetMapping(value = GET_STORE_STORE_CODE,
         produces = MediaType.APPLICATION_JSON_VALUE)
     @ResponseStatus(HttpStatus.OK)
     Mono<StoreDto> findStore(@PathVariable String storeCode) {
@@ -58,7 +63,7 @@ public class StoreController extends ControllerExceptionHandler {
         );
     }
 
-    @PutMapping(value = "/store",
+    @PutMapping(value = PUT_STORE,
         consumes = MediaType.APPLICATION_JSON_VALUE,
         produces = MediaType.APPLICATION_JSON_VALUE)
     @ResponseStatus(HttpStatus.OK)
@@ -67,7 +72,7 @@ public class StoreController extends ControllerExceptionHandler {
             storeService.upsertStore(request));
     }
 
-    @DeleteMapping(value = "/store/{storeCode}",
+    @DeleteMapping(value = DELETE_STORE_STORE_CODE,
         produces = MediaType.APPLICATION_JSON_VALUE)
     @ResponseStatus(HttpStatus.OK)
     Mono<MessageDto> deleteStore(@PathVariable String storeCode) {

@@ -57,8 +57,8 @@ public class StoreService {
         }
         Store storeOut = storeRepository.save(storeRepository
             .findByStoreCode(storeDto.getStoreCode()).stream()
+            .findFirst()
             .map(store -> (Store) modelMapper.update(store, storeDto))
-            .findAny()
             .orElse((Store) modelMapper.insert(storeDto))
         );
         helper.assertNonNull("storeOut", storeOut);

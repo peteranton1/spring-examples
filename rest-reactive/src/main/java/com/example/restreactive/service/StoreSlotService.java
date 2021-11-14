@@ -1,7 +1,6 @@
 package com.example.restreactive.service;
 
 import com.example.restreactive.dto.MessageDto;
-import com.example.restreactive.dto.StoreDto;
 import com.example.restreactive.dto.StoreSlotDto;
 import com.example.restreactive.mapping.ModelMapper;
 import com.example.restreactive.model.StoreSlot;
@@ -11,10 +10,10 @@ import org.springframework.stereotype.Service;
 
 import java.time.ZonedDateTime;
 import java.util.List;
-import java.util.Objects;
 import java.util.UUID;
 
-import static java.util.Objects.requireNonNull;
+import static java.util.Collections.emptyList;
+import static java.util.Objects.isNull;
 
 @Service
 public class StoreSlotService {
@@ -48,6 +47,9 @@ public class StoreSlotService {
         ZonedDateTime startTime,
         ZonedDateTime endTime) {
 
+        if (isNull(startTime) || isNull(endTime)) {
+            return emptyList();
+        }
         return storeSlotRepository
             .findAllSlotsByStoreBetweenStartTimeAndEndTime(
                 startTime,
@@ -63,6 +65,10 @@ public class StoreSlotService {
         ZonedDateTime startTime,
         ZonedDateTime endTime) {
 
+        if (isNull(startTime) || isNull(endTime) ||
+            isNull(storeCodes) || storeCodes.isEmpty()) {
+            return emptyList();
+        }
         return storeSlotRepository
             .findAllSlotsByStoresListBetweenStartTimeAndEndTime(
                 startTime,
@@ -73,21 +79,14 @@ public class StoreSlotService {
             .toList();
     }
 
-
     public StoreSlotDto upsertAppointmentSlot(StoreSlotDto storeSlotDto) {
-        requireNonNull(storeSlotDto);
-        requireNonNull(storeSlotDto.getStoreCode());
-        requireNonNull(storeSlotDto.getStartTime());
-        requireNonNull(storeSlotDto.getEndTime());
-        if(Objects.isNull(storeSlotDto.getSlotCode())){
-            storeSlotDto.setSlotCode(UUID.randomUUID().toString());
-        }
+        verifyStoreSlotDtoForUpdate(storeSlotDto);
         StoreSlot slotOut = storeSlotRepository.save(storeSlotRepository
-            .findAllSlotsByStoreBetweenStartTimeAndEndTime(
-                storeSlotDto.getStartTime(),
-                storeSlotDto.getEndTime(),
-                storeSlotDto.getStoreCode()
-                ).stream().findFirst()
+            .findAllSlotsByStoreCodeAndSlotCode(
+                storeSlotDto.getStoreCode(),
+                storeSlotDto.getSlotCode()
+            ).stream()
+            .findFirst()
             .map(slot -> (StoreSlot) modelMapper.update(slot, storeSlotDto))
             .orElse((StoreSlot) modelMapper.insert(storeSlotDto))
         );
@@ -95,14 +94,23 @@ public class StoreSlotService {
         return (StoreSlotDto) modelMapper.toDto(slotOut);
     }
 
+    private void verifyStoreSlotDtoForUpdate(StoreSlotDto storeSlotDto) {
+        helper.assertNonNull("storeSlotDto", storeSlotDto);
+        helper.assertNonNull("storeSlotDto.getStoreCode()", storeSlotDto.getStoreCode());
+        helper.assertNonNull("storeSlotDto.getStartTime()", storeSlotDto.getStartTime());
+        helper.assertNonNull("storeSlotDto.getEndTime()", storeSlotDto.getEndTime());
+        if (isNull(storeSlotDto.getSlotCode())) {
+            storeSlotDto.setSlotCode(UUID.randomUUID().toString());
+        }
+        storeSlotDto.setSlotCode(storeSlotDto.getSlotCode().toLowerCase());
+        storeSlotDto.setStoreCode(storeSlotDto.getStoreCode().toLowerCase());
+    }
+
     public MessageDto deleteAppointmentSlot(
         String storeCode,
         String slotCode
     ) {
-        if (
-            Objects.isNull(storeCode) ||
-            Objects.isNull(slotCode)
-        ) {
+        if (isNull(storeCode) || isNull(slotCode)) {
             return MessageDto.builder()
                 .code("200")
                 .message("Store / Slot not specified.")

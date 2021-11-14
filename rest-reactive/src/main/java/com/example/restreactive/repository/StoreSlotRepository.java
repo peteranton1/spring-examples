@@ -10,8 +10,6 @@ import java.util.List;
 
 public interface StoreSlotRepository extends JpaRepository<StoreSlot, Long> {
 
-    List<StoreSlot> findAllSlotsByStoreCode(String storeCode);
-
     List<StoreSlot> findAllSlotsByStoreCodeAndSlotCode(String storeCode, String slotCode);
 
     @Query("SELECT s FROM StoreSlot s " +

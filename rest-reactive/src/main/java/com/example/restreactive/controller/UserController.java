@@ -19,10 +19,15 @@ import java.util.List;
 @RestController
 public class UserController extends ControllerExceptionHandler {
 
+    public static final String GET_USERS_LIMIT = "/users/{limit}";
+    public static final String GET_USER_USERNAME = "/user/{username}";
+    public static final String PUT_USER = "/user";
+    public static final String DELETE_USER_USERNAME = "/user/{username}";
+
     @Autowired
     private UserService userService;
 
-    @GetMapping(value = "/users/{limit}",
+    @GetMapping(value = GET_USERS_LIMIT,
         produces = MediaType.APPLICATION_JSON_VALUE)
     Flux<UserDto> listAllUsersWithLimit(@PathVariable int limit) {
         final int max = 1000;
@@ -36,7 +41,7 @@ public class UserController extends ControllerExceptionHandler {
             ;
     }
 
-    @GetMapping(value = "/user/{username}",
+    @GetMapping(value = GET_USER_USERNAME,
         produces = MediaType.APPLICATION_JSON_VALUE)
     @ResponseStatus(HttpStatus.OK)
     Mono<UserDto> findUser(@PathVariable String username) {
@@ -49,7 +54,7 @@ public class UserController extends ControllerExceptionHandler {
         );
     }
 
-    @PutMapping(value = "/user",
+    @PutMapping(value = PUT_USER,
         consumes = MediaType.APPLICATION_JSON_VALUE,
         produces = MediaType.APPLICATION_JSON_VALUE)
     @ResponseStatus(HttpStatus.OK)
@@ -58,7 +63,7 @@ public class UserController extends ControllerExceptionHandler {
             userService.upsertUser(request));
     }
 
-    @DeleteMapping(value = "/user/{username}",
+    @DeleteMapping(value = DELETE_USER_USERNAME,
         produces = MediaType.APPLICATION_JSON_VALUE)
     @ResponseStatus(HttpStatus.OK)
     Mono<MessageDto> deleteUser(@PathVariable String username) {
