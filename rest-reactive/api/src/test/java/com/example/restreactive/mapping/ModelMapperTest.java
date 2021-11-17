@@ -8,6 +8,7 @@ import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.context.SpringBootTest;
 
+import java.time.ZoneId;
 import java.time.ZonedDateTime;
 import java.util.List;
 
@@ -19,7 +20,7 @@ class ModelMapperTest {
     public static final int ID_1 = 1;
     public static final String TEST = "TEST";
     public static final ZonedDateTime DATE_TIME = ZonedDateTime
-        .parse("2019-04-01T16:24:11.252Z");
+        .parse("2019-04-01T16:24:11.252Z").withZoneSameLocal(ZoneId.of("UTC"));
 
     @Autowired
     private ModelMapper underTest;
@@ -39,7 +40,7 @@ class ModelMapperTest {
         , createCountryDto()
         , createEmailAddressDto()
         , createStreetAddressDto()
-        , createAppointmentSlotDto()
+        , createStoreSlotDto()
         , createStoreDto()
         , createAppointmentDto()
     );
@@ -164,7 +165,7 @@ class ModelMapperTest {
         );
     }
 
-    private StoreSlotDto createAppointmentSlotDto() {
+    private StoreSlotDto createStoreSlotDto() {
         return StoreSlotDto.builder()
             .id(ID_1)
             .slotCode(TEST)
@@ -205,7 +206,7 @@ class ModelMapperTest {
             .id(ID_1)
             .appointmentCode(createAppointmentCode())
             .store(createStoreDto())
-            .storeSlot(createAppointmentSlotDto())
+            .storeSlot(createStoreSlotDto())
             .users(ImmutableList.of(createUserDto()))
             .build();
     }
