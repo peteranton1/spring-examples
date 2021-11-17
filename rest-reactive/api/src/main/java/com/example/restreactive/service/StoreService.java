@@ -11,7 +11,6 @@ import com.example.restreactive.model.StreetAddress;
 import com.example.restreactive.repository.CountryRepository;
 import com.example.restreactive.repository.StoreRepository;
 import com.example.restreactive.repository.StreetAddressRepository;
-import com.example.restreactive.service.ServiceHelper;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
@@ -34,7 +33,7 @@ public class StoreService {
     @Autowired
     private ModelMapper modelMapper;
 
-    private final ServiceHelper helper = new ServiceHelper();
+    private final ServiceHelper serviceHelper = new ServiceHelper();
 
     public List<StoreDto> findAllStores() {
         return storeRepository.findAll()
@@ -55,12 +54,12 @@ public class StoreService {
             .map(store -> (Store) modelMapper.update(store, storeDto))
             .orElse((Store) modelMapper.insert(storeDto))
         );
-        helper.assertNonNull("storeOut", storeOut);
+        serviceHelper.assertNonNull("storeOut", storeOut);
         return (StoreDto) modelMapper.toDto(storeOut);
     }
 
     private void verifyStoreForUpdate(StoreDto storeDto) {
-        helper.assertNonNull("storeDto", storeDto);
+        serviceHelper.assertNonNull("storeDto", storeDto);
         StreetAddressDto streetAddressDto = storeDto.getAddress();
         if (nonNull(streetAddressDto)) {
             Integer id = upsertStreetAddress(streetAddressDto);
@@ -68,16 +67,16 @@ public class StoreService {
             String storeCode = storeDto.getStoreName().toLowerCase() + "-" + id;
             storeDto.setStoreCode(storeCode);
         }
-        helper.assertNonNull("storeDto.getStoreCode()", storeDto.getStoreCode());
+        serviceHelper.assertNonNull("storeDto.getStoreCode()", storeDto.getStoreCode());
     }
 
     public Integer upsertStreetAddress(StreetAddressDto streetAddressDto) {
-        helper.assertNonNull("streetAddressDto", streetAddressDto);
-        helper.assertNonNull("streetAddressDto.getPostcode()", streetAddressDto.getPostcode());
+        serviceHelper.assertNonNull("streetAddressDto", streetAddressDto);
+        serviceHelper.assertNonNull("streetAddressDto.getPostcode()", streetAddressDto.getPostcode());
         CountryDto countryDto = streetAddressDto.getCountry();
         if (nonNull(countryDto)) {
             Integer id = upsertCountry(countryDto);
-            helper.assertNonNull("country.id", id);
+            serviceHelper.assertNonNull("country.id", id);
             countryDto.setId(id);
         }
         StreetAddress streetAddress = streetAddressRepository
@@ -90,13 +89,13 @@ public class StoreService {
                     .update(address, streetAddressDto))
                 .orElse((StreetAddress) modelMapper.insert(streetAddressDto))
             );
-        helper.assertNonNull("streetAddress", streetAddress);
+        serviceHelper.assertNonNull("streetAddress", streetAddress);
         return streetAddress.getId();
     }
 
     public Integer upsertCountry(CountryDto countryDto) {
-        helper.assertNonNull("countryDto", countryDto);
-        helper.assertNonNull("countryDto.getCode()", countryDto.getCode());
+        serviceHelper.assertNonNull("countryDto", countryDto);
+        serviceHelper.assertNonNull("countryDto.getCode()", countryDto.getCode());
         Country countryOut = countryRepository
             .save(countryRepository
                 .findByCode(countryDto.getCode())
@@ -105,13 +104,13 @@ public class StoreService {
                     .update(country, countryDto))
                 .orElse((Country) modelMapper.insert(countryDto))
             );
-        helper.assertNonNull("countryOut", countryOut);
+        serviceHelper.assertNonNull("countryOut", countryOut);
         return countryOut.getId();
     }
 
     public MessageDto deleteStore(String storeCode) {
 
-        helper.assertNonNull("storeCode", storeCode);
+        serviceHelper.assertNonNull("storeCode", storeCode);
         storeCode = storeCode.toLowerCase();
         storeRepository
             .findByStoreCode(storeCode)

@@ -83,7 +83,7 @@ class StoreSlotServiceTest {
         // Step 1 - save
         StoreSlotDto storeSlotDto = creator.createStoreSlotDto(
             TEST, TEST, DATE_TIME_1, DATE_TIME_2);
-        StoreSlotDto actual = underTest.upsertAppointmentSlot(storeSlotDto);
+        StoreSlotDto actual = underTest.upsertStoreSlot(storeSlotDto);
         assertNotNull(actual);
 
         // Check 1 in db, therefore created
@@ -99,14 +99,14 @@ class StoreSlotServiceTest {
         // Step 1 - save
         StoreSlotDto appointmentSlotDto = creator.createStoreSlotDto(
             TEST, TEST, DATE_TIME_1, DATE_TIME_2);
-        StoreSlotDto actual1 = underTest.upsertAppointmentSlot(appointmentSlotDto);
+        StoreSlotDto actual1 = underTest.upsertStoreSlot(appointmentSlotDto);
         assertNotNull(actual1);
 
         // Check 1 in db, therefore created
         assertSlotsSize(1);
 
         // Step 2 - Update
-        StoreSlotDto actual2 = underTest.upsertAppointmentSlot(appointmentSlotDto);
+        StoreSlotDto actual2 = underTest.upsertStoreSlot(appointmentSlotDto);
         assertEquals(actual1, actual2);
 
         // Check 1 in db, therefore updated

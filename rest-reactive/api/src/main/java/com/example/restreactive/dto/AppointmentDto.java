@@ -13,7 +13,8 @@ import java.util.List;
 @EqualsAndHashCode
 public class AppointmentDto implements DtoObject {
     Integer id;
+    String appointmentCode;
     StoreDto store;
-    StoreSlotDto storeSlotDto;
+    StoreSlotDto storeSlot;
     List<UserDto> users;
 }

@@ -1,8 +1,6 @@
 package com.example.restreactive.mapping;
 
 import com.example.restreactive.dto.*;
-import com.example.restreactive.mapping.AppointmentException;
-import com.example.restreactive.mapping.ModelMapper;
 import com.example.restreactive.model.*;
 import com.google.common.collect.ImmutableList;
 import org.junit.jupiter.api.Assertions;
@@ -205,18 +203,24 @@ class ModelMapperTest {
     private AppointmentDto createAppointmentDto() {
         return AppointmentDto.builder()
             .id(ID_1)
+            .appointmentCode(createAppointmentCode())
             .store(createStoreDto())
-            .storeSlotDto(createAppointmentSlotDto())
+            .storeSlot(createAppointmentSlotDto())
             .users(ImmutableList.of(createUserDto()))
             .build();
     }
 
     private Appointment createAppointment() {
         return new Appointment(ID_1
+            ,createAppointmentCode()
             ,createStore()
             ,createAppointmentSlot()
             ,ImmutableList.of(createUser())
         );
+    }
+
+    private String createAppointmentCode() {
+        return "appointmentCode";
     }
 
 }

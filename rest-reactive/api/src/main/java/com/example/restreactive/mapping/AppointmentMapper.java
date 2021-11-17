@@ -2,6 +2,7 @@ package com.example.restreactive.mapping;
 
 import com.example.restreactive.dto.AppointmentDto;
 import com.example.restreactive.dto.DtoObject;
+import com.example.restreactive.dto.UserDto;
 import com.example.restreactive.model.*;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Component;
@@ -9,6 +10,7 @@ import org.springframework.stereotype.Component;
 import java.util.List;
 import java.util.stream.Collectors;
 
+import static java.util.Objects.isNull;
 import static java.util.Objects.nonNull;
 
 @Component
@@ -50,11 +52,14 @@ public class AppointmentMapper implements DtoMapper, EntityMapper {
         Integer id = nonNull(appointment.getId()) ?
             appointment.getId() :
             appointmentDto.getId();
+        String appointmentCode = nonNull(appointment.getAppointmentCode()) ?
+            appointment.getAppointmentCode() :
+            appointmentDto.getAppointmentCode();
         Store store = nonNull(appointmentDto.getStore()) ?
             storeMapper.storeEntityOf(appointmentDto.getStore()) :
             appointment.getStore();
-        StoreSlot slot = nonNull(appointmentDto.getStoreSlotDto()) ?
-            storeSlotMapper.appointmentSlotEntityOf(appointmentDto.getStoreSlotDto()) :
+        StoreSlot slot = nonNull(appointmentDto.getStoreSlot()) ?
+            storeSlotMapper.storeSlotEntityOf(appointmentDto.getStoreSlot()) :
             appointment.getStoreSlot();
         List<User> users = nonNull(appointmentDto.getUsers()) ?
             appointmentDto.getUsers().stream()
@@ -63,6 +68,7 @@ public class AppointmentMapper implements DtoMapper, EntityMapper {
             appointment.getUsers();
         return Appointment.builder()
             .id(id)
+            .appointmentCode(appointmentCode)
             .store(store)
             .storeSlot(slot)
             .users(users)
@@ -70,21 +76,27 @@ public class AppointmentMapper implements DtoMapper, EntityMapper {
     }
 
     public Appointment appointmentEntityOf(AppointmentDto appointmentDto) {
+        List<UserDto> users = appointmentDto.getUsers();
+        if(isNull(users)){
+            users = List.of();
+        }
         return new Appointment(
             appointmentDto.getId()
+            , appointmentDto.getAppointmentCode()
             , storeMapper.storeEntityOf(appointmentDto.getStore())
-            , storeSlotMapper.appointmentSlotEntityOf(appointmentDto.getStoreSlotDto())
-            , appointmentDto.getUsers().stream()
+            , storeSlotMapper.storeSlotEntityOf(appointmentDto.getStoreSlot())
+            , users.stream()
             .map(userDto -> userMapper.userEntityOf(userDto))
-            .collect(Collectors.toList())
+            .toList()
         );
     }
 
     public AppointmentDto appointmentDtoOf(Appointment appointment) {
         return AppointmentDto.builder()
             .id(appointment.getId())
+            .appointmentCode(appointment.getAppointmentCode())
             .store(storeMapper.storeDtoOf(appointment.getStore()))
-            .storeSlotDto(storeSlotMapper.appointmentSlotDtoOf(appointment.getStoreSlot()))
+            .storeSlot(storeSlotMapper.storeSlotDtoOf(appointment.getStoreSlot()))
             .users(appointment.getUsers().stream()
                 .map(user -> userMapper.userDtoOf(user))
                 .toList())

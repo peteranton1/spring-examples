@@ -2,8 +2,6 @@ package com.example.restreactive.mapping;
 
 import com.example.restreactive.dto.DtoObject;
 import com.example.restreactive.dto.StoreSlotDto;
-import com.example.restreactive.mapping.DtoMapper;
-import com.example.restreactive.mapping.EntityMapper;
 import com.example.restreactive.model.EntityObject;
 import com.example.restreactive.model.StoreSlot;
 import org.springframework.stereotype.Component;
@@ -16,6 +14,8 @@ import static java.util.Objects.nonNull;
 @Component
 public class StoreSlotMapper implements DtoMapper, EntityMapper {
 
+    private final ZonedDateTimeHelper zonedDateTimeHelper = new ZonedDateTimeHelper();
+
     @Override
     public boolean accepts(DtoObject dtoObject) {
         return dtoObject instanceof StoreSlotDto;
@@ -23,7 +23,7 @@ public class StoreSlotMapper implements DtoMapper, EntityMapper {
 
     @Override
     public EntityObject mapTo(DtoObject dtoObject) {
-        return appointmentSlotEntityOf((StoreSlotDto) dtoObject);
+        return storeSlotEntityOf((StoreSlotDto) dtoObject);
     }
 
     @Override
@@ -33,15 +33,15 @@ public class StoreSlotMapper implements DtoMapper, EntityMapper {
 
     @Override
     public DtoObject mapTo(EntityObject entityObject) {
-        return appointmentSlotDtoOf((StoreSlot) entityObject);
+        return storeSlotDtoOf((StoreSlot) entityObject);
     }
 
     @Override
     public EntityObject updateEntity(EntityObject entityObject, DtoObject dtoObject) {
-        return appointmentSlotUpdate((StoreSlot) entityObject, (StoreSlotDto) dtoObject);
+        return storeSlotUpdate((StoreSlot) entityObject, (StoreSlotDto) dtoObject);
     }
 
-    public StoreSlot appointmentSlotUpdate(StoreSlot storeSlot, StoreSlotDto storeSlotDto) {
+    public StoreSlot storeSlotUpdate(StoreSlot storeSlot, StoreSlotDto storeSlotDto) {
         Integer id = nonNull(storeSlot.getId()) ?
             storeSlot.getId() :
             storeSlotDto.getId();
@@ -57,6 +57,8 @@ public class StoreSlotMapper implements DtoMapper, EntityMapper {
         ZonedDateTime endTime = nonNull(storeSlotDto.getEndTime()) ?
             storeSlotDto.getEndTime() :
             storeSlot.getEndTime();
+        startTime = zonedDateTimeHelper.ensureZone(startTime);
+        endTime = zonedDateTimeHelper.ensureZone(endTime);
         return StoreSlot.builder()
             .id(id)
             .slotCode(slotCode)
@@ -66,10 +68,12 @@ public class StoreSlotMapper implements DtoMapper, EntityMapper {
             .build();
     }
 
-    public StoreSlot appointmentSlotEntityOf(StoreSlotDto storeSlotDto) {
+    public StoreSlot storeSlotEntityOf(StoreSlotDto storeSlotDto) {
         if (isNull(storeSlotDto)) {
             return null;
         }
+        storeSlotDto.setStartTime(zonedDateTimeHelper.ensureZone(storeSlotDto.getStartTime()));
+        storeSlotDto.setEndTime(zonedDateTimeHelper.ensureZone(storeSlotDto.getEndTime()));
         return new StoreSlot(
             storeSlotDto.getId()
             , storeSlotDto.getSlotCode()
@@ -79,10 +83,12 @@ public class StoreSlotMapper implements DtoMapper, EntityMapper {
         );
     }
 
-    public StoreSlotDto appointmentSlotDtoOf(StoreSlot storeSlot) {
+    public StoreSlotDto storeSlotDtoOf(StoreSlot storeSlot) {
         if (isNull(storeSlot)) {
             return null;
         }
+        storeSlot.setStartTime(zonedDateTimeHelper.ensureZone(storeSlot.getStartTime()));
+        storeSlot.setEndTime(zonedDateTimeHelper.ensureZone(storeSlot.getEndTime()));
         return StoreSlotDto.builder()
             .id(storeSlot.getId())
             .slotCode(storeSlot.getSlotCode())

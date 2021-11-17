@@ -5,6 +5,7 @@ import com.example.restreactive.dto.StoreDto;
 import com.example.restreactive.dto.StoreSlotDto;
 import com.example.restreactive.dto.UserDto;
 import com.example.restreactive.mapping.AppointmentException;
+import com.example.restreactive.model.Appointment;
 import com.example.restreactive.repository.AppointmentRepository;
 import com.google.common.collect.ImmutableList;
 import org.junit.jupiter.api.BeforeEach;
@@ -44,21 +45,21 @@ class AppointmentServiceTest {
 
     private final EntityDtoCreator creator = new EntityDtoCreator();
 
-    private StoreSlotDto storeSlotDto ;
+    private StoreSlotDto storeSlotDto;
 
-    private StoreDto storeDto ;
+    private StoreDto storeDto;
 
-    private UserDto userDto ;
+    private UserDto userDto;
 
 
     @BeforeEach
     void setUp() {
         appointmentRepository.deleteAll();
 
-        // Appointment slot
+        // Store slot
         storeSlotDto = creator
             .createStoreSlotDto(TEST, TEST, DATE_TIME_1, DATE_TIME_2);
-        storeSlotService.upsertAppointmentSlot(storeSlotDto);
+        storeSlotService.upsertStoreSlot(storeSlotDto);
 
         // STORE
         storeDto = creator.createStoreDto(
@@ -78,6 +79,72 @@ class AppointmentServiceTest {
     }
 
     @Test
+    void whenFindByStartTimeAndEndTimeEmptyThenEmpty() {
+        List<AppointmentDto> expected = ImmutableList.of();
+        List<AppointmentDto> actual = underTest.findByStartTimeAndEndTime(
+            DATE_TIME_1, DATE_TIME_2);
+        assertEquals(expected, actual);
+    }
+
+    @Test
+    void whenFindByStartTimeAndEndTime1ApptThen1Appt() {
+
+        // Check 0 in db, initial conditions
+        assertSlotsSize(0);
+
+        // Add 1 appointment
+        AppointmentDto appointmentDto = creator.createAppointmentDto(
+            storeSlotDto, storeDto, userDto);
+        appointmentDto = underTest.upsertAppointment(appointmentDto);
+
+        // Check 0 in db, initial conditions
+        assertSlotsSize(1);
+
+        // Verify 1 appointment found
+        List<AppointmentDto> expected = ImmutableList.of(appointmentDto);
+        List<AppointmentDto> actual = underTest.findByStartTimeAndEndTime(
+            DATE_TIME_1, DATE_TIME_2);
+        assertEquals(expected, actual);
+
+    }
+
+    @Test
+    void whenFindByStartTimeAndEndTimeAndStoreCodeListEmptyThenEmpty() {
+        List<AppointmentDto> expected = ImmutableList.of();
+        List<AppointmentDto> actual = underTest
+            .findByStartTimeAndEndTimeAndStoreCodeList(
+                DATE_TIME_1, DATE_TIME_2,
+                List.of("non-existent")
+            );
+        assertEquals(expected, actual);
+    }
+
+    @Test
+    void whenFindByStartTimeAndEndTimeAndStoreCodeList1ApptThen1Appt() {
+
+        // Check 0 in db, initial conditions
+        assertSlotsSize(0);
+
+        // Add 1 appointment
+        AppointmentDto appointmentDto = creator.createAppointmentDto(
+            storeSlotDto, storeDto, userDto);
+        appointmentDto = underTest.upsertAppointment(appointmentDto);
+
+        // Check 0 in db, initial conditions
+        assertSlotsSize(1);
+
+        // Verify 1 appointment found
+        List<AppointmentDto> expected = ImmutableList.of(appointmentDto);
+        List<AppointmentDto> actual = underTest
+            .findByStartTimeAndEndTimeAndStoreCodeList(
+                DATE_TIME_1, DATE_TIME_2,
+                List.of(storeDto.getStoreCode())
+            );
+        assertEquals(expected, actual);
+
+    }
+
+    @Test
     void whenFindByStoreAndAppointmentEmptyThenEmpty() {
         List<AppointmentDto> expected = ImmutableList.of();
         List<AppointmentDto> actual = underTest
@@ -89,11 +156,12 @@ class AppointmentServiceTest {
     void whenFindByStoreAndAppointmentNullStoreThenException() {
         Exception ex = assertThrows(AppointmentException.class,
             () -> underTest
-            .findByStoreAndAppointmentSlot(null, storeSlotDto));
+                .findByStoreAndAppointmentSlot(null, storeSlotDto));
         String expected = """
             Null value for find appointment,\s
             store: 'null',\s
-            slot: 'StoreSlotDto(id=null, slotCode=test, storeCode=test, startTime=2019-04-01T16:24:11.252Z, endTime=2019-04-01T16:54:11.252Z)'""";
+            slot: 'StoreSlotDto(id=null, slotCode=test, storeCode=test, startTime=2019-04-01T16:24:11.252Z[UTC], endTime=2019-04-01T16:54:11.252Z[UTC])'\s
+            users: '[]'""";
         assertEquals(expected, ex.getMessage());
     }
 
@@ -101,7 +169,7 @@ class AppointmentServiceTest {
     void whenFindByStoreAndAppointmentNullSlotThenException() {
         Exception ex = assertThrows(AppointmentException.class,
             () -> underTest
-            .findByStoreAndAppointmentSlot(storeDto, null));
+                .findByStoreAndAppointmentSlot(storeDto, null));
         String expected = "Null value for find appointment, \n";
         assertTrue(ex.getMessage().startsWith(expected));
     }
@@ -110,11 +178,12 @@ class AppointmentServiceTest {
     void whenFindByStoreAndAppointmentNullStoreNullSlotThenException() {
         Exception ex = assertThrows(AppointmentException.class,
             () -> underTest
-            .findByStoreAndAppointmentSlot(null, null));
+                .findByStoreAndAppointmentSlot(null, null));
         String expected = """
             Null value for find appointment,\s
             store: 'null',\s
-            slot: 'null'""";
+            slot: 'null'\s
+            users: '[]'""";
         assertEquals(expected, ex.getMessage());
     }
 
@@ -129,7 +198,7 @@ class AppointmentServiceTest {
             storeSlotDto,
             storeDto, userDto
         );
-        long actual = underTest.upsertAppointment(appointmentDto);
+        long actual = underTest.upsertAppointment(appointmentDto).getId();
         long expected = 1L;
         assertTrue(expected <= actual);
 
@@ -148,7 +217,7 @@ class AppointmentServiceTest {
             storeSlotDto,
             storeDto, userDto
         );
-        long actual1 = underTest.upsertAppointment(appointmentDto);
+        long actual1 = underTest.upsertAppointment(appointmentDto).getId();
         long expected = 1L;
         assertTrue(expected <= actual1);
 
@@ -156,7 +225,7 @@ class AppointmentServiceTest {
         assertSlotsSize(1);
 
         // Step 2 - Update
-        long actual2 = underTest.upsertAppointment(appointmentDto);
+        long actual2 = underTest.upsertAppointment(appointmentDto).getId();
         assertEquals(actual1, actual2);
 
         // Check 1 in db, therefore updated

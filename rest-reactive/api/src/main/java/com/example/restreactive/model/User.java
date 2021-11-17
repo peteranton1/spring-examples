@@ -6,6 +6,7 @@ import com.example.restreactive.model.EntityObject;
 import lombok.*;
 
 import javax.persistence.*;
+import java.util.List;
 
 @Builder
 @AllArgsConstructor
@@ -27,7 +28,7 @@ public class User implements EntityObject {
     @OneToOne
     EmailAddress email;
 
-    @ManyToOne(fetch = FetchType.LAZY)
-    @JoinColumn(name = "user_id")
-    private Appointment appointment;
+    @ManyToMany(fetch = FetchType.LAZY)
+    @JoinColumn(name = "appointment_id")
+    private List<Appointment> appointments;
 }

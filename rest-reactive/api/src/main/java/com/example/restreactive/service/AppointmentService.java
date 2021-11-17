@@ -1,10 +1,9 @@
 package com.example.restreactive.service;
 
-import com.example.restreactive.dto.AppointmentDto;
-import com.example.restreactive.dto.StoreDto;
-import com.example.restreactive.dto.StoreSlotDto;
+import com.example.restreactive.dto.*;
 import com.example.restreactive.mapping.AppointmentException;
 import com.example.restreactive.mapping.ModelMapper;
+import com.example.restreactive.mapping.ZonedDateTimeHelper;
 import com.example.restreactive.model.Appointment;
 import com.example.restreactive.model.Store;
 import com.example.restreactive.model.StoreSlot;
@@ -17,7 +16,9 @@ import org.springframework.stereotype.Service;
 
 import java.time.ZonedDateTime;
 import java.util.List;
+import java.util.UUID;
 
+import static java.util.Collections.emptyList;
 import static java.util.Objects.*;
 
 @Service
@@ -38,6 +39,10 @@ public class AppointmentService {
     @Autowired
     private ModelMapper modelMapper;
 
+    private final ServiceHelper serviceHelper = new ServiceHelper();
+
+    private final ZonedDateTimeHelper zonedDateTimeHelper = new ZonedDateTimeHelper();
+
     public List<AppointmentDto> findAllAppointments() {
         return appointmentRepository.findAll()
             .stream()
@@ -45,14 +50,50 @@ public class AppointmentService {
             .toList();
     }
 
+    public List<AppointmentDto> findByStartTimeAndEndTime(ZonedDateTime startTime,
+                                                          ZonedDateTime endTime) {
+        if (isNull(startTime) || isNull(endTime) ) {
+            return emptyList();
+        }
+        List<Appointment> appointments = appointmentRepository
+            .findAllAppointmentsBetweenStartTimeAndEndTime(startTime, endTime);
+        return appointments
+            .stream()
+            .map(slot -> (AppointmentDto) modelMapper.toDto(slot))
+            .toList();
+    }
+
+    public List<AppointmentDto> findByStartTimeAndEndTimeAndStoreCodeList(
+        ZonedDateTime startTime,
+        ZonedDateTime endTime,
+        List<String> storeCodes
+    ) {
+
+        if (isNull(startTime) || isNull(endTime) ||
+            isNull(storeCodes) || storeCodes.isEmpty()) {
+            return emptyList();
+        }
+        List<String> storeCodes1 = storeCodes.stream()
+            .map(String::toLowerCase).toList();
+        ZonedDateTime startTime1 = zonedDateTimeHelper.ensureZone(startTime);
+        ZonedDateTime endTime1 = zonedDateTimeHelper.ensureZone(endTime);
+        List<Appointment> appointments = appointmentRepository
+            .findAllAppointmentsByStoresListBetweenStartTimeAndEndTime(
+                startTime1, endTime1, storeCodes1);
+        return appointments
+            .stream()
+            .map(slot -> (AppointmentDto) modelMapper.toDto(slot))
+            .toList();
+    }
+
     public List<AppointmentDto> findByStoreAndAppointmentSlot(
         StoreDto storeDto, StoreSlotDto slotDto) {
 
         // Validate Input
-        validateInputs(storeDto, slotDto);
+        validateInputs(storeDto, slotDto, List.of());
 
         // Get Entities
-        StoreSlot slot = getAppointmentSlot(
+        StoreSlot slot = getStoreSlot(
             slotDto.getStartTime(), slotDto.getEndTime());
 
         Store store = getStore(storeDto.getStoreCode());
@@ -66,17 +107,19 @@ public class AppointmentService {
             .toList();
     }
 
-    public Integer upsertAppointment(AppointmentDto appointmentDto) {
+    public AppointmentDto upsertAppointment(AppointmentDto appointmentDto) {
         // Validate Input
-        requireNonNull(appointmentDto);
+        verifyAppointmentDtoForUpdate(appointmentDto);
+
         StoreDto storeDto = appointmentDto.getStore();
-        StoreSlotDto slotDto = appointmentDto.getStoreSlotDto();
-        validateInputs(storeDto, slotDto);
+        StoreSlotDto slotDto = appointmentDto.getStoreSlot();
+        List<UserDto> userDtos = appointmentDto.getUsers();
+        validateInputs(storeDto, slotDto, userDtos);
 
         // Get Entities and ids
-        StoreSlot slot = getAppointmentSlot(
+        StoreSlot slot = getStoreSlot(
             slotDto.getStartTime(), slotDto.getEndTime());
-        appointmentDto.getStoreSlotDto().setId(slot.getId());
+        appointmentDto.getStoreSlot().setId(slot.getId());
 
         Store store = getStore(storeDto.getStoreCode());
         appointmentDto.getStore().setId(store.getId());
@@ -91,7 +134,7 @@ public class AppointmentService {
         });
 
         // Get Slot
-        Appointment apptOut = appointmentRepository.save(appointmentRepository
+        Appointment appointmentOut = appointmentRepository.save(appointmentRepository
             .findByStoreAndStoreSlot(
                 store,
                 slot
@@ -100,11 +143,49 @@ public class AppointmentService {
                 .update(appointment, appointmentDto))
             .orElse((Appointment) modelMapper.insert(appointmentDto))
         );
-        return apptOut.getId();
+        serviceHelper.assertNonNull("appointmentOut", appointmentOut);
+        return (AppointmentDto) modelMapper.toDto(appointmentOut);
     }
 
-    StoreSlot getAppointmentSlot(ZonedDateTime startTime,
-                                 ZonedDateTime endTime) {
+    private void verifyAppointmentDtoForUpdate(AppointmentDto appointmentDto) {
+        serviceHelper.assertNonNull("appointmentDto", appointmentDto);
+        if (isNull(appointmentDto.getAppointmentCode())) {
+            appointmentDto.setAppointmentCode(UUID.randomUUID().toString());
+        }
+        appointmentDto.setAppointmentCode(appointmentDto
+            .getAppointmentCode().toLowerCase());
+    }
+
+
+    public MessageDto deleteAppointment(
+        String appointmentCode
+    ) {
+        if (isNull(appointmentCode)) {
+            return MessageDto.builder()
+                .code("200")
+                .message(String.format("Appointment not specified. %s", appointmentCode))
+                .build();
+        }
+        appointmentCode = appointmentCode.toLowerCase();
+
+        return appointmentRepository
+            .findByAppointmentCode(appointmentCode)
+            .stream().findFirst()
+            .map(appt -> {
+                appointmentRepository.delete(appt);
+                return MessageDto.builder()
+                    .code("200")
+                    .message("Appointment deleted: " + appt.getAppointmentCode())
+                    .build();
+            })
+            .orElse( MessageDto.builder()
+                .code("200")
+                .message("Appointment not found: " + appointmentCode)
+                .build());
+    }
+
+    StoreSlot getStoreSlot(ZonedDateTime startTime,
+                           ZonedDateTime endTime) {
         if (nonNull(startTime) && nonNull(endTime)) {
             return storeSlotRepository
                 .findAllSlotsBetweenStartTimeAndEndTime(startTime, endTime)
@@ -129,17 +210,20 @@ public class AppointmentService {
                 "with code: '%s'", storeCode));
     }
 
-    void validateInputs(StoreDto storeDto, StoreSlotDto slotDto) {
+    void validateInputs(StoreDto storeDto, StoreSlotDto slotDto, List<UserDto> userDtos) {
         if (isNull(storeDto) ||
             isNull(storeDto.getStoreCode()) ||
             isNull(slotDto) ||
             isNull(slotDto.getStartTime()) ||
-            isNull(slotDto.getEndTime())) {
+            isNull(slotDto.getEndTime()) ||
+            isNull(userDtos)
+        ) {
             throw new AppointmentException(String.format(
                 """
                     Null value for find appointment,\s
                     store: '%s',\s
-                    slot: '%s'""", storeDto, slotDto
+                    slot: '%s'\s
+                    users: '%s'""", storeDto, slotDto, userDtos
             ));
         }
     }

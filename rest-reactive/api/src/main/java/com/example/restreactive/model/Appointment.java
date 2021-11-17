@@ -18,11 +18,16 @@ public class Appointment implements EntityObject {
     @Id
     @GeneratedValue
     Integer id;
+
+    String appointmentCode;
+
     @OneToOne
     Store store;
+
     @OneToOne
     StoreSlot storeSlot;
 
-    @OneToMany(fetch = FetchType.EAGER, mappedBy = "id")
+    @ManyToMany(fetch = FetchType.EAGER)
+    @JoinColumn(name = "user_id")
     List<User> users;
 }

@@ -5,7 +5,6 @@ import com.example.restreactive.dto.StoreSlotDto;
 import com.example.restreactive.mapping.ModelMapper;
 import com.example.restreactive.model.StoreSlot;
 import com.example.restreactive.repository.StoreSlotRepository;
-import com.example.restreactive.service.ServiceHelper;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
@@ -25,7 +24,7 @@ public class StoreSlotService {
     @Autowired
     private ModelMapper modelMapper;
 
-    private final ServiceHelper helper = new ServiceHelper();
+    private final ServiceHelper serviceHelper = new ServiceHelper();
 
     public List<StoreSlotDto> findAllSlots() {
         return storeSlotRepository.findAll()
@@ -80,7 +79,7 @@ public class StoreSlotService {
             .toList();
     }
 
-    public StoreSlotDto upsertAppointmentSlot(StoreSlotDto storeSlotDto) {
+    public StoreSlotDto upsertStoreSlot(StoreSlotDto storeSlotDto) {
         verifyStoreSlotDtoForUpdate(storeSlotDto);
         StoreSlot slotOut = storeSlotRepository.save(storeSlotRepository
             .findAllSlotsByStoreCodeAndSlotCode(
@@ -91,15 +90,15 @@ public class StoreSlotService {
             .map(slot -> (StoreSlot) modelMapper.update(slot, storeSlotDto))
             .orElse((StoreSlot) modelMapper.insert(storeSlotDto))
         );
-        helper.assertNonNull("slotOut", slotOut);
+        serviceHelper.assertNonNull("slotOut", slotOut);
         return (StoreSlotDto) modelMapper.toDto(slotOut);
     }
 
     private void verifyStoreSlotDtoForUpdate(StoreSlotDto storeSlotDto) {
-        helper.assertNonNull("storeSlotDto", storeSlotDto);
-        helper.assertNonNull("storeSlotDto.getStoreCode()", storeSlotDto.getStoreCode());
-        helper.assertNonNull("storeSlotDto.getStartTime()", storeSlotDto.getStartTime());
-        helper.assertNonNull("storeSlotDto.getEndTime()", storeSlotDto.getEndTime());
+        serviceHelper.assertNonNull("storeSlotDto", storeSlotDto);
+        serviceHelper.assertNonNull("storeSlotDto.getStoreCode()", storeSlotDto.getStoreCode());
+        serviceHelper.assertNonNull("storeSlotDto.getStartTime()", storeSlotDto.getStartTime());
+        serviceHelper.assertNonNull("storeSlotDto.getEndTime()", storeSlotDto.getEndTime());
         if (isNull(storeSlotDto.getSlotCode())) {
             storeSlotDto.setSlotCode(UUID.randomUUID().toString());
         }

@@ -8,7 +8,6 @@ import com.example.restreactive.model.EmailAddress;
 import com.example.restreactive.model.User;
 import com.example.restreactive.repository.EmailAddressRepository;
 import com.example.restreactive.repository.UserRepository;
-import com.example.restreactive.service.ServiceHelper;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
@@ -32,7 +31,7 @@ public class UserService {
     @Autowired
     private ModelMapper modelMapper;
 
-    private final ServiceHelper helper = new ServiceHelper();
+    private final ServiceHelper serviceHelper = new ServiceHelper();
 
     public List<UserDto> findAllUsers() {
         List<UserDto> userDtos = userRepository.findAll()
@@ -46,15 +45,15 @@ public class UserService {
     }
 
     public Optional<UserDto> findByUsername(String username) {
-        helper.assertNonNull("username", username);
+        serviceHelper.assertNonNull("username", username);
         return userRepository.findByUsername(username.toLowerCase())
             .stream().findFirst()
             .map(user -> (UserDto) modelMapper.toDto(user));
     }
 
     public UserDto upsertUser(UserDto userDto) {
-        helper.assertNonNull("userDto", userDto);
-        helper.assertNonNull("userDto.getUsername()", userDto.getUsername());
+        serviceHelper.assertNonNull("userDto", userDto);
+        serviceHelper.assertNonNull("userDto.getUsername()", userDto.getUsername());
         userDto.setUsername(userDto.getUsername().toLowerCase());
         EmailAddressDto emailAddressDto = userDto.getEmail();
         if (nonNull(emailAddressDto)) {
@@ -70,8 +69,8 @@ public class UserService {
     }
 
     public Integer upsertEmailAddress(EmailAddressDto emailAddressDto) {
-        helper.assertNonNull("emailAddressDto", emailAddressDto);
-        helper.assertNonNull("emailAddressDto.getEmail()", emailAddressDto.getEmail());
+        serviceHelper.assertNonNull("emailAddressDto", emailAddressDto);
+        serviceHelper.assertNonNull("emailAddressDto.getEmail()", emailAddressDto.getEmail());
         emailAddressDto.setEmail(emailAddressDto.getEmail().toLowerCase());
         EmailAddress emailOut = emailAddressRepository.save(emailAddressRepository
             .findByEmail(emailAddressDto.getEmail().toLowerCase())

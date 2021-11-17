@@ -27,7 +27,7 @@ public class EntityDtoCreator {
         StoreDto storeDto,
         UserDto userDto) {
         return AppointmentDto.builder()
-            .storeSlotDto(storeSlotDto)
+            .storeSlot(storeSlotDto)
             .store(storeDto)
             .users(ImmutableList.of(userDto))
             .build();

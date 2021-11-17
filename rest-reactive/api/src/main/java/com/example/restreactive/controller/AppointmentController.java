@@ -1,11 +1,12 @@
 package com.example.restreactive.controller;
 
 
+import com.example.restreactive.dto.AppointmentDto;
 import com.example.restreactive.dto.MessageDto;
 import com.example.restreactive.dto.StoreSlotDto;
 import com.example.restreactive.mapping.AppointmentException;
 import com.example.restreactive.mapping.ModelMapper;
-import com.example.restreactive.service.StoreSlotService;
+import com.example.restreactive.service.AppointmentService;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
@@ -19,75 +20,74 @@ import java.util.List;
 
 @Slf4j
 @RestController
-public class StoreSlotController extends ControllerExceptionHandler {
+public class AppointmentController extends ControllerExceptionHandler {
 
-    public static final String STORE_SLOTS_START_TIME_LIMIT = "/stores/slots/{startTime}/{limit}";
-    public static final String PUT_STORE_STORE_CODE_SLOT = "/store/{storeCode}/slot";
-    public static final String DELETE_STORE_STORE_CODE_SLOT_SLOT_CODE = "/store/{storeCode}/slot/{slotCode}";
+    public static final String APPOINTMENT_START_TIME_LIMIT = "/appointments/{startTime}/{limit}";
+    public static final String PUT_APPOINTMENT = "/appointment";
+    public static final String DELETE_APPOINTMENT = "/appointment/{appointmentCode}";
     public static final long PLUS_DAYS = 7L;
     public static final int MAX_RECORDS = 1000;
 
     @Autowired
-    private StoreSlotService storeSlotService;
+    private AppointmentService appointmentService;
 
     @Autowired
     private ModelMapper modelMapper;
 
-    @GetMapping(value = STORE_SLOTS_START_TIME_LIMIT,
+    @GetMapping(value = APPOINTMENT_START_TIME_LIMIT,
         produces = MediaType.APPLICATION_JSON_VALUE)
-    Flux<StoreSlotDto> listAllSlotsForStartDateWithLimit(
+    Flux<AppointmentDto> listAllAppointmentsForStartDateWithLimit(
         @PathVariable String startTime,
         @PathVariable int limit
     ) {
         ZonedDateTime[] startTimes = getZonedDateTimes(startTime);
-        List<StoreSlotDto> storeSlotDtos = storeSlotService
+        List<AppointmentDto> appointmentDtos = appointmentService
             .findByStartTimeAndEndTime(startTimes[0], startTimes[1]);
-        return getDtoFlux(limit, storeSlotDtos);
+        return getDtoFlux(limit, appointmentDtos);
     }
 
-    @PostMapping(value = STORE_SLOTS_START_TIME_LIMIT,
+    @PostMapping(value = APPOINTMENT_START_TIME_LIMIT,
         produces = MediaType.APPLICATION_JSON_VALUE)
     @ResponseStatus(HttpStatus.OK)
-    Flux<StoreSlotDto> listAllSlotsForStoresAndStartDateWithLimit(
+    Flux<AppointmentDto> listAllAppointmentsForStoresAndStartDateWithLimit(
         @PathVariable String startTime,
         @PathVariable int limit,
         @RequestBody List<String> storeCodes
     ) {
         ZonedDateTime[] startTimes = getZonedDateTimes(startTime);
-        List<StoreSlotDto> storeSlotDtos = storeSlotService
-            .findByStoreCodeListAndStartTimeAndEndTime(
-                storeCodes, startTimes[0], startTimes[1]
+        List<AppointmentDto> appointmentDtos = appointmentService
+            .findByStartTimeAndEndTimeAndStoreCodeList(
+                startTimes[0], startTimes[1], storeCodes
             );
-        return getDtoFlux(limit, storeSlotDtos);
+        return getDtoFlux(limit, appointmentDtos);
     }
 
-    @PutMapping(value = PUT_STORE_STORE_CODE_SLOT,
+    @PutMapping(value = PUT_APPOINTMENT,
         consumes = MediaType.APPLICATION_JSON_VALUE,
         produces = MediaType.APPLICATION_JSON_VALUE)
     @ResponseStatus(HttpStatus.OK)
-    Mono<StoreSlotDto> upsertStore(@RequestBody StoreSlotDto request) {
+    Mono<AppointmentDto> upsertAppointment(@RequestBody AppointmentDto request) {
         return Mono.just(
-            storeSlotService.upsertStoreSlot(request));
+            appointmentService.upsertAppointment(request));
     }
 
-    @DeleteMapping(value = DELETE_STORE_STORE_CODE_SLOT_SLOT_CODE,
+    @DeleteMapping(value = DELETE_APPOINTMENT,
         produces = MediaType.APPLICATION_JSON_VALUE)
     @ResponseStatus(HttpStatus.OK)
     Mono<MessageDto> deleteStore(
-        @PathVariable String storeCode,
-        @PathVariable String slotCode
+        @PathVariable String appointmentCode
     ) {
         return Mono.just(
-            storeSlotService.deleteAppointmentSlot(storeCode, slotCode));
+            appointmentService.deleteAppointment(appointmentCode));
     }
 
-    private Flux<StoreSlotDto> getDtoFlux(
+    private Flux<AppointmentDto> getDtoFlux(
         int limit,
-        List<StoreSlotDto> slotDtos
+        List<AppointmentDto> appointmentDtos
     ) {
-        log.info("Controller: slots {} ", slotDtos.size());
+        log.info("Controller: slots {} ", appointmentDtos.size());
         return Flux
-            .fromStream(slotDtos.stream())
+            .fromStream(appointmentDtos.stream())
             .take(effectiveLimit(limit))
             //.delayElements(Duration.ofMillis(100))
             ;
