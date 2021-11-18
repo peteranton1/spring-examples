@@ -9,6 +9,7 @@ import com.example.restreactive.repository.CountryRepository;
 import com.example.restreactive.repository.StoreRepository;
 import com.example.restreactive.repository.StreetAddressRepository;
 import com.google.common.collect.ImmutableList;
+import org.junit.jupiter.api.AfterEach;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -37,6 +38,15 @@ class StoreServiceTest {
 
     @BeforeEach
     void setUp() {
+        deleteAll();
+    }
+
+    @AfterEach
+    void tearDown() {
+        deleteAll();
+    }
+
+    private void deleteAll() {
         storeRepository.deleteAll();
     }
 

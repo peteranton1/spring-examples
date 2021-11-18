@@ -8,6 +8,7 @@ import com.example.restreactive.mapping.AppointmentException;
 import com.example.restreactive.model.Appointment;
 import com.example.restreactive.repository.AppointmentRepository;
 import com.google.common.collect.ImmutableList;
+import org.junit.jupiter.api.AfterEach;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -54,7 +55,7 @@ class AppointmentServiceTest {
 
     @BeforeEach
     void setUp() {
-        appointmentRepository.deleteAll();
+        deleteAll();
 
         // Store slot
         storeSlotDto = creator
@@ -71,6 +72,15 @@ class AppointmentServiceTest {
         userDto = creator.createUserDto(
             creator.createEmailAddressDto(EMAIL));
         userService.upsertUser(userDto);
+    }
+
+    @AfterEach
+    void tearDown() {
+        deleteAll();
+    }
+
+    private void deleteAll() {
+        appointmentRepository.deleteAll();
     }
 
     @Test

@@ -4,6 +4,7 @@ import com.example.restreactive.dto.StoreSlotDto;
 import com.example.restreactive.repository.AppointmentRepository;
 import com.example.restreactive.repository.StoreSlotRepository;
 import com.google.common.collect.ImmutableList;
+import org.junit.jupiter.api.AfterEach;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -39,6 +40,15 @@ class StoreSlotServiceTest {
 
     @BeforeEach
     void setUp() {
+        deleteAll();
+    }
+
+    @AfterEach
+    void tearDown() {
+        deleteAll();
+    }
+
+    private void deleteAll() {
         appointmentRepository.deleteAll();
         storeSlotRepository.deleteAll();
     }

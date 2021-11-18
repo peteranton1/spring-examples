@@ -8,6 +8,7 @@ import com.example.restreactive.mapping.ModelMapper;
 import com.example.restreactive.mapping.StoreSlotMapper;
 import com.example.restreactive.model.StoreSlot;
 import com.example.restreactive.repository.StoreSlotRepository;
+import com.example.restreactive.service.EntityDtoCreator;
 import com.example.restreactive.service.StoreSlotService;
 import com.google.common.collect.ImmutableList;
 import org.junit.jupiter.api.Test;
@@ -27,6 +28,7 @@ import java.util.LinkedHashMap;
 import java.util.List;
 import java.util.Map;
 
+import static com.example.restreactive.service.EntityDtoCreator.*;
 import static java.util.Collections.emptyList;
 import static org.junit.jupiter.api.Assertions.assertEquals;
 import static org.mockito.ArgumentMatchers.any;
@@ -41,8 +43,6 @@ class StoreSlotControllerTest {
 
     private static final String SLOT_1 = "slot1";
     private static final String STORE_1 = "store1";
-    private static final String START_TIME_STR_1 = "2019-04-01T16:24:11.252Z";
-    private static final String END_TIME_STR_1 = "2019-04-01T16:54:11.252Z";
 
     private static final String STORE_SLOTS_START_TIME_LIMIT =
         "/stores/slots/" + START_TIME_STR_1 + "/10";
@@ -51,12 +51,8 @@ class StoreSlotControllerTest {
     private static final String DELETE_STORE_STORE_CODE_SLOT_SLOT_CODE =
         "/store/" + STORE_1 + "/slot/" + SLOT_1;
 
-    private static final ZonedDateTime START_TIME_1 = ZonedDateTime
-        .parse(START_TIME_STR_1).withZoneSameLocal(ZoneId.of("UTC"));
-
-    private static final ZonedDateTime END_TIME_1 = ZonedDateTime
-        .parse(END_TIME_STR_1).withZoneSameLocal(ZoneId.of("UTC"));
-
+    private final EntityDtoCreator dtoCreator = new EntityDtoCreator();
+    private final DtoMapCreator mapCreator = new DtoMapCreator();
 
     @Autowired
     private WebTestClient webTestClient;
@@ -87,7 +83,7 @@ class StoreSlotControllerTest {
 
     @Test
     void whenListAllSlotsForStartDateWithLimitAnd1RecThen1Rec() {
-        StoreSlotDto storeSlotDto = getStoreSlotDto(1);
+        StoreSlotDto storeSlotDto = dtoCreator.getStoreSlotDto(1);
         StoreSlot storeSlot = (StoreSlot) modelMapper.toEntity(storeSlotDto);
         when(storeSlotRepository.findAllSlotsBetweenStartTimeAndEndTime(
             any(), any()))
@@ -101,7 +97,7 @@ class StoreSlotControllerTest {
             .expectBody(List.class)
             .returnResult().getResponseBody();
 
-        List<?> expected = ImmutableList.of(asMapStoreDto(storeSlotDto));
+        List<?> expected = ImmutableList.of(mapCreator.asMapStoreDto(storeSlotDto));
         assertEquals(expected, actual);
     }
 
@@ -126,7 +122,7 @@ class StoreSlotControllerTest {
 
     @Test
     void whenListAllSlotsForStoresAndStartDateWithLimitAnd1RecThen1Rec() {
-        StoreSlotDto storeSlotDto = getStoreSlotDto(1);
+        StoreSlotDto storeSlotDto = dtoCreator.getStoreSlotDto(1);
         StoreSlot storeSlot = (StoreSlot) modelMapper.toEntity(storeSlotDto);
         when(storeSlotRepository.findAllSlotsByStoresListBetweenStartTimeAndEndTime(
             any(), any(), any()))
@@ -141,13 +137,13 @@ class StoreSlotControllerTest {
             .expectBody(List.class)
             .returnResult().getResponseBody();
 
-        List<?> expected = ImmutableList.of(asMapStoreDto(storeSlotDto));
+        List<?> expected = ImmutableList.of(mapCreator.asMapStoreDto(storeSlotDto));
         assertEquals(expected, actual);
     }
 
     @Test
     void whenUpsertStoreInsertThenOk() {
-        StoreSlotDto storeSlotDto = getStoreSlotDto(1);
+        StoreSlotDto storeSlotDto = dtoCreator.getStoreSlotDto(1);
         StoreSlot storeSlot = (StoreSlot) modelMapper.toEntity(storeSlotDto);
         when(storeSlotRepository.findAllSlotsByStoreBetweenStartTimeAndEndTime(
             START_TIME_1, END_TIME_1, STORE_1))
@@ -195,7 +191,7 @@ class StoreSlotControllerTest {
             .code("200")
             .message("Store Slot deleted: " + STORE_1 + "/" + SLOT_1)
             .build();
-        StoreSlotDto storeSlotDto = getStoreSlotDto(1);
+        StoreSlotDto storeSlotDto = dtoCreator.getStoreSlotDto(1);
         StoreSlot storeSlot = (StoreSlot) modelMapper.toEntity(storeSlotDto);
         when(storeSlotRepository.findAllSlotsByStoreCodeAndSlotCode(
             any(), any()))
@@ -210,30 +206,6 @@ class StoreSlotControllerTest {
             .returnResult().getResponseBody();
 
         assertEquals(messageDto, actual);
-    }
-
-    private StoreSlotDto getStoreSlotDto(int i) {
-        String slotCode = "slot" + i;
-        String storeCode = "store" + i;
-        return StoreSlotDto.builder()
-            .id(i)
-            .slotCode(slotCode)
-            .storeCode(storeCode)
-            .startTime(START_TIME_1)
-            .endTime(END_TIME_1)
-            .build();
-    }
-
-    private Map<String, Object> asMapStoreDto(StoreSlotDto storeSlotDto) {
-        Map<String, Object> outerMap = new LinkedHashMap<>();
-        if (storeSlotDto != null) {
-            outerMap.put("id", storeSlotDto.getId());
-            outerMap.put("slotCode", storeSlotDto.getSlotCode());
-            outerMap.put("storeCode", storeSlotDto.getStoreCode());
-            outerMap.put("startTime", START_TIME_STR_1);
-            outerMap.put("endTime", END_TIME_STR_1);
-        }
-        return outerMap;
     }
 
 }

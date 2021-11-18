@@ -1,7 +1,5 @@
 package com.example.restreactive.controller;
 
-import com.example.restreactive.controller.UserController;
-import com.example.restreactive.dto.EmailAddressDto;
 import com.example.restreactive.dto.MessageDto;
 import com.example.restreactive.dto.UserDto;
 import com.example.restreactive.mapping.EmailAddressMapper;
@@ -11,6 +9,7 @@ import com.example.restreactive.model.EmailAddress;
 import com.example.restreactive.model.User;
 import com.example.restreactive.repository.EmailAddressRepository;
 import com.example.restreactive.repository.UserRepository;
+import com.example.restreactive.service.EntityDtoCreator;
 import com.example.restreactive.service.UserService;
 import com.google.common.collect.ImmutableList;
 import org.junit.jupiter.api.Assertions;
@@ -23,9 +22,7 @@ import org.springframework.http.MediaType;
 import org.springframework.test.web.reactive.server.WebTestClient;
 import reactor.core.publisher.Mono;
 
-import java.util.LinkedHashMap;
 import java.util.List;
-import java.util.Map;
 
 import static java.util.Collections.emptyList;
 import static org.mockito.ArgumentMatchers.any;
@@ -50,6 +47,9 @@ class UserControllerTest {
 
     @MockBean
     private EmailAddressRepository emailAddressRepository;
+
+    private final EntityDtoCreator dtoCreator = new EntityDtoCreator();
+    private final DtoMapCreator mapCreator = new DtoMapCreator();
 
     @Test
     void whenListAllUsersWithLimit10AndEmptyThenEmpty() {
@@ -83,7 +83,7 @@ class UserControllerTest {
             .expectBody(List.class)
             .returnResult().getResponseBody();
 
-        List<?> expected = ImmutableList.of(asMapUserDto(userDto));
+        List<?> expected = ImmutableList.of(mapCreator.asMapUserDto(userDto));
         Assertions.assertEquals(expected, actual);
     }
 
@@ -195,36 +195,8 @@ class UserControllerTest {
     }
 
     private UserDto getUserDto(int i) {
-        String username = "user" + i;
-        String emailaddress = username + "@user.user";
-        return UserDto.builder()
-            .username(username)
-            .email(EmailAddressDto.builder()
-                .email(emailaddress)
-                .build())
-            .firstName(username)
-            .lastName(username)
-            .build();
+        return dtoCreator.createUserDto(dtoCreator.createEmailAddressDto("a@a.a"));
     }
 
-    private Map<String, Object> asMapUserDto(UserDto userDto) {
-        Map<String, Object> outerMap = new LinkedHashMap<>();
-        if (userDto != null) {
-            outerMap.put("id", userDto.getId());
-            outerMap.put("username", userDto.getUsername());
-            outerMap.put("firstName", userDto.getFirstName());
-            outerMap.put("lastName", userDto.getLastName());
-            outerMap.put("email", asMapEmailDto(userDto.getEmail()));
-        }
-        return outerMap;
-    }
 
-    private Map<String, Object> asMapEmailDto(EmailAddressDto emailDto) {
-        Map<String, Object> outerMap = new LinkedHashMap<>();
-        if (emailDto != null) {
-            outerMap.put("id", emailDto.getId());
-            outerMap.put("email", emailDto.getEmail());
-        }
-        return outerMap;
-    }
 }

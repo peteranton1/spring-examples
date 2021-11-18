@@ -13,6 +13,7 @@ import com.example.restreactive.model.Store;
 import com.example.restreactive.repository.CountryRepository;
 import com.example.restreactive.repository.StoreRepository;
 import com.example.restreactive.repository.StreetAddressRepository;
+import com.example.restreactive.service.EntityDtoCreator;
 import com.example.restreactive.service.StoreService;
 import com.google.common.collect.ImmutableList;
 import org.junit.jupiter.api.Assertions;
@@ -59,6 +60,9 @@ class StoreControllerTest {
     @MockBean
     private CountryRepository countryRepository;
 
+    private final EntityDtoCreator dtoCreator = new EntityDtoCreator();
+    private final DtoMapCreator mapCreator = new DtoMapCreator();
+
     @Test
     void whenListAllStoresWithLimit10AndEmptyThenEmpty() {
         when(storeRepository.findAll())
@@ -78,7 +82,7 @@ class StoreControllerTest {
 
     @Test
     void whenListAllStoresWithLimit10And1RecThen1Rec() {
-        StoreDto storeDto = getStoreDto(1);
+        StoreDto storeDto = dtoCreator.getStoreDto(1);
         Store store = (Store)modelMapper.toEntity(storeDto);
         when(storeRepository.findAll())
             .thenReturn(ImmutableList.of(store));
@@ -91,7 +95,7 @@ class StoreControllerTest {
             .expectBody(List.class)
             .returnResult().getResponseBody();
 
-        List<?> expected = ImmutableList.of(asMapStoreDto(storeDto));
+        List<?> expected = ImmutableList.of(mapCreator.asMapStoreDto(storeDto));
         Assertions.assertEquals(expected, actual);
     }
 
@@ -117,7 +121,7 @@ class StoreControllerTest {
 
     @Test
     void whenFindStoreExistsThenOk() {
-        StoreDto storeDto = getStoreDto(1);
+        StoreDto storeDto = dtoCreator.getStoreDto(1);
         Store store = (Store)modelMapper.toEntity(storeDto);
         when(storeRepository.findByStoreCode("store1"))
             .thenReturn(ImmutableList.of(store));
@@ -135,7 +139,7 @@ class StoreControllerTest {
 
     @Test
     void whenUpsertStoreInsertThenOk() {
-        StoreDto storeDto = getStoreDto(1);
+        StoreDto storeDto = dtoCreator.getStoreDto(1);
         Store store = (Store)modelMapper.toEntity(storeDto);
         when(storeRepository.findByStoreCode(any()))
             .thenReturn(ImmutableList.of(store));
@@ -165,7 +169,7 @@ class StoreControllerTest {
             .code("200")
             .message("Store deleted: " + storeCode)
             .build();
-        StoreDto storeDto = getStoreDto(1);
+        StoreDto storeDto = dtoCreator.getStoreDto(1);
         Store store = (Store)modelMapper.toEntity(storeDto);
         when(storeRepository.findByStoreCode("store1"))
             .thenReturn(ImmutableList.of(store));
@@ -179,72 +183,5 @@ class StoreControllerTest {
             .returnResult().getResponseBody();
 
         Assertions.assertEquals(messageDto, actual);
-    }
-
-    private StoreDto getStoreDto(int i) {
-        String storeCode = "store" + i;
-        return StoreDto.builder()
-            .id(i)
-            .storeCode(storeCode)
-            .storeName(storeCode)
-            .address(getStreetAddressDto(i))
-            .build();
-    }
-
-    private StreetAddressDto getStreetAddressDto(int i) {
-        String line = "line" + i;
-        return StreetAddressDto.builder()
-            .id(i)
-            .line1(line)
-            .line2(line)
-            .city(line)
-            .county(line)
-            .country(getCountryDto(i))
-            .postcode(line)
-            .build();
-    }
-
-    private CountryDto getCountryDto(int i) {
-        String name = "country" + i;
-        return CountryDto.builder()
-            .id(i)
-            .name(name)
-            .code(name)
-            .build();
-    }
-
-    private Map<String, Object> asMapStoreDto(StoreDto storeDto) {
-        Map<String, Object> outerMap = new LinkedHashMap<>();
-        if (storeDto != null) {
-            outerMap.put("id", storeDto.getId());
-            outerMap.put("storeName", storeDto.getStoreName());
-            outerMap.put("storeCode", storeDto.getStoreCode());
-            outerMap.put("address", asMapAddressDto(storeDto.getAddress()));
-        }
-        return outerMap;
-    }
-
-    private Map<String, Object> asMapAddressDto(StreetAddressDto addressDto) {
-        Map<String, Object> outerMap = new LinkedHashMap<>();
-        if (addressDto != null) {
-            outerMap.put("id", addressDto.getId());
-            outerMap.put("line1", addressDto.getLine1());
-            outerMap.put("line2", addressDto.getLine2());
-            outerMap.put("city", addressDto.getCity());
-            outerMap.put("county", addressDto.getCounty());
-            outerMap.put("country", asMapCountryDto(addressDto.getCountry()));
-            outerMap.put("postcode", addressDto.getPostcode());
-        }
-        return outerMap;
-    }
-
-    private Map<String, Object> asMapCountryDto(CountryDto countryDto) {
-        Map<String, Object> outerMap = new LinkedHashMap<>();
-        if (countryDto != null) {
-            outerMap.put("id", countryDto.getId());
-            outerMap.put("name", countryDto.getName());
-            outerMap.put("code", countryDto.getCode());
-        }
-        return outerMap;
     }
 }

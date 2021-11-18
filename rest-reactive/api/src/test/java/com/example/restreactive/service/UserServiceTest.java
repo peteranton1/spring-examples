@@ -5,6 +5,7 @@ import com.example.restreactive.dto.MessageDto;
 import com.example.restreactive.dto.UserDto;
 import com.example.restreactive.repository.EmailAddressRepository;
 import com.example.restreactive.repository.UserRepository;
+import org.junit.jupiter.api.AfterEach;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -33,7 +34,16 @@ class UserServiceTest {
 
     @BeforeEach
     void setUp() {
+        deleteAll();
+    }
+
+    private void deleteAll() {
         userRepository.deleteAll();
+    }
+
+    @AfterEach
+    void tearDown() {
+        deleteAll();
     }
 
     @Test
