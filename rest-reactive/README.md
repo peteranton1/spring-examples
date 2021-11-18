@@ -5,7 +5,7 @@ Rest-Reactive
 
 This project implements a microservice for the following problem space: 
 
-- users booking appointments with stores
+* users booking appointments with stores
 * Persistent datastore for the state  
 * REST API with endpoints for CRUD operations 
 * Error handling for error scenarios
