@@ -32,7 +32,7 @@ The following endpoints are provided
 
 
 | Http Method | Details |
-----------------------------
+|-------------|---------------|
 | Appointment | The booked appointment matching store, store slot and user(s). |
 | GET         | /appointments/{startTime}/{limit} |
 | POST        | /appointments/{startTime}/{limit} |
