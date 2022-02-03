@@ -1,0 +1,64 @@
+WARNING: An illegal reflective access operation has occurred
+WARNING: Illegal reflective access by com.intellij.util.lang.UrlClassLoader (file:/home/webuser/dev/ideac/lib/util.jar) to field java.lang.ClassLoader.classLoaderValueMap
+WARNING: Please consider reporting this to the maintainers of com.intellij.util.lang.UrlClassLoader
+WARNING: Use --illegal-access=warn to enable warnings of further illegal reflective access operations
+WARNING: All illegal access operations will be denied in a future release
+2021-12-14 19:27:26,691 [   1480]   WARN - llij.ide.plugins.PluginManager - com.intellij.javafx uses deprecated `use-idea-classloader` attribute 
+2021-12-14 19:27:27,993 [   2782]   WARN - tor.impl.FontFamilyServiceImpl - Couldn't access required runtime API, will fall back to basic logic of font selection 
+2021-12-14 19:27:32,345 [   7134]   WARN - l.NotificationGroupManagerImpl - Notification group CodeWithMe is already registered (group=com.intellij.notification.NotificationGroup@5ee674b3). Plugin descriptor: PluginDescriptor(name=Code With Me, id=com.jetbrains.codeWithMe, descriptorPath=plugin.xml, path=~/dev/ideac/plugins/cwm-plugin, version=213.5744.223, package=null, isBundled=true) 
+Info  | RdCoroutineScope          | 25:JobScheduler FJ pool 9/11 | RdCoroutineHost overridden 
+2021-12-14 19:27:32,626 [   7415]   WARN - #com.intellij.ui.jcef.JBCefApp - JCEF runtime library is not a JBR module (Use JBR bundled with the IDE) 
+2021-12-14 19:27:36,595 [  11384]   WARN - ctionSystem.impl.ActionUpdater - 232 ms to grab EDT for #update (com.intellij.codeInsight.actions.ReaderModeActionProvider$createAction$1) 
+2021-12-14 19:27:36,699 [  11488]   WARN - vdmanager.AvdManagerConnection - No Android SDK Found 
+2021-12-14 19:27:39,103 [  13892]   WARN - ctionSystem.impl.ActionUpdater - 780 ms to grab EDT for OpenFileAction#update (com.intellij.ide.actions.OpenFileAction) 
+2021-12-14 19:27:39,544 [  14333]   WARN - a.repo.GitUntrackedFilesHolder - Ignoring ignored file under another root: /home/webuser/dev/proj/spring-examples/blog/19-react-project/blog/.DS_Store; root: /home/webuser/dev/proj/spring-examples; mapped root: null 
+2021-12-14 19:27:39,664 [  14453]   WARN - ctionSystem.impl.ActionUpdater - 1069 ms to grab EDT for DefaultCompactActionGroup#update (com.intellij.openapi.actionSystem.DefaultCompactActionGroup) 
+2021-12-14 19:27:39,675 [  14464]   WARN - ctionSystem.impl.ActionUpdater - 570 ms to grab EDT for SaveAllAction#update (com.intellij.ide.actions.SaveAllAction) 
+2021-12-14 19:27:40,915 [  15704]   WARN - ctionSystem.impl.ActionUpdater - 252 ms to call on EDT CWMHostShowPopupAction#update (com.jetbrains.rdserver.toolbar.CWMHostShowPopupAction) - speed it up and/or implement UpdateInBackground. 
+2021-12-14 19:27:46,690 [  21479]   WARN - gnostic.PerformanceWatcherImpl - UI was frozen for 5209ms, details saved to /home/webuser/.cache/JetBrains/IdeaIC2021.3/log/threadDumps-freeze-20211214-192746-IC-213.5744.223-5sec 
+2021-12-14 19:27:50,879 [  25668]   WARN - ctionSystem.impl.ActionUpdater - 1361 ms to call on BGT RunContextAction#update (com.intellij.execution.actions.RunContextAction) 
+2021-12-14 19:27:50,879 [  25668]   WARN - ctionSystem.impl.ActionUpdater - 1522 ms to call on BGT RunContextAction#update (com.intellij.execution.actions.RunContextAction) 
+2021-12-14 19:28:00,740 [  35529]   WARN - gnostic.PerformanceWatcherImpl - UI was frozen for 7871ms, details saved to /home/webuser/.cache/JetBrains/IdeaIC2021.3/log/threadDumps-freeze-20211214-192757-IC-213.5744.223-7sec 
+2021-12-14 19:31:50,438 [ 265227]   WARN - com.intellij.util.xmlb.Binding - no accessors for org.jetbrains.idea.perforce.perforce.ConnectionId 
+2021-12-14 19:32:33,267 [ 308056]   WARN - ompiler.CompileServerLauncher$ - Connection refused (Connection refused) 
+java.net.ConnectException: Connection refused (Connection refused)
+	at java.base/java.net.PlainSocketImpl.socketConnect(Native Method)
+	at java.base/java.net.AbstractPlainSocketImpl.doConnect(AbstractPlainSocketImpl.java:399)
+	at java.base/java.net.AbstractPlainSocketImpl.connectToAddress(AbstractPlainSocketImpl.java:242)
+	at java.base/java.net.AbstractPlainSocketImpl.connect(AbstractPlainSocketImpl.java:224)
+	at java.base/java.net.SocksSocketImpl.connect(SocksSocketImpl.java:403)
+	at java.base/java.net.Socket.connect(Socket.java:591)
+	at org.jetbrains.jps.incremental.scala.remote.RemoteResourceOwner.send(RemoteResourceOwner.scala:39)
+	at org.jetbrains.jps.incremental.scala.remote.RemoteResourceOwner.send$(RemoteResourceOwner.scala:33)
+	at org.jetbrains.plugins.scala.compiler.RemoteServerRunner.send(RemoteServerRunner.scala:22)
+	at org.jetbrains.plugins.scala.compiler.CompileServerLauncher$.sendDummyRequest(CompileServerLauncher.scala:101)
+	at org.jetbrains.plugins.scala.compiler.CompileServerLauncher$.tryToStart(CompileServerLauncher.scala:83)
+	at org.jetbrains.plugins.scala.compiler.CompileServerLauncher$.ensureServerRunning(CompileServerLauncher.scala:410)
+	at org.jetbrains.plugins.scala.externalHighlighters.CompilerHighlightingService.org$jetbrains$plugins$scala$externalHighlighters$CompilerHighlightingService$$performCompilation(CompilerHighlightingService.scala:141)
+	at org.jetbrains.plugins.scala.externalHighlighters.CompilerHighlightingService.$anonfun$triggerIncrementalCompilation$2(CompilerHighlightingService.scala:66)
+	at org.jetbrains.plugins.scala.util.RescheduledExecutor$$anon$1.perform(RescheduledExecutor.scala:42)
+	at org.jetbrains.plugins.scala.util.RescheduledExecutor.$anonfun$schedule$1(RescheduledExecutor.scala:30)
+	at java.base/java.util.concurrent.Executors$RunnableAdapter.call(Executors.java:515)
+	at java.base/java.util.concurrent.FutureTask.run(FutureTask.java:264)
+	at com.intellij.util.concurrency.SchedulingWrapper$MyScheduledFutureTask.run(SchedulingWrapper.java:220)
+	at com.intellij.util.concurrency.BoundedTaskExecutor.doRun(BoundedTaskExecutor.java:246)
+	at com.intellij.util.concurrency.BoundedTaskExecutor.access$200(BoundedTaskExecutor.java:32)
+	at com.intellij.util.concurrency.BoundedTaskExecutor$1.execute(BoundedTaskExecutor.java:225)
+	at com.intellij.util.ConcurrencyUtil.runUnderThreadName(ConcurrencyUtil.java:213)
+	at com.intellij.util.concurrency.BoundedTaskExecutor$1.run(BoundedTaskExecutor.java:214)
+	at java.base/java.util.concurrent.ThreadPoolExecutor.runWorker(ThreadPoolExecutor.java:1128)
+	at java.base/java.util.concurrent.ThreadPoolExecutor$Worker.run(ThreadPoolExecutor.java:628)
+	at java.base/java.util.concurrent.Executors$PrivilegedThreadFactory$1$1.run(Executors.java:668)
+	at java.base/java.util.concurrent.Executors$PrivilegedThreadFactory$1$1.run(Executors.java:665)
+	at java.base/java.security.AccessController.doPrivileged(Native Method)
+	at java.base/java.util.concurrent.Executors$PrivilegedThreadFactory$1.run(Executors.java:665)
+	at java.base/java.lang.Thread.run(Thread.java:834)
+2021-12-14 19:32:33,655 [ 308444]   WARN - .scala.compiler.ProcessWatcher - [stderr] WARNING: A terminally deprecated method in java.lang.System has been called 
+2021-12-14 19:32:33,655 [ 308444]   WARN - .scala.compiler.ProcessWatcher - [stderr] WARNING: System::setSecurityManager has been called by 
+2021-12-14 19:32:33,655 [ 308444]   WARN - .scala.compiler.ProcessWatcher - [stderr] com.martiansoftware.nailgun.NGServer (file:/home/webuser/.local/share/JetBrains/IdeaIC2021.3/Scala/lib/jps/nailgun.jar) 
+2021-12-14 19:32:33,655 [ 308444]   WARN - .scala.compiler.ProcessWatcher - [stderr] WARNING: Please consider reporting this to the maintainers of com.martiansoftware.nailgun.NGServer 
+2021-12-14 19:32:33,655 [ 308444]   WARN - .scala.compiler.ProcessWatcher - [stderr] WARNING: System::setSecurityManager will be removed in a future release 
+2021-12-14 19:34:54,886 [ 449675]   WARN - s.ui.configuration.SdkDetector - No version is returned for detected SDK IDEA JDK at /home/webuser/dev/ideac 
+2021-12-14 19:36:06,563 [ 521352]   WARN - a.repo.GitUntrackedFilesHolder - Ignoring ignored file under another root: /home/webuser/dev/proj/spring-examples/blog/19-react-project/blog/.DS_Store; root: /home/webuser/dev/proj/spring-examples; mapped root: null 
+2021-12-14 19:36:10,961 [ 525750]   WARN - a.repo.GitUntrackedFilesHolder - Ignoring ignored file under another root: /home/webuser/dev/proj/spring-examples/blog/19-react-project/blog/.DS_Store; root: /home/webuser/dev/proj/spring-examples; mapped root: null 
+2021-12-14 19:36:11,444 [ 526233]   WARN - a.repo.GitUntrackedFilesHolder - Ignoring ignored file under another root: /home/webuser/dev/proj/spring-examples/blog/19-react-project/blog/.DS_Store; root: /home/webuser/dev/proj/spring-examples; mapped root: null 

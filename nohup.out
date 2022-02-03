@@ -1,0 +1,338 @@
+WARNING: An illegal reflective access operation has occurred
+WARNING: Illegal reflective access by com.intellij.util.lang.UrlClassLoader (file:/home/webuser/dev/ideac/lib/util.jar) to field java.lang.ClassLoader.classLoaderValueMap
+WARNING: Please consider reporting this to the maintainers of com.intellij.util.lang.UrlClassLoader
+WARNING: Use --illegal-access=warn to enable warnings of further illegal reflective access operations
+WARNING: All illegal access operations will be denied in a future release
+2021-12-11 18:35:43,509 [    366]   WARN - llij.ide.plugins.PluginManager - com.intellij.javafx uses deprecated `use-idea-classloader` attribute 
+2021-12-11 18:35:44,535 [   1392]   WARN - tor.impl.FontFamilyServiceImpl - Couldn't access required runtime API, will fall back to basic logic of font selection 
+2021-12-11 18:35:45,687 [   2544]   WARN - l.NotificationGroupManagerImpl - Notification group CodeWithMe is already registered (group=com.intellij.notification.NotificationGroup@3ea5c6f). Plugin descriptor: PluginDescriptor(name=Code With Me, id=com.jetbrains.codeWithMe, descriptorPath=plugin.xml, path=~/dev/ideac/plugins/cwm-plugin, version=213.5744.223, package=null, isBundled=true) 
+2021-12-11 18:36:29,745 [  46602]   WARN - #com.intellij.ui.jcef.JBCefApp - JCEF runtime library is not a JBR module (Use JBR bundled with the IDE) 
+Info  | RdCoroutineScope          | 20:JobScheduler FJ pool 6/11 | RdCoroutineHost overridden 
+2021-12-11 18:36:34,653 [  51510]  ERROR - rationStore.ComponentStoreImpl - Conflicting component name 'MavenCustomPomFilePath': class org.jetbrains.idea.maven.importing.MavenPomPathModuleService and class org.jetbrains.idea.maven.importing.MavenPomPathModuleService (componentManager=Module: 'service') 
+java.lang.Throwable: Conflicting component name 'MavenCustomPomFilePath': class org.jetbrains.idea.maven.importing.MavenPomPathModuleService and class org.jetbrains.idea.maven.importing.MavenPomPathModuleService (componentManager=Module: 'service')
+	at com.intellij.openapi.diagnostic.Logger.error(Logger.java:182)
+	at com.intellij.configurationStore.ComponentStoreImpl.doAddComponent(ComponentStoreImpl.kt:356)
+	at com.intellij.configurationStore.ComponentStoreImpl.initComponent(ComponentStoreImpl.kt:115)
+	at com.intellij.serviceContainer.ComponentManagerImpl.initializeComponent$intellij_platform_serviceContainer(ComponentManagerImpl.kt:521)
+	at com.intellij.serviceContainer.ServiceComponentAdapter.createAndInitialize(ServiceComponentAdapter.kt:51)
+	at com.intellij.serviceContainer.ServiceComponentAdapter.doCreateInstance(ServiceComponentAdapter.kt:37)
+	at com.intellij.serviceContainer.BaseComponentAdapter.getInstanceUncached(BaseComponentAdapter.kt:113)
+	at com.intellij.serviceContainer.BaseComponentAdapter.getInstance(BaseComponentAdapter.kt:67)
+	at com.intellij.serviceContainer.BaseComponentAdapter.getInstance$default(BaseComponentAdapter.kt:60)
+	at com.intellij.serviceContainer.ComponentManagerImpl.doGetService(ComponentManagerImpl.kt:595)
+	at com.intellij.serviceContainer.ComponentManagerImpl.getService(ComponentManagerImpl.kt:569)
+	at org.jetbrains.idea.maven.importing.MavenPomPathModuleService.getInstance(MavenPomPathModuleService.java:15)
+	at org.jetbrains.idea.maven.project.MavenProjectsManager.findPomFile(MavenProjectsManager.java:725)
+	at org.jetbrains.idea.maven.project.MavenProjectsManager.lambda$findProject$4(MavenProjectsManager.java:688)
+	at com.intellij.psi.impl.PsiCachedValueImpl.doCompute(PsiCachedValueImpl.java:39)
+	at com.intellij.util.CachedValueBase.lambda$getValueWithLock$3(CachedValueBase.java:227)
+	at com.intellij.util.CachedValueBase.computeData(CachedValueBase.java:42)
+	at com.intellij.util.CachedValueBase.lambda$getValueWithLock$4(CachedValueBase.java:227)
+	at com.intellij.openapi.util.RecursionManager$1.computePreventingRecursion(RecursionManager.java:114)
+	at com.intellij.openapi.util.RecursionGuard.doPreventingRecursion(RecursionGuard.java:44)
+	at com.intellij.openapi.util.RecursionManager.doPreventingRecursion(RecursionManager.java:68)
+	at com.intellij.util.CachedValueBase.getValueWithLock(CachedValueBase.java:228)
+	at com.intellij.psi.impl.PsiCachedValueImpl.getValue(PsiCachedValueImpl.java:28)
+	at com.intellij.util.CachedValuesManagerImpl.getCachedValue(CachedValuesManagerImpl.java:72)
+	at com.intellij.psi.util.CachedValuesManager.getCachedValue(CachedValuesManager.java:111)
+	at org.jetbrains.idea.maven.project.MavenProjectsManager.findProject(MavenProjectsManager.java:687)
+	at com.jetbrains.packagesearch.intellij.plugin.maven.MavenModuleTransformer$transformModules$2$invokeSuspend$$inlined$runCatching$lambda$1.invoke(MavenModuleTransformer.kt:19)
+	at com.jetbrains.packagesearch.intellij.plugin.maven.MavenModuleTransformer$transformModules$2$invokeSuspend$$inlined$runCatching$lambda$1.invoke(MavenModuleTransformer.kt:15)
+	at com.intellij.openapi.progress.CancellationKt$sam$com_intellij_openapi_util_ThrowableComputable$0.compute(cancellation.kt)
+	at com.intellij.openapi.progress.Cancellation.withJob(Cancellation.java:65)
+	at com.intellij.openapi.progress.CancellationKt.withJob(cancellation.kt:12)
+	at com.intellij.openapi.application.rw.ReadAction$tryReadAction$3.run(ReadAction.kt:74)
+	at com.intellij.openapi.application.impl.ApplicationImpl.tryRunReadAction(ApplicationImpl.java:1084)
+	at com.intellij.openapi.application.rw.ReadAction.tryReadAction(ReadAction.kt:71)
+	at com.intellij.openapi.application.rw.ReadAction.access$tryReadAction(ReadAction.kt:14)
+	at com.intellij.openapi.application.rw.ReadAction$tryReadAction$2$2.run(ReadAction.kt:62)
+	at com.intellij.openapi.progress.util.ProgressIndicatorUtils.runActionAndCancelBeforeWrite(ProgressIndicatorUtils.java:158)
+	at com.intellij.openapi.application.rw.ReadAction$tryReadAction$2.invokeSuspend(ReadAction.kt:60)
+	at kotlin.coroutines.jvm.internal.BaseContinuationImpl.resumeWith(ContinuationImpl.kt:33)
+	at kotlinx.coroutines.DispatchedTask.run(DispatchedTask.kt:106)
+	at kotlinx.coroutines.scheduling.CoroutineScheduler.runSafely(CoroutineScheduler.kt:571)
+	at kotlinx.coroutines.scheduling.CoroutineScheduler$Worker.executeTask(CoroutineScheduler.kt:750)
+	at kotlinx.coroutines.scheduling.CoroutineScheduler$Worker.runWorker(CoroutineScheduler.kt:678)
+	at kotlinx.coroutines.scheduling.CoroutineScheduler$Worker.run(CoroutineScheduler.kt:665)
+2021-12-11 18:36:34,657 [  51514]  ERROR - rationStore.ComponentStoreImpl - IntelliJ IDEA 2021.3  Build #IC-213.5744.223 
+2021-12-11 18:36:34,657 [  51514]  ERROR - rationStore.ComponentStoreImpl - JDK: 11; VM: OpenJDK 64-Bit Server VM; Vendor: Oracle Corporation 
+2021-12-11 18:36:34,657 [  51514]  ERROR - rationStore.ComponentStoreImpl - OS: Linux 
+2021-12-11 18:36:34,658 [  51515]  ERROR - rationStore.ComponentStoreImpl - Last Action: WelcomeScreen.OpenProject 
+2021-12-11 18:36:36,802 [  53659]   WARN - a.repo.GitUntrackedFilesHolder - Ignoring ignored file under another root: /home/webuser/dev/proj/spring-examples/blog/19-react-project/blog/.DS_Store; root: /home/webuser/dev/proj/spring-examples; mapped root: null 
+2021-12-11 18:36:37,058 [  53915]   WARN - ctionSystem.impl.ActionUpdater - 402 ms to grab EDT for QuickChangeSchemesAction#update (com.intellij.ide.actions.QuickChangeSchemesAction) 
+2021-12-11 18:36:37,061 [  53918]   WARN - ctionSystem.impl.ActionUpdater - 405 ms to grab EDT for JumpToLastEditAction#update (com.intellij.ide.actions.JumpToLastEditAction) 
+2021-12-11 18:36:38,241 [  55098]   WARN - ution.rmi.RemoteProcessSupport - SLF4J: Class path contains multiple SLF4J bindings. 
+2021-12-11 18:36:38,242 [  55099]   WARN - ution.rmi.RemoteProcessSupport - SLF4J: Found binding in [jar:file:/home/webuser/dev/ideac/plugins/maven/lib/maven36-server.jar!/org/slf4j/impl/StaticLoggerBinder.class] 
+2021-12-11 18:36:38,242 [  55099]   WARN - ution.rmi.RemoteProcessSupport - SLF4J: Found binding in [jar:file:/home/webuser/dev/ideac/lib/3rd-party-rt.jar!/org/slf4j/impl/StaticLoggerBinder.class] 
+2021-12-11 18:36:38,242 [  55099]   WARN - ution.rmi.RemoteProcessSupport - SLF4J: See http://www.slf4j.org/codes.html#multiple_bindings for an explanation. 
+2021-12-11 18:36:38,242 [  55099]   WARN - ution.rmi.RemoteProcessSupport - SLF4J: Actual binding is of type [org.jetbrains.idea.maven.server.Maven3WrapperSl4LoggerFactory] 
+2021-12-11 18:36:40,915 [  57772]   WARN - ctionSystem.impl.ActionUpdater - 1403 ms to call on BGT RunContextAction#update (com.intellij.execution.actions.RunContextAction) 
+2021-12-11 18:36:40,916 [  57773]   WARN - ctionSystem.impl.ActionUpdater - 1447 ms to call on BGT RunContextAction#update (com.intellij.execution.actions.RunContextAction) 
+2021-12-11 18:36:43,038 [  59895]   WARN - a.repo.GitUntrackedFilesHolder - Ignoring ignored file under another root: /home/webuser/dev/proj/spring-examples/blog/19-react-project/blog/.DS_Store; root: /home/webuser/dev/proj/spring-examples; mapped root: null 
+2021-12-11 18:36:43,569 [  60426]   WARN - a.repo.GitUntrackedFilesHolder - Ignoring ignored file under another root: /home/webuser/dev/proj/spring-examples/blog/19-react-project/blog/.DS_Store; root: /home/webuser/dev/proj/spring-examples; mapped root: null 
+2021-12-11 18:36:53,164 [  70021]   WARN - lij.build.BuildTreeConsoleView - start event id collision found:Downloading org.springframework.boot:spring-boot-starter-rsocket::2.6.1, was also in node: null 
+2021-12-11 18:36:53,165 [  70022]   WARN - lij.build.BuildTreeConsoleView - start event id collision found:Downloading org.springframework.boot:spring-boot-starter::2.6.1, was also in node: null 
+2021-12-11 18:36:53,165 [  70022]   WARN - lij.build.BuildTreeConsoleView - start event id collision found:Downloading org.springframework.boot:spring-boot::2.6.1, was also in node: null 
+2021-12-11 18:36:53,165 [  70022]   WARN - lij.build.BuildTreeConsoleView - start event id collision found:Downloading org.springframework:spring-core::5.3.13, was also in node: null 
+2021-12-11 18:36:53,165 [  70022]   WARN - lij.build.BuildTreeConsoleView - start event id collision found:Downloading org.springframework:spring-context::5.3.13, was also in node: null 
+2021-12-11 18:36:53,165 [  70022]   WARN - lij.build.BuildTreeConsoleView - start event id collision found:Downloading org.springframework.boot:spring-boot-autoconfigure::2.6.1, was also in node: null 
+2021-12-11 18:36:53,165 [  70022]   WARN - lij.build.BuildTreeConsoleView - start event id collision found:Downloading org.springframework.boot:spring-boot-starter-logging::2.6.1, was also in node: null 
+2021-12-11 18:36:53,165 [  70022]   WARN - lij.build.BuildTreeConsoleView - start event id collision found:Downloading ch.qos.logback:logback-classic::1.2.7, was also in node: null 
+2021-12-11 18:36:53,165 [  70022]   WARN - lij.build.BuildTreeConsoleView - start event id collision found:Downloading ch.qos.logback:logback-core::1.2.7, was also in node: null 
+2021-12-11 18:36:53,165 [  70022]   WARN - lij.build.BuildTreeConsoleView - start event id collision found:Downloading org.yaml:snakeyaml::1.29, was also in node: null 
+2021-12-11 18:36:53,165 [  70022]   WARN - lij.build.BuildTreeConsoleView - start event id collision found:Downloading org.springframework.boot:spring-boot-starter-json::2.6.1, was also in node: null 
+2021-12-11 18:36:53,165 [  70022]   WARN - lij.build.BuildTreeConsoleView - start event id collision found:Downloading org.springframework:spring-web::5.3.13, was also in node: null 
+2021-12-11 18:36:53,165 [  70022]   WARN - lij.build.BuildTreeConsoleView - start event id collision found:Downloading org.springframework:spring-beans::5.3.13, was also in node: null 
+2021-12-11 18:36:53,165 [  70022]   WARN - lij.build.BuildTreeConsoleView - start event id collision found:Downloading com.fasterxml.jackson.core:jackson-databind::2.13.0, was also in node: null 
+2021-12-11 18:36:53,165 [  70022]   WARN - lij.build.BuildTreeConsoleView - start event id collision found:Downloading com.fasterxml.jackson.core:jackson-annotations::2.13.0, was also in node: null 
+2021-12-11 18:36:53,165 [  70022]   WARN - lij.build.BuildTreeConsoleView - start event id collision found:Downloading com.fasterxml.jackson.core:jackson-core::2.13.0, was also in node: null 
+2021-12-11 18:36:53,165 [  70022]   WARN - lij.build.BuildTreeConsoleView - start event id collision found:Downloading com.fasterxml.jackson.datatype:jackson-datatype-jdk8::2.13.0, was also in node: null 
+2021-12-11 18:36:53,165 [  70022]   WARN - lij.build.BuildTreeConsoleView - start event id collision found:Downloading com.fasterxml.jackson.datatype:jackson-datatype-jsr310::2.13.0, was also in node: null 
+2021-12-11 18:36:53,165 [  70022]   WARN - lij.build.BuildTreeConsoleView - start event id collision found:Downloading com.fasterxml.jackson.module:jackson-module-parameter-names::2.13.0, was also in node: null 
+2021-12-11 18:36:53,165 [  70022]   WARN - lij.build.BuildTreeConsoleView - start event id collision found:Downloading org.springframework.boot:spring-boot-starter-reactor-netty::2.6.1, was also in node: null 
+2021-12-11 18:36:53,165 [  70022]   WARN - lij.build.BuildTreeConsoleView - start event id collision found:Downloading io.projectreactor.netty:reactor-netty-http::1.0.13, was also in node: null 
+2021-12-11 18:36:53,165 [  70022]   WARN - lij.build.BuildTreeConsoleView - start event id collision found:Downloading io.netty:netty-codec-http::4.1.70.Final, was also in node: null 
+2021-12-11 18:36:53,166 [  70023]   WARN - lij.build.BuildTreeConsoleView - start event id collision found:Downloading io.netty:netty-common::4.1.70.Final, was also in node: null 
+2021-12-11 18:36:53,166 [  70023]   WARN - lij.build.BuildTreeConsoleView - start event id collision found:Downloading io.netty:netty-buffer::4.1.70.Final, was also in node: null 
+2021-12-11 18:36:53,166 [  70023]   WARN - lij.build.BuildTreeConsoleView - start event id collision found:Downloading io.netty:netty-transport::4.1.70.Final, was also in node: null 
+2021-12-11 18:36:53,166 [  70023]   WARN - lij.build.BuildTreeConsoleView - start event id collision found:Downloading io.netty:netty-resolver::4.1.70.Final, was also in node: null 
+2021-12-11 18:36:53,166 [  70023]   WARN - lij.build.BuildTreeConsoleView - start event id collision found:Downloading io.netty:netty-codec::4.1.70.Final, was also in node: null 
+2021-12-11 18:36:53,166 [  70023]   WARN - lij.build.BuildTreeConsoleView - start event id collision found:Downloading io.netty:netty-handler::4.1.70.Final, was also in node: null 
+2021-12-11 18:36:53,166 [  70023]   WARN - lij.build.BuildTreeConsoleView - start event id collision found:Downloading io.netty:netty-codec-http2::4.1.70.Final, was also in node: null 
+2021-12-11 18:36:53,166 [  70023]   WARN - lij.build.BuildTreeConsoleView - start event id collision found:Downloading io.netty:netty-resolver-dns::4.1.70.Final, was also in node: null 
+2021-12-11 18:36:53,166 [  70023]   WARN - lij.build.BuildTreeConsoleView - start event id collision found:Downloading io.netty:netty-codec-dns::4.1.70.Final, was also in node: null 
+2021-12-11 18:36:53,166 [  70023]   WARN - lij.build.BuildTreeConsoleView - start event id collision found:Downloading io.netty:netty-resolver-dns-classes-macos::4.1.70.Final, was also in node: null 
+2021-12-11 18:36:53,166 [  70023]   WARN - lij.build.BuildTreeConsoleView - start event id collision found:Downloading io.netty:netty-transport-native-unix-common::4.1.70.Final, was also in node: null 
+2021-12-11 18:36:53,166 [  70023]   WARN - lij.build.BuildTreeConsoleView - start event id collision found:Downloading io.netty:netty-transport-classes-epoll::4.1.70.Final, was also in node: null 
+2021-12-11 18:36:53,166 [  70023]   WARN - lij.build.BuildTreeConsoleView - start event id collision found:Downloading io.projectreactor.netty:reactor-netty-core::1.0.13, was also in node: null 
+2021-12-11 18:36:53,166 [  70023]   WARN - lij.build.BuildTreeConsoleView - start event id collision found:Downloading io.projectreactor:reactor-core::3.4.12, was also in node: null 
+2021-12-11 18:36:53,166 [  70023]   WARN - lij.build.BuildTreeConsoleView - start event id collision found:Downloading com.fasterxml.jackson.dataformat:jackson-dataformat-cbor::2.13.0, was also in node: null 
+2021-12-11 18:36:53,166 [  70023]   WARN - lij.build.BuildTreeConsoleView - start event id collision found:Downloading io.rsocket:rsocket-core::1.1.1, was also in node: null 
+2021-12-11 18:36:53,166 [  70023]   WARN - lij.build.BuildTreeConsoleView - start event id collision found:Downloading io.rsocket:rsocket-transport-netty::1.1.1, was also in node: null 
+2021-12-11 18:36:53,166 [  70023]   WARN - lij.build.BuildTreeConsoleView - start event id collision found:Downloading io.netty:netty-handler-proxy::4.1.70.Final, was also in node: null 
+2021-12-11 18:36:53,166 [  70023]   WARN - lij.build.BuildTreeConsoleView - start event id collision found:Downloading io.netty:netty-codec-socks::4.1.70.Final, was also in node: null 
+2021-12-11 18:36:53,166 [  70023]   WARN - lij.build.BuildTreeConsoleView - start event id collision found:Downloading org.springframework:spring-messaging::5.3.13, was also in node: null 
+2021-12-11 18:36:53,166 [  70023]   WARN - lij.build.BuildTreeConsoleView - start event id collision found:Downloading org.springframework.boot:spring-boot-starter-security::2.6.1, was also in node: null 
+2021-12-11 18:36:53,166 [  70023]   WARN - lij.build.BuildTreeConsoleView - start event id collision found:Downloading org.springframework:spring-aop::5.3.13, was also in node: null 
+2021-12-11 18:36:53,167 [  70024]   WARN - lij.build.BuildTreeConsoleView - start event id collision found:Downloading org.springframework.security:spring-security-config::5.6.0, was also in node: null 
+2021-12-11 18:36:53,167 [  70024]   WARN - lij.build.BuildTreeConsoleView - start event id collision found:Downloading org.springframework.security:spring-security-core::5.6.0, was also in node: null 
+2021-12-11 18:36:53,167 [  70024]   WARN - lij.build.BuildTreeConsoleView - start event id collision found:Downloading org.springframework.security:spring-security-web::5.6.0, was also in node: null 
+2021-12-11 18:36:53,167 [  70024]   WARN - lij.build.BuildTreeConsoleView - start event id collision found:Downloading org.springframework:spring-expression::5.3.13, was also in node: null 
+2021-12-11 18:36:53,167 [  70024]   WARN - lij.build.BuildTreeConsoleView - start event id collision found:Downloading org.springframework.security:spring-security-messaging::5.6.0, was also in node: null 
+2021-12-11 18:36:53,167 [  70024]   WARN - lij.build.BuildTreeConsoleView - start event id collision found:Downloading org.springframework.security:spring-security-crypto::5.6.0, was also in node: null 
+2021-12-11 18:36:53,167 [  70024]   WARN - lij.build.BuildTreeConsoleView - start event id collision found:Downloading org.springframework:spring-jcl::5.3.13, was also in node: null 
+2021-12-11 18:36:53,167 [  70024]   WARN - lij.build.BuildTreeConsoleView - start event id collision found:Downloading org.springframework.security:spring-security-rsocket::5.6.0, was also in node: null 
+2021-12-11 18:36:53,167 [  70024]   WARN - lij.build.BuildTreeConsoleView - start event id collision found:Downloading org.projectlombok:lombok::1.18.22, was also in node: null 
+2021-12-11 18:36:53,167 [  70024]   WARN - lij.build.BuildTreeConsoleView - start event id collision found:Downloading org.springframework.boot:spring-boot-starter-test::2.6.1, was also in node: null 
+2021-12-11 18:36:53,167 [  70024]   WARN - lij.build.BuildTreeConsoleView - start event id collision found:Downloading org.springframework.boot:spring-boot-test::2.6.1, was also in node: null 
+2021-12-11 18:36:53,167 [  70024]   WARN - lij.build.BuildTreeConsoleView - start event id collision found:Downloading org.springframework.boot:spring-boot-test-autoconfigure::2.6.1, was also in node: null 
+2021-12-11 18:36:53,167 [  70024]   WARN - lij.build.BuildTreeConsoleView - start event id collision found:Downloading com.jayway.jsonpath:json-path::2.6.0, was also in node: null 
+2021-12-11 18:36:53,167 [  70024]   WARN - lij.build.BuildTreeConsoleView - start event id collision found:Downloading org.assertj:assertj-core::3.21.0, was also in node: null 
+2021-12-11 18:36:53,167 [  70024]   WARN - lij.build.BuildTreeConsoleView - start event id collision found:Downloading org.junit.jupiter:junit-jupiter::5.8.1, was also in node: null 
+2021-12-11 18:36:53,167 [  70024]   WARN - lij.build.BuildTreeConsoleView - start event id collision found:Downloading org.junit.jupiter:junit-jupiter-api::5.8.1, was also in node: null 
+2021-12-11 18:36:53,167 [  70024]   WARN - lij.build.BuildTreeConsoleView - start event id collision found:Downloading org.junit.platform:junit-platform-commons::1.8.1, was also in node: null 
+2021-12-11 18:36:53,167 [  70024]   WARN - lij.build.BuildTreeConsoleView - start event id collision found:Downloading org.apiguardian:apiguardian-api::1.1.2, was also in node: null 
+2021-12-11 18:36:53,167 [  70024]   WARN - lij.build.BuildTreeConsoleView - start event id collision found:Downloading org.junit.jupiter:junit-jupiter-params::5.8.1, was also in node: null 
+2021-12-11 18:36:53,167 [  70024]   WARN - lij.build.BuildTreeConsoleView - start event id collision found:Downloading org.junit.jupiter:junit-jupiter-engine::5.8.1, was also in node: null 
+2021-12-11 18:36:53,167 [  70024]   WARN - lij.build.BuildTreeConsoleView - start event id collision found:Downloading org.junit.platform:junit-platform-engine::1.8.1, was also in node: null 
+2021-12-11 18:36:53,167 [  70024]   WARN - lij.build.BuildTreeConsoleView - start event id collision found:Downloading org.mockito:mockito-core::4.0.0, was also in node: null 
+2021-12-11 18:36:53,167 [  70024]   WARN - lij.build.BuildTreeConsoleView - start event id collision found:Downloading net.bytebuddy:byte-buddy::1.11.22, was also in node: null 
+2021-12-11 18:36:53,167 [  70024]   WARN - lij.build.BuildTreeConsoleView - start event id collision found:Downloading net.bytebuddy:byte-buddy-agent::1.11.22, was also in node: null 
+2021-12-11 18:36:53,167 [  70024]   WARN - lij.build.BuildTreeConsoleView - start event id collision found:Downloading org.mockito:mockito-junit-jupiter::4.0.0, was also in node: null 
+2021-12-11 18:36:53,167 [  70024]   WARN - lij.build.BuildTreeConsoleView - start event id collision found:Downloading org.springframework:spring-test::5.3.13, was also in node: null 
+2021-12-11 18:36:53,167 [  70024]   WARN - lij.build.BuildTreeConsoleView - start event id collision found:Downloading io.projectreactor:reactor-test::3.4.12, was also in node: null 
+2021-12-11 18:36:53,167 [  70024]   WARN - lij.build.BuildTreeConsoleView - start event id collision found:Downloading org.springframework.security:spring-security-test::5.6.0, was also in node: null 
+2021-12-11 18:36:59,116 [  75973]   WARN - lij.build.BuildTreeConsoleView - start event id collision found:Downloading org.springframework.boot:spring-boot-maven-plugin::2.6.1, was also in node: null 
+2021-12-11 18:37:08,337 [  85194]   WARN - .kotlin.VirtualFileKotlinClass - Could not read file: /home/webuser/.sdkman/candidates/java/18.ea.2.lm-open!/java.base/sun/security/validator/CADistrustPolicy.class; size in bytes: 3083; file type: CLASS 
+java.lang.UnsupportedOperationException: PermittedSubclasses requires ASM9
+	at org.jetbrains.org.objectweb.asm.ClassVisitor.visitPermittedSubclass(ClassVisitor.java:266)
+	at org.jetbrains.org.objectweb.asm.ClassReader.accept(ClassReader.java:707)
+	at org.jetbrains.org.objectweb.asm.ClassReader.accept(ClassReader.java:425)
+	at org.jetbrains.kotlin.load.kotlin.FileBasedKotlinClass.create(FileBasedKotlinClass.java:96)
+	at org.jetbrains.kotlin.load.kotlin.VirtualFileKotlinClass$Factory$create$1.invoke(VirtualFileKotlinClass.kt:67)
+	at org.jetbrains.kotlin.load.kotlin.VirtualFileKotlinClass$Factory$create$1.invoke(VirtualFileKotlinClass.kt:61)
+	at org.jetbrains.kotlin.util.PerformanceCounter.time(PerformanceCounter.kt:101)
+	at org.jetbrains.kotlin.load.kotlin.VirtualFileKotlinClass$Factory.create(VirtualFileKotlinClass.kt:61)
+	at org.jetbrains.kotlin.load.kotlin.KotlinBinaryClassCache$Companion.getKotlinBinaryClassOrClassFileContent$lambda-0(KotlinBinaryClassCache.kt:86)
+	at com.intellij.openapi.application.impl.ApplicationImpl.runReadAction(ApplicationImpl.java:852)
+	at org.jetbrains.kotlin.load.kotlin.KotlinBinaryClassCache$Companion.getKotlinBinaryClassOrClassFileContent(KotlinBinaryClassCache.kt:84)
+	at org.jetbrains.kotlin.idea.caches.IDEKotlinBinaryClassCache.binaryClassResult(IDEKotlinBinaryClassCache.kt:86)
+	at org.jetbrains.kotlin.idea.caches.IDEKotlinBinaryClassCache.kotlinJvmBinaryClass(IDEKotlinBinaryClassCache.kt:60)
+	at org.jetbrains.kotlin.idea.caches.IDEKotlinBinaryClassCache.getKotlinBinaryClassHeaderData(IDEKotlinBinaryClassCache.kt:99)
+	at org.jetbrains.kotlin.idea.vfilefinder.KotlinClassFileIndex$INDEXER$1.invoke(fileIndexes.kt:87)
+	at org.jetbrains.kotlin.idea.vfilefinder.KotlinClassFileIndex$INDEXER$1.invoke(fileIndexes.kt:76)
+	at org.jetbrains.kotlin.idea.vfilefinder.KotlinFileIndexBase$indexer$1.map(fileIndexes.kt:58)
+	at org.jetbrains.kotlin.idea.vfilefinder.KotlinFileIndexBase$indexer$1.map(fileIndexes.kt:34)
+	at com.intellij.util.indexing.impl.MapReduceIndex.mapByIndexer(MapReduceIndex.java:306)
+	at com.intellij.util.indexing.impl.MapReduceIndex.mapInput(MapReduceIndex.java:297)
+	at com.intellij.util.indexing.impl.storage.VfsAwareMapReduceIndex.mapInput(VfsAwareMapReduceIndex.java:182)
+	at com.intellij.util.indexing.impl.storage.VfsAwareMapReduceIndex.mapInput(VfsAwareMapReduceIndex.java:47)
+	at com.intellij.util.indexing.impl.MapReduceIndex.mapInputAndPrepareUpdate(MapReduceIndex.java:244)
+	at com.intellij.indexing.composite.CompositeInvertedIndexBase.updateBaseIndex(CompositeInvertedIndexBase.java:240)
+	at com.intellij.indexing.composite.CompositeInvertedIndexBase.mapInputAndPrepareUpdate(CompositeInvertedIndexBase.java:60)
+	at com.intellij.indexing.composite.CompositeInvertedIndexBase.mapInputAndPrepareUpdate(CompositeInvertedIndexBase.java:27)
+	at com.intellij.util.indexing.FileBasedIndexImpl.updateSingleIndex(FileBasedIndexImpl.java:1534)
+	at com.intellij.util.indexing.FileBasedIndexImpl.lambda$doIndexFileContent$27(FileBasedIndexImpl.java:1408)
+	at com.intellij.openapi.fileTypes.impl.FileTypeManagerImpl.freezeFileTypeTemporarilyIn(FileTypeManagerImpl.java:627)
+	at com.intellij.util.indexing.FileBasedIndexImpl.doIndexFileContent(FileBasedIndexImpl.java:1376)
+	at com.intellij.util.indexing.FileBasedIndexImpl.indexFileContent(FileBasedIndexImpl.java:1330)
+	at com.intellij.util.indexing.contentQueue.IndexUpdateRunner.lambda$indexOneFileOfJob$5(IndexUpdateRunner.java:267)
+	at com.intellij.openapi.application.impl.NonBlockingReadActionImpl$Submission.insideReadAction(NonBlockingReadActionImpl.java:521)
+	at com.intellij.openapi.application.impl.NonBlockingReadActionImpl$Submission.lambda$attemptComputation$3(NonBlockingReadActionImpl.java:486)
+	at com.intellij.openapi.application.impl.ApplicationImpl.tryRunReadAction(ApplicationImpl.java:1084)
+	at com.intellij.openapi.progress.util.ProgressIndicatorUtils.lambda$runInReadActionWithWriteActionPriority$0(ProgressIndicatorUtils.java:75)
+	at com.intellij.openapi.progress.util.ProgressIndicatorUtils.runActionAndCancelBeforeWrite(ProgressIndicatorUtils.java:158)
+	at com.intellij.openapi.progress.util.ProgressIndicatorUtils.lambda$runWithWriteActionPriority$1(ProgressIndicatorUtils.java:115)
+	at com.intellij.openapi.progress.ProgressManager.lambda$runProcess$0(ProgressManager.java:57)
+	at com.intellij.openapi.progress.impl.CoreProgressManager.lambda$runProcess$2(CoreProgressManager.java:188)
+	at com.intellij.openapi.progress.impl.CoreProgressManager.lambda$executeProcessUnderProgress$12(CoreProgressManager.java:624)
+	at com.intellij.openapi.progress.impl.CoreProgressManager.registerIndicatorAndRun(CoreProgressManager.java:698)
+	at com.intellij.openapi.progress.impl.CoreProgressManager.computeUnderProgress(CoreProgressManager.java:646)
+	at com.intellij.openapi.progress.impl.CoreProgressManager.executeProcessUnderProgress(CoreProgressManager.java:623)
+	at com.intellij.openapi.progress.impl.ProgressManagerImpl.executeProcessUnderProgress(ProgressManagerImpl.java:66)
+	at com.intellij.openapi.progress.impl.CoreProgressManager.runProcess(CoreProgressManager.java:175)
+	at com.intellij.openapi.progress.ProgressManager.runProcess(ProgressManager.java:57)
+	at com.intellij.openapi.progress.util.ProgressIndicatorUtils.runWithWriteActionPriority(ProgressIndicatorUtils.java:112)
+	at com.intellij.openapi.progress.util.ProgressIndicatorUtils.runInReadActionWithWriteActionPriority(ProgressIndicatorUtils.java:75)
+	at com.intellij.openapi.application.impl.NonBlockingReadActionImpl$Submission.attemptComputation(NonBlockingReadActionImpl.java:486)
+	at com.intellij.openapi.application.impl.NonBlockingReadActionImpl$Submission.executeSynchronously(NonBlockingReadActionImpl.java:421)
+	at com.intellij.openapi.application.impl.NonBlockingReadActionImpl.executeSynchronously(NonBlockingReadActionImpl.java:186)
+	at com.intellij.util.indexing.contentQueue.IndexUpdateRunner.indexOneFileOfJob(IndexUpdateRunner.java:270)
+	at com.intellij.util.indexing.contentQueue.IndexUpdateRunner.lambda$indexJobsFairly$4(IndexUpdateRunner.java:210)
+	at com.intellij.openapi.progress.impl.ProgressSuspender.executeNonSuspendableSection(ProgressSuspender.java:83)
+	at com.intellij.util.indexing.contentQueue.IndexUpdateRunner.indexJobsFairly(IndexUpdateRunner.java:213)
+	at com.intellij.util.indexing.contentQueue.IndexUpdateRunner.lambda$doIndexFiles$3(IndexUpdateRunner.java:147)
+	at com.intellij.util.concurrency.BoundedTaskExecutor.doRun(BoundedTaskExecutor.java:246)
+	at com.intellij.util.concurrency.BoundedTaskExecutor.access$200(BoundedTaskExecutor.java:32)
+	at com.intellij.util.concurrency.BoundedTaskExecutor$1.execute(BoundedTaskExecutor.java:225)
+	at com.intellij.util.ConcurrencyUtil.runUnderThreadName(ConcurrencyUtil.java:213)
+	at com.intellij.util.concurrency.BoundedTaskExecutor$1.run(BoundedTaskExecutor.java:214)
+	at java.base/java.util.concurrent.ThreadPoolExecutor.runWorker(ThreadPoolExecutor.java:1128)
+	at java.base/java.util.concurrent.ThreadPoolExecutor$Worker.run(ThreadPoolExecutor.java:628)
+	at java.base/java.util.concurrent.Executors$PrivilegedThreadFactory$1$1.run(Executors.java:668)
+	at java.base/java.util.concurrent.Executors$PrivilegedThreadFactory$1$1.run(Executors.java:665)
+	at java.base/java.security.AccessController.doPrivileged(Native Method)
+	at java.base/java.util.concurrent.Executors$PrivilegedThreadFactory$1.run(Executors.java:665)
+	at java.base/java.lang.Thread.run(Thread.java:834)
+2021-12-11 18:37:08,950 [  85807]   WARN - .kotlin.VirtualFileKotlinClass - Exception 'java.lang.UnsupportedOperationException: PermittedSubclasses requires ASM9' was reported 10 times 
+2021-12-11 18:37:12,493 [  89350]   WARN - lij.build.BuildTreeConsoleView - start event id collision found:Downloading org.springframework.boot:spring-boot-buildpack-platform::2.6.1, was also in node: null 
+2021-12-11 18:37:12,493 [  89350]   WARN - lij.build.BuildTreeConsoleView - start event id collision found:Downloading org.apache.commons:commons-compress::1.21, was also in node: null 
+2021-12-11 18:37:12,493 [  89350]   WARN - lij.build.BuildTreeConsoleView - start event id collision found:Downloading org.springframework.boot:spring-boot-loader-tools::2.6.1, was also in node: null 
+2021-12-11 18:37:13,524 [  90381]   WARN - .kotlin.VirtualFileKotlinClass - Exception 'java.lang.UnsupportedOperationException: PermittedSubclasses requires ASM9' was reported 20 times 
+2021-12-11 18:37:13,633 [  90490]   WARN - .kotlin.VirtualFileKotlinClass - Exception 'java.lang.UnsupportedOperationException: PermittedSubclasses requires ASM9' was reported 30 times 
+2021-12-11 18:37:14,356 [  91213]   WARN - .kotlin.VirtualFileKotlinClass - Exception 'java.lang.UnsupportedOperationException: PermittedSubclasses requires ASM9' was reported 40 times 
+2021-12-11 18:37:17,502 [  94359]   WARN - lij.build.BuildTreeConsoleView - start event id collision found:Downloading org.apache.maven.plugins:maven-deploy-plugin::2.8.2, was also in node: null 
+2021-12-11 18:37:23,754 [ 100611]   WARN - .kotlin.VirtualFileKotlinClass - Exception 'java.lang.UnsupportedOperationException: PermittedSubclasses requires ASM9' was reported 50 times 
+2021-12-11 18:37:56,795 [ 133652]   WARN - vdmanager.AvdManagerConnection - No Android SDK Found 
+2021-12-11 18:38:04,694 [ 141551]   WARN - nCompilerReferenceIndexStorage - kotlin-data-container is not found 
+2021-12-11 18:41:53,110 [ 369967]   WARN - com.intellij.util.xmlb.Binding - no accessors for org.jetbrains.idea.perforce.perforce.ConnectionId 
+2021-12-11 18:50:45,808 [ 902665]   WARN - vdmanager.AvdManagerConnection - No Android SDK Found 
+2021-12-11 18:50:50,016 [ 906873]   WARN - nCompilerReferenceIndexStorage - kotlin-data-container is not found 
+2021-12-11 18:55:50,045 [1206902]   WARN - ution.rmi.RemoteProcessSupport - SLF4J: Class path contains multiple SLF4J bindings. 
+2021-12-11 18:55:50,045 [1206902]   WARN - ution.rmi.RemoteProcessSupport - SLF4J: Found binding in [jar:file:/home/webuser/dev/ideac/plugins/maven/lib/maven36-server.jar!/org/slf4j/impl/StaticLoggerBinder.class] 
+2021-12-11 18:55:50,045 [1206902]   WARN - ution.rmi.RemoteProcessSupport - SLF4J: Found binding in [jar:file:/home/webuser/dev/ideac/lib/3rd-party-rt.jar!/org/slf4j/impl/StaticLoggerBinder.class] 
+2021-12-11 18:55:50,045 [1206902]   WARN - ution.rmi.RemoteProcessSupport - SLF4J: See http://www.slf4j.org/codes.html#multiple_bindings for an explanation. 
+2021-12-11 18:55:50,045 [1206902]   WARN - ution.rmi.RemoteProcessSupport - SLF4J: Actual binding is of type [org.jetbrains.idea.maven.server.Maven3WrapperSl4LoggerFactory] 
+2021-12-11 18:55:53,208 [1210065]   WARN - ctionSystem.impl.ActionUpdater - 110 ms to call on EDT ShareWholeProject#update (org.jetbrains.idea.svn.actions.ShareWholeProject) - speed it up and/or implement UpdateInBackground. 
+2021-12-11 18:55:54,981 [1211838]   WARN - a.repo.GitUntrackedFilesHolder - Ignoring ignored file under another root: /home/webuser/dev/proj/spring-examples/blog/19-react-project/blog/.DS_Store; root: /home/webuser/dev/proj/spring-examples; mapped root: null 
+2021-12-11 18:56:59,575 [1276432]   WARN - com.intellij.util.xmlb.Binding - no accessors for scala.collection.immutable.Seq 
+2021-12-11 19:08:42,554 [1979411]   WARN - a.repo.GitUntrackedFilesHolder - Ignoring ignored file under another root: /home/webuser/dev/proj/spring-examples/blog/19-react-project/blog/.DS_Store; root: /home/webuser/dev/proj/spring-examples; mapped root: null 
+2021-12-11 19:16:50,992 [2467849]   WARN - a.repo.GitUntrackedFilesHolder - Ignoring ignored file under another root: /home/webuser/dev/proj/spring-examples/blog/19-react-project/blog/.DS_Store; root: /home/webuser/dev/proj/spring-examples; mapped root: null 
+2021-12-11 19:18:37,133 [2573990]   WARN - ernallyAddedFilesProcessorImpl - Cannot find project config directory for non-default and non-directory based project service 
+2021-12-11 19:18:37,302 [2574159]   WARN - ernallyAddedFilesProcessorImpl - Cannot find project config directory for non-default and non-directory based project service 
+2021-12-11 19:19:14,331 [2611188]   WARN - ernallyAddedFilesProcessorImpl - Cannot find project config directory for non-default and non-directory based project service 
+2021-12-11 19:19:14,674 [2611531]   WARN - ernallyAddedFilesProcessorImpl - Cannot find project config directory for non-default and non-directory based project service 
+2021-12-11 19:19:15,215 [2612072]   WARN - a.repo.GitUntrackedFilesHolder - Ignoring ignored file under another root: /home/webuser/dev/proj/spring-examples/blog/19-react-project/blog/.DS_Store; root: /home/webuser/dev/proj/spring-examples; mapped root: null 
+2021-12-11 19:20:27,176 [2684033]   WARN - ution.rmi.RemoteProcessSupport - SLF4J: Class path contains multiple SLF4J bindings. 
+2021-12-11 19:20:27,176 [2684033]   WARN - ution.rmi.RemoteProcessSupport - SLF4J: Found binding in [jar:file:/home/webuser/dev/ideac/plugins/maven/lib/maven36-server.jar!/org/slf4j/impl/StaticLoggerBinder.class] 
+2021-12-11 19:20:27,176 [2684033]   WARN - ution.rmi.RemoteProcessSupport - SLF4J: Found binding in [jar:file:/home/webuser/dev/ideac/lib/3rd-party-rt.jar!/org/slf4j/impl/StaticLoggerBinder.class] 
+2021-12-11 19:20:27,176 [2684033]   WARN - ution.rmi.RemoteProcessSupport - SLF4J: See http://www.slf4j.org/codes.html#multiple_bindings for an explanation. 
+2021-12-11 19:20:27,177 [2684034]   WARN - ution.rmi.RemoteProcessSupport - SLF4J: Actual binding is of type [org.jetbrains.idea.maven.server.Maven3WrapperSl4LoggerFactory] 
+2021-12-11 19:20:28,206 [2685063]   WARN - a.repo.GitUntrackedFilesHolder - Ignoring ignored file under another root: /home/webuser/dev/proj/spring-examples/blog/19-react-project/blog/.DS_Store; root: /home/webuser/dev/proj/spring-examples; mapped root: null 
+2021-12-11 19:20:33,047 [2689904]   WARN - a.repo.GitUntrackedFilesHolder - Ignoring ignored file under another root: /home/webuser/dev/proj/spring-examples/blog/19-react-project/blog/.DS_Store; root: /home/webuser/dev/proj/spring-examples; mapped root: null 
+2021-12-11 19:20:33,047 [2689904]   WARN - a.repo.GitUntrackedFilesHolder - Ignoring ignored file under another root: /home/webuser/dev/proj/spring-examples/blog/19-react-project/blog/.DS_Store; root: /home/webuser/dev/proj/spring-examples; mapped root: null 
+2021-12-11 19:32:17,587 [3394444]   WARN - vdmanager.AvdManagerConnection - No Android SDK Found 
+2021-12-11 19:32:21,775 [3398632]   WARN - nCompilerReferenceIndexStorage - kotlin-data-container is not found 
+2021-12-11 19:32:44,746 [3421603]   WARN - a.repo.GitUntrackedFilesHolder - Ignoring ignored file under another root: /home/webuser/dev/proj/spring-examples/blog/19-react-project/blog/.DS_Store; root: /home/webuser/dev/proj/spring-examples; mapped root: null 
+2021-12-11 19:32:45,032 [3421889]   WARN - a.repo.GitUntrackedFilesHolder - Ignoring ignored file under another root: /home/webuser/dev/proj/spring-examples/blog/19-react-project/blog/.DS_Store; root: /home/webuser/dev/proj/spring-examples; mapped root: null 
+2021-12-11 19:32:53,029 [3429886]   WARN - nCompilerReferenceIndexStorage - kotlin-data-container is not found 
+2021-12-11 19:33:35,201 [3472058]   WARN - nCompilerReferenceIndexStorage - kotlin-data-container is not found 
+2021-12-11 19:33:52,066 [3488923]   WARN - s.ui.configuration.SdkDetector - No version is returned for detected SDK IDEA JDK at /home/webuser/dev/ideac 
+2021-12-11 19:34:10,678 [3507535]   WARN - nCompilerReferenceIndexStorage - kotlin-data-container is not found 
+2021-12-11 19:34:40,035 [3536892]   WARN - ution.rmi.RemoteProcessSupport - SLF4J: Class path contains multiple SLF4J bindings. 
+2021-12-11 19:34:40,035 [3536892]   WARN - ution.rmi.RemoteProcessSupport - SLF4J: Found binding in [jar:file:/home/webuser/dev/ideac/plugins/maven/lib/maven36-server.jar!/org/slf4j/impl/StaticLoggerBinder.class] 
+2021-12-11 19:34:40,035 [3536892]   WARN - ution.rmi.RemoteProcessSupport - SLF4J: Found binding in [jar:file:/home/webuser/dev/ideac/lib/3rd-party-rt.jar!/org/slf4j/impl/StaticLoggerBinder.class] 
+2021-12-11 19:34:40,035 [3536892]   WARN - ution.rmi.RemoteProcessSupport - SLF4J: See http://www.slf4j.org/codes.html#multiple_bindings for an explanation. 
+2021-12-11 19:34:40,035 [3536892]   WARN - ution.rmi.RemoteProcessSupport - SLF4J: Actual binding is of type [org.jetbrains.idea.maven.server.Maven3WrapperSl4LoggerFactory] 
+2021-12-11 19:34:50,573 [3547430]   WARN - nCompilerReferenceIndexStorage - kotlin-data-container is not found 
+2021-12-11 19:34:54,868 [3551725]   WARN - ConfigurableExtensionPointUtil - ignore deprecated groupId: language for id: preferences.language.Kotlin.scripting 
+2021-12-11 19:36:18,278 [3635135]   WARN - tions.ex.ConfigurableCardPanel - auto-dispose 'Plugins' id=preferences.pluginManager 
+2021-12-11 19:36:29,152 [3646009]   WARN - s.ui.configuration.SdkDetector - No version is returned for detected SDK IDEA JDK at /home/webuser/dev/ideac 
+2021-12-11 19:36:42,497 [3659354]   WARN - nCompilerReferenceIndexStorage - kotlin-data-container is not found 
+2021-12-11 19:37:35,083 [3711940]   WARN - nCompilerReferenceIndexStorage - kotlin-data-container is not found 
+2021-12-11 19:38:52,765 [3789622]   WARN - s.ui.configuration.SdkDetector - No version is returned for detected SDK IDEA JDK at /home/webuser/dev/ideac 
+2021-12-11 19:38:53,812 [3790669]   WARN - ctionSystem.impl.ActionUpdater - 543 ms to grab EDT for BackAction#update (com.intellij.ui.navigation.BackAction) 
+2021-12-11 19:39:08,340 [3805197]   WARN - nCompilerReferenceIndexStorage - kotlin-data-container is not found 
+2021-12-11 19:39:26,303 [3823160]   WARN - ution.rmi.RemoteProcessSupport - SLF4J: Class path contains multiple SLF4J bindings. 
+2021-12-11 19:39:26,303 [3823160]   WARN - ution.rmi.RemoteProcessSupport - SLF4J: Found binding in [jar:file:/home/webuser/dev/ideac/plugins/maven/lib/maven36-server.jar!/org/slf4j/impl/StaticLoggerBinder.class] 
+2021-12-11 19:39:26,303 [3823160]   WARN - ution.rmi.RemoteProcessSupport - SLF4J: Found binding in [jar:file:/home/webuser/dev/ideac/lib/3rd-party-rt.jar!/org/slf4j/impl/StaticLoggerBinder.class] 
+2021-12-11 19:39:26,303 [3823160]   WARN - ution.rmi.RemoteProcessSupport - SLF4J: See http://www.slf4j.org/codes.html#multiple_bindings for an explanation. 
+2021-12-11 19:39:26,304 [3823161]   WARN - ution.rmi.RemoteProcessSupport - SLF4J: Actual binding is of type [org.jetbrains.idea.maven.server.Maven3WrapperSl4LoggerFactory] 
+2021-12-11 19:39:26,304 [3823161]   WARN - ution.rmi.RemoteProcessSupport -  
+2021-12-11 19:39:36,509 [3833366]   WARN - nCompilerReferenceIndexStorage - kotlin-data-container is not found 
+2021-12-11 19:39:42,361 [3839218]   WARN - ConfigurableExtensionPointUtil - ignore deprecated groupId: language for id: preferences.language.Kotlin.scripting 
+2021-12-11 19:40:22,749 [3879606]   WARN -      #org.jetbrains.idea.maven - Cannot determine maven version from run configuration and project settings, use embedded as version: 3.8.1 
+2021-12-11 19:40:44,933 [3901790]   WARN - nCompilerReferenceIndexStorage - kotlin-data-container is not found 
+2021-12-11 19:44:10,512 [4107369]   WARN -      #org.jetbrains.idea.maven - Cannot determine maven version from run configuration and project settings, use embedded as version: 3.8.1 
+2021-12-11 19:46:21,081 [4237938]   WARN - ution.rmi.RemoteProcessSupport - SLF4J: Class path contains multiple SLF4J bindings. 
+2021-12-11 19:46:21,081 [4237938]   WARN - ution.rmi.RemoteProcessSupport - SLF4J: Found binding in [jar:file:/home/webuser/dev/ideac/plugins/maven/lib/maven36-server.jar!/org/slf4j/impl/StaticLoggerBinder.class] 
+2021-12-11 19:46:21,081 [4237938]   WARN - ution.rmi.RemoteProcessSupport - SLF4J: Found binding in [jar:file:/home/webuser/dev/ideac/lib/3rd-party-rt.jar!/org/slf4j/impl/StaticLoggerBinder.class] 
+2021-12-11 19:46:21,081 [4237938]   WARN - ution.rmi.RemoteProcessSupport - SLF4J: See http://www.slf4j.org/codes.html#multiple_bindings for an explanation. 
+2021-12-11 19:46:21,081 [4237938]   WARN - ution.rmi.RemoteProcessSupport - SLF4J: Actual binding is of type [org.jetbrains.idea.maven.server.Maven3WrapperSl4LoggerFactory] 
+2021-12-11 19:46:22,125 [4238982]   WARN - a.repo.GitUntrackedFilesHolder - Ignoring ignored file under another root: /home/webuser/dev/proj/spring-examples/blog/19-react-project/blog/.DS_Store; root: /home/webuser/dev/proj/spring-examples; mapped root: null 
+2021-12-11 19:46:26,530 [4243387]   WARN - a.repo.GitUntrackedFilesHolder - Ignoring ignored file under another root: /home/webuser/dev/proj/spring-examples/blog/19-react-project/blog/.DS_Store; root: /home/webuser/dev/proj/spring-examples; mapped root: null 
+2021-12-11 19:46:26,533 [4243390]   WARN - a.repo.GitUntrackedFilesHolder - Ignoring ignored file under another root: /home/webuser/dev/proj/spring-examples/blog/19-react-project/blog/.DS_Store; root: /home/webuser/dev/proj/spring-examples; mapped root: null 
+2021-12-11 19:46:40,395 [4257252]   WARN - vdmanager.AvdManagerConnection - No Android SDK Found 
+2021-12-11 19:46:45,955 [4262812]   WARN - nCompilerReferenceIndexStorage - kotlin-data-container is not found 
+2021-12-11 19:48:21,513 [4358370]   WARN - ctionSystem.impl.ActionUpdater - 312 ms to grab EDT for TabListAction#update (com.intellij.ide.actions.TabListAction) 
+2021-12-11 19:48:21,513 [4358370]   WARN - ctionSystem.impl.ActionUpdater - 273 ms to grab EDT for CWMTelephonyGroup#update (com.jetbrains.rd.platform.codeWithMe.telephony.CWMTelephonyGroup) 
+2021-12-11 19:51:51,493 [4568350]   WARN - lij.build.BuildTreeConsoleView - start event id collision found:Downloading org.springframework.integration:spring-integration-file::5.5.6, was also in node: null 
+2021-12-11 19:51:51,494 [4568351]   WARN - lij.build.BuildTreeConsoleView - start event id collision found:Downloading org.springframework.integration:spring-integration-core::5.5.6, was also in node: null 
+2021-12-11 19:51:51,494 [4568351]   WARN - lij.build.BuildTreeConsoleView - start event id collision found:Downloading org.springframework:spring-tx::5.3.13, was also in node: null 
+2021-12-11 19:51:51,494 [4568351]   WARN - lij.build.BuildTreeConsoleView - start event id collision found:Downloading org.springframework.retry:spring-retry::1.3.1, was also in node: null 
+2021-12-11 19:51:51,494 [4568351]   WARN - lij.build.BuildTreeConsoleView - start event id collision found:Downloading commons-io:commons-io::2.11.0, was also in node: null 
+2021-12-11 20:18:09,213 [6146070]   WARN - nCompilerReferenceIndexStorage - kotlin-data-container is not found 
+2021-12-11 20:18:21,298 [6158155]   WARN - nCompilerReferenceIndexStorage - kotlin-data-container is not found 
+2021-12-11 20:19:59,603 [6256460]   WARN - nCompilerReferenceIndexStorage - kotlin-data-container is not found 
+2021-12-11 20:20:29,469 [6286326]   WARN - nCompilerReferenceIndexStorage - kotlin-data-container is not found 
+2021-12-11 20:21:37,326 [6354183]   WARN - nCompilerReferenceIndexStorage - kotlin-data-container is not found 
+2021-12-11 20:22:16,578 [6393435]   WARN -      #org.jetbrains.idea.maven - Cannot determine maven version from run configuration and project settings, use embedded as version: 3.8.1 
+2021-12-11 20:22:23,306 [6400163]   WARN - vdmanager.AvdManagerConnection - No Android SDK Found 
+2021-12-11 20:22:23,865 [6400722]   WARN - nCompilerReferenceIndexStorage - kotlin-data-container is not found 
+2021-12-11 20:25:53,932 [6610789]   WARN - nCompilerReferenceIndexStorage - kotlin-data-container is not found 
+2021-12-11 20:27:38,109 [6714966]   WARN - nCompilerReferenceIndexStorage - kotlin-data-container is not found 
+2021-12-11 20:28:56,965 [6793822]   WARN - nCompilerReferenceIndexStorage - kotlin-data-container is not found 
+2021-12-11 20:29:45,712 [6842569]   WARN - nCompilerReferenceIndexStorage - kotlin-data-container is not found 
+2021-12-11 20:31:45,722 [6962579]   WARN - nCompilerReferenceIndexStorage - kotlin-data-container is not found 
+2021-12-11 20:32:42,127 [7018984]   WARN - nCompilerReferenceIndexStorage - kotlin-data-container is not found 
+2021-12-11 20:36:27,176 [7244033]   WARN - vdmanager.AvdManagerConnection - No Android SDK Found 
+2021-12-11 20:36:27,839 [7244696]   WARN - a.repo.GitUntrackedFilesHolder - Ignoring ignored file under another root: /home/webuser/dev/proj/spring-examples/blog/19-react-project/blog/.DS_Store; root: /home/webuser/dev/proj/spring-examples; mapped root: null 
+2021-12-11 20:36:30,451 [7247308]   WARN - ctionSystem.impl.ActionUpdater - 295 ms to call on EDT SurroundWithAction#update (com.intellij.codeInsight.generation.actions.SurroundWithAction) - speed it up and/or implement UpdateInBackground. 
+2021-12-11 20:52:05,268 [8182125]   WARN -      #org.jetbrains.idea.maven - Cannot determine maven version from run configuration and project settings, use embedded as version: 3.8.1 
+2021-12-11 20:52:09,029 [8185886]   WARN - nCompilerReferenceIndexStorage - kotlin-data-container is not found 
+2021-12-11 20:52:46,392 [8223249]   WARN - nCompilerReferenceIndexStorage - kotlin-data-container is not found 
+2021-12-11 21:31:39,732 [10556589]   WARN -      #org.jetbrains.idea.maven - Cannot determine maven version from run configuration and project settings, use embedded as version: 3.8.1 
+2021-12-11 21:31:51,686 [10568543]   WARN - a.repo.GitUntrackedFilesHolder - Ignoring ignored file under another root: /home/webuser/dev/proj/spring-examples/blog/19-react-project/blog/.DS_Store; root: /home/webuser/dev/proj/spring-examples; mapped root: null 
+2021-12-11 21:31:52,037 [10568894]   WARN - a.repo.GitUntrackedFilesHolder - Ignoring ignored file under another root: /home/webuser/dev/proj/spring-examples/blog/19-react-project/blog/.DS_Store; root: /home/webuser/dev/proj/spring-examples; mapped root: null 
+2021-12-11 21:33:36,384 [10673241]   WARN - ution.rmi.RemoteProcessSupport - SLF4J: Class path contains multiple SLF4J bindings. 
+2021-12-11 21:33:36,384 [10673241]   WARN - ution.rmi.RemoteProcessSupport - SLF4J: Found binding in [jar:file:/home/webuser/dev/ideac/plugins/maven/lib/maven36-server.jar!/org/slf4j/impl/StaticLoggerBinder.class] 
+2021-12-11 21:33:36,384 [10673241]   WARN - ution.rmi.RemoteProcessSupport - SLF4J: Found binding in [jar:file:/home/webuser/dev/ideac/lib/3rd-party-rt.jar!/org/slf4j/impl/StaticLoggerBinder.class] 
+2021-12-11 21:33:36,384 [10673241]   WARN - ution.rmi.RemoteProcessSupport - SLF4J: See http://www.slf4j.org/codes.html#multiple_bindings for an explanation. 
+2021-12-11 21:33:36,384 [10673241]   WARN - ution.rmi.RemoteProcessSupport - SLF4J: Actual binding is of type [org.jetbrains.idea.maven.server.Maven3WrapperSl4LoggerFactory] 
+2021-12-11 21:39:45,174 [11042031]   WARN - nCompilerReferenceIndexStorage - kotlin-data-container is not found 
+2021-12-11 21:43:00,600 [11237457]   WARN -      #org.jetbrains.idea.maven - Cannot determine maven version from run configuration and project settings, use embedded as version: 3.8.1 
+2021-12-11 21:43:15,002 [11251859]   WARN - nCompilerReferenceIndexStorage - kotlin-data-container is not found 
+2021-12-11 21:44:24,146 [11321003]   WARN -      #org.jetbrains.idea.maven - Cannot determine maven version from run configuration and project settings, use embedded as version: 3.8.1 
+2021-12-11 21:44:39,869 [11336726]   WARN - nCompilerReferenceIndexStorage - kotlin-data-container is not found 
+2021-12-12 01:16:18,896 [24035753]   WARN - a.repo.GitUntrackedFilesHolder - Ignoring ignored file under another root: /home/webuser/dev/proj/spring-examples/blog/19-react-project/blog/.DS_Store; root: /home/webuser/dev/proj/spring-examples; mapped root: null 
+2021-12-12 01:16:18,896 [24035753]   WARN - a.repo.GitUntrackedFilesHolder - Ignoring ignored file under another root: /home/webuser/dev/proj/spring-examples/blog/19-react-project/blog/.DS_Store; root: /home/webuser/dev/proj/spring-examples; mapped root: null 

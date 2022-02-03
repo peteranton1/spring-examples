@@ -10,7 +10,8 @@ function subtract(a,b) {
     return a - b;
 }
 
-
+// alternative syntax
+// exports.add = add 
 // module.exports = { 
 //     add, 
 //     subtract 
