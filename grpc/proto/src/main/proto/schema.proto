@@ -17,7 +17,6 @@ message Author {
     string first_name = 2;
     string last_name = 3;
     string gender = 4;
-    int32 book_id = 5;
 }
 
 service BookAuthorService {
