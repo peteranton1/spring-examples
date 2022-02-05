@@ -26,7 +26,9 @@ To install on linux, try this
 - Run Postman or Curl to endpoint
 - Check specific details of each example test below
 
-### Synchronous endpoint http://localhost:8080/author/1 
+### Unary Synchronous 
+
+endpoint http://localhost:8080/author/1 
 
     curl http://localhost:8080/author/1 | jq '.'
 
@@ -36,4 +38,25 @@ To install on linux, try this
         "com.example.Author.last_name": "Dickens",
         "com.example.Author.gender": "Male"
     }
+
+### Server Streaming - Asynchronous
+
+    curl http://localhost:8080/book/1 | jq '.'
+
+    [
+      {
+        "com.example.Book.book_id": 1,
+        "com.example.Book.title": "Oliver Twist",
+        "com.example.Book.price": 11.1,
+        "com.example.Book.pages": 111,
+        "com.example.Book.author_id": 1
+      },
+      {
+        "com.example.Book.book_id": 2,
+        "com.example.Book.title": "A Christmas Carol",
+        "com.example.Book.price": 12.2,
+        "com.example.Book.pages": 122,
+        "com.example.Book.author_id": 1
+      }
+    ]
 

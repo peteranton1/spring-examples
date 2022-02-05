@@ -12,8 +12,8 @@
     <artifactId>proto</artifactId>
 
     <properties>
-        <maven.compiler.source>18</maven.compiler.source>
-        <maven.compiler.target>18</maven.compiler.target>
+        <maven.compiler.source>17</maven.compiler.source>
+        <maven.compiler.target>17</maven.compiler.target>
         <grpc.version>1.44.0</grpc.version>
         <grpc.ext.version>1.6.1</grpc.ext.version>
         <grpc.plugin.version>0.6.1</grpc.plugin.version>

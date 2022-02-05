@@ -1,6 +1,7 @@
 package com.example.grpc.server;
 
 import com.example.Author;
+import com.example.Book;
 import com.example.BookAuthorServiceGrpc;
 import com.example.db.TempDb;
 import io.grpc.stub.StreamObserver;
@@ -30,4 +31,11 @@ public class BookAuthorServerService extends
     }
   }
 
+  @Override
+  public void getBooksByAuthor(Author request, StreamObserver<Book> responseObserver) {
+    TempDb.getBooksFromTempDb().stream()
+        .filter(book -> book.getAuthorId() == request.getAuthorId())
+        .forEach(responseObserver::onNext);
+    responseObserver.onCompleted();
+  }
 }
