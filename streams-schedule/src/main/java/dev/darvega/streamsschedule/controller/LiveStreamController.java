@@ -2,7 +2,6 @@ package dev.darvega.streamsschedule.controller;
 
 import dev.darvega.streamsschedule.model.LiveStream;
 import dev.darvega.streamsschedule.repository.LiveStreamRepository;
-import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.MediaType;
 import org.springframework.web.bind.annotation.*;
@@ -35,7 +34,7 @@ public class LiveStreamController {
   // POST http://localhost/streams
   @PostMapping(
       consumes = {MediaType.APPLICATION_JSON_VALUE}
-      ,produces = {MediaType.APPLICATION_JSON_VALUE}
+      , produces = {MediaType.APPLICATION_JSON_VALUE}
   )
   @ResponseStatus(HttpStatus.CREATED)
   public LiveStream create(
@@ -46,7 +45,7 @@ public class LiveStreamController {
   // PUT http://localhost/streams
   @PutMapping(
       consumes = {MediaType.APPLICATION_JSON_VALUE}
-      ,produces = {MediaType.APPLICATION_JSON_VALUE}
+      , produces = {MediaType.APPLICATION_JSON_VALUE}
   )
   @ResponseStatus(HttpStatus.OK)
   public LiveStream update(
