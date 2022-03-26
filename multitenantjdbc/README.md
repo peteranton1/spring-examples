@@ -87,6 +87,31 @@ will be a customer table with some data in each database.
     
     user=# \q
 
+## Test the application endpoints
+
+The /customers endpoint will return the list of customers for the database for the user given. 
+
+In this application, you supply the user in the web request. In a production grade
+application you would set things up more securely, but this is just a demo.
+
+There are two users defined : 
+
+    jlong
+    rwinch
+
+Both have password "pw". 
+
+Using curl, we would get back the right results like this:
+
+    $ curl -u jlong:pw http://localhost:8080/customers
+    [{"id":1,"name":"Juergen"},{"id":2,"name":"Hexen"}]
+    
+    $ curl -u rwinch:pw http://localhost:8080/customers
+    [{"id":1,"name":"Dave"},{"id":2,"name":"Yuxin"}]
+
+This demonstrates that the user supplied will determine which 
+database is queried.
+
 ## Stop the databases
 
 You can check the databases are running using the docker ps command

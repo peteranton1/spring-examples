@@ -20,6 +20,7 @@ import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.security.core.userdetails.User;
 import org.springframework.security.core.userdetails.UserDetailsService;
 import org.springframework.security.core.userdetails.UsernameNotFoundException;
+import org.springframework.security.crypto.factory.PasswordEncoderFactories;
 import org.springframework.security.web.SecurityFilterChain;
 import org.springframework.web.servlet.function.RouterFunction;
 import org.springframework.web.servlet.function.ServerResponse;
@@ -119,8 +120,8 @@ class SecurityConfiguration {
 
   @Bean
   UserDetailsService userDetailsService() {
-    var rob = createUser("rwinch", 1543);
-    var josh = createUser("jlong", 2543);
+    var rob = createUser("rwinch", 1);
+    var josh = createUser("jlong", 2);
     var users = Stream.of(josh, rob)
         .collect(Collectors.toMap(User::getUsername, u -> u));
     return username -> {
@@ -161,7 +162,10 @@ class MultitenantUser extends User {
                          boolean accountNonLocked,
                          Collection<? extends GrantedAuthority> authorities,
                          Integer tenantId) {
-    super(username, password, enabled, accountNonExpired,
+    super(username, PasswordEncoderFactories
+            .createDelegatingPasswordEncoder()
+            .encode(password),
+        enabled, accountNonExpired,
         credentialsNonExpired, accountNonLocked, authorities);
     this.tenantId = tenantId;
   }
